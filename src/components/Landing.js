@@ -1,11 +1,17 @@
-import React from 'react'
+import React, { Fragment } from 'react'
 import { Link } from 'react-router-dom';
 
 const Landing = () => {
     return (
-        <Link to = '/register'>
-            Register
-        </Link>
+        <Fragment>
+            <Link to = '/register'>
+                Register
+            </Link>
+            <br></br>
+            <Link to = '/login'>
+                Login
+            </Link>
+        </Fragment>
     )
 }
 

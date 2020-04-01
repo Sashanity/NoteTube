@@ -1,5 +1,6 @@
 import React, { Fragment } from 'react';
 import Register from './components/auth/Register';
+import Login from './components/auth/Login';
 import { BrowserRouter as Router, Route, Switch } from 'react-router-dom';
 import Landing from './components/Landing';
 import './App.css';
@@ -12,6 +13,7 @@ const  App = () =>  (
       <section className = "container">
         <Switch>
           <Route exact path = '/register' component = {Register}/>
+          <Route exact path = '/login' component = {Login}/>
         </Switch>
       </section>
     </Fragment>
