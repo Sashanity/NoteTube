@@ -1,36 +1,45 @@
 {
-  "name": "notetube",
-  "version": "0.1.0",
-  "private": true,
-  "dependencies": {
-    "@testing-library/jest-dom": "^4.2.4",
-    "@testing-library/react": "^9.3.2",
-    "@testing-library/user-event": "^7.1.2",
-    "firebase": "^7.13.0",
-    "react": "^16.13.1",
-    "react-dom": "^16.13.1",
-    "react-router-dom": "^5.1.2",
-    "react-scripts": "3.4.1"
-  },
+  "name": "taiker-react",
+  "version": "2.0.0",
+  "main": "index.js",
   "scripts": {
-    "start": "react-scripts start",
-    "build": "react-scripts build",
-    "test": "react-scripts test",
-    "eject": "react-scripts eject"
+    "dev": "node server.js -p $PORT",
+    "build": "next build",
+    "start": "NODE_ENV=production node server.js -p $PORT"
   },
-  "eslintConfig": {
-    "extends": "react-app"
+  "author": "EnvyTheme.com",
+  "license": "ISC",
+  "description": "",
+  "dependencies": {
+    "@babel/runtime-corejs2": "^7.9.2",
+    "axios": "^0.19.2",
+    "body-parser": "^1.19.0",
+    "express": "^4.17.1",
+    "next": "^9.3.2",
+    "next-images": "^1.4.0",
+    "next-redux-wrapper": "^5.0.0",
+    "next-seo": "^2.2.1",
+    "next-videos": "^1.1.3",
+    "node-sass": "^4.13.1",
+    "react": "^16.13.1",
+    "react-accessible-accordion": "^3.0.1",
+    "react-countup": "^4.3.3",
+    "react-dom": "^16.13.1",
+    "react-image-lightbox": "^5.1.1",
+    "react-modal-video": "^1.2.3",
+    "react-owl-carousel3": "^2.2.5",
+    "react-redux": "^7.2.0",
+    "react-stripe-checkout": "^2.6.3",
+    "react-toastify": "^5.5.0",
+    "react-visibility-sensor": "^5.1.1",
+    "react-wow": "^1.0.0",
+    "redux": "^4.0.5",
+    "redux-devtools-extension": "^2.13.8",
+    "sass": "^1.26.3",
+    "stripe": "^8.38.0"
   },
-  "browserslist": {
-    "production": [
-      ">0.2%",
-      "not dead",
-      "not op_mini all"
-    ],
-    "development": [
-      "last 1 chrome version",
-      "last 1 firefox version",
-      "last 1 safari version"
-    ]
+  "devDependencies": {
+    "file-loader": "^6.0.0",
+    "url-loader": "^4.0.0"
   }
 }
