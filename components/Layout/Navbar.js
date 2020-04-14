@@ -67,7 +67,7 @@ class Navbar extends Component {
                             <nav className="navbar navbar-expand-md navbar-light">
                                 <Link href="/">
                                     <a className="navbar-brand">
-                                    <img src={require("../../images/icon-homework.png")} alt="logo" />
+                                    <img src={require("../../images/icon-img.png")} alt="logo" />
                                     </a>
                                 </Link>
 

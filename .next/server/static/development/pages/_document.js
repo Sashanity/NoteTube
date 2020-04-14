@@ -88,21 +88,10 @@ module.exports =
 /******/
 /******/
 /******/ 	// Load entry module and return exports
-/******/ 	return __webpack_require__(__webpack_require__.s = 1);
+/******/ 	return __webpack_require__(__webpack_require__.s = 2);
 /******/ })
 /************************************************************************/
 /******/ ({
-
-/***/ "./images/favicon.png":
-/*!****************************!*\
-  !*** ./images/favicon.png ***!
-  \****************************/
-/*! no static exports found */
-/***/ (function(module, exports) {
-
-module.exports = "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAACAAAAAgCAYAAABzenr0AAAAGXRFWHRTb2Z0d2FyZQBBZG9iZSBJbWFnZVJlYWR5ccllPAAAAyZpVFh0WE1MOmNvbS5hZG9iZS54bXAAAAAAADw/eHBhY2tldCBiZWdpbj0i77u/IiBpZD0iVzVNME1wQ2VoaUh6cmVTek5UY3prYzlkIj8+IDx4OnhtcG1ldGEgeG1sbnM6eD0iYWRvYmU6bnM6bWV0YS8iIHg6eG1wdGs9IkFkb2JlIFhNUCBDb3JlIDUuNi1jMTQ1IDc5LjE2MzQ5OSwgMjAxOC8wOC8xMy0xNjo0MDoyMiAgICAgICAgIj4gPHJkZjpSREYgeG1sbnM6cmRmPSJodHRwOi8vd3d3LnczLm9yZy8xOTk5LzAyLzIyLXJkZi1zeW50YXgtbnMjIj4gPHJkZjpEZXNjcmlwdGlvbiByZGY6YWJvdXQ9IiIgeG1sbnM6eG1wPSJodHRwOi8vbnMuYWRvYmUuY29tL3hhcC8xLjAvIiB4bWxuczp4bXBNTT0iaHR0cDovL25zLmFkb2JlLmNvbS94YXAvMS4wL21tLyIgeG1sbnM6c3RSZWY9Imh0dHA6Ly9ucy5hZG9iZS5jb20veGFwLzEuMC9zVHlwZS9SZXNvdXJjZVJlZiMiIHhtcDpDcmVhdG9yVG9vbD0iQWRvYmUgUGhvdG9zaG9wIENDIDIwMTkgKFdpbmRvd3MpIiB4bXBNTTpJbnN0YW5jZUlEPSJ4bXAuaWlkOjNBOUE2MzQ3NDAwNzExRUE5QzY5RkM2OUUyNjUyNUNGIiB4bXBNTTpEb2N1bWVudElEPSJ4bXAuZGlkOjNBOUE2MzQ4NDAwNzExRUE5QzY5RkM2OUUyNjUyNUNGIj4gPHhtcE1NOkRlcml2ZWRGcm9tIHN0UmVmOmluc3RhbmNlSUQ9InhtcC5paWQ6M0E5QTYzNDU0MDA3MTFFQTlDNjlGQzY5RTI2NTI1Q0YiIHN0UmVmOmRvY3VtZW50SUQ9InhtcC5kaWQ6M0E5QTYzNDY0MDA3MTFFQTlDNjlGQzY5RTI2NTI1Q0YiLz4gPC9yZGY6RGVzY3JpcHRpb24+IDwvcmRmOlJERj4gPC94OnhtcG1ldGE+IDw/eHBhY2tldCBlbmQ9InIiPz4YMny/AAAHeElEQVR42qxX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"
-
-/***/ }),
 
 /***/ "./node_modules/next/dist/next-server/lib/constants.js":
 /*!*************************************************************!*\
@@ -1069,75 +1058,14 @@ const ESCAPE_LOOKUP={'&':'\\u0026','>':'\\u003e','<':'\\u003c','\u2028':'\\u2028
 
 /***/ }),
 
-/***/ "./node_modules/next/document.js":
+/***/ 2:
 /*!***************************************!*\
-  !*** ./node_modules/next/document.js ***!
+  !*** multi next/dist/pages/_document ***!
   \***************************************/
 /*! no static exports found */
 /***/ (function(module, exports, __webpack_require__) {
 
-module.exports = __webpack_require__(/*! ./dist/pages/_document */ "./node_modules/next/dist/pages/_document.js")
-
-
-/***/ }),
-
-/***/ "./pages/_document.js":
-/*!****************************!*\
-  !*** ./pages/_document.js ***!
-  \****************************/
-/*! exports provided: default */
-/***/ (function(module, __webpack_exports__, __webpack_require__) {
-
-"use strict";
-__webpack_require__.r(__webpack_exports__);
-/* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! react */ "react");
-/* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(react__WEBPACK_IMPORTED_MODULE_0__);
-/* harmony import */ var next_document__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! next/document */ "./node_modules/next/document.js");
-/* harmony import */ var next_document__WEBPACK_IMPORTED_MODULE_1___default = /*#__PURE__*/__webpack_require__.n(next_document__WEBPACK_IMPORTED_MODULE_1__);
-
-var __jsx = react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement;
-
-function ownKeys(object, enumerableOnly) { var keys = Object.keys(object); if (Object.getOwnPropertySymbols) { var symbols = Object.getOwnPropertySymbols(object); if (enumerableOnly) symbols = symbols.filter(function (sym) { return Object.getOwnPropertyDescriptor(object, sym).enumerable; }); keys.push.apply(keys, symbols); } return keys; }
-
-function _objectSpread(target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i] != null ? arguments[i] : {}; if (i % 2) { ownKeys(Object(source), true).forEach(function (key) { _defineProperty(target, key, source[key]); }); } else if (Object.getOwnPropertyDescriptors) { Object.defineProperties(target, Object.getOwnPropertyDescriptors(source)); } else { ownKeys(Object(source)).forEach(function (key) { Object.defineProperty(target, key, Object.getOwnPropertyDescriptor(source, key)); }); } } return target; }
-
-function _defineProperty(obj, key, value) { if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
-
-
-
-class MyDocument extends next_document__WEBPACK_IMPORTED_MODULE_1___default.a {
-  static async getInitialProps(ctx) {
-    const initialProps = await next_document__WEBPACK_IMPORTED_MODULE_1___default.a.getInitialProps(ctx);
-    return _objectSpread({}, initialProps);
-  }
-
-  render() {
-    return __jsx(next_document__WEBPACK_IMPORTED_MODULE_1__["Html"], {
-      lang: "zxx"
-    }, __jsx(next_document__WEBPACK_IMPORTED_MODULE_1__["Head"], null, __jsx("meta", {
-      name: "viewport",
-      content: "width=device-width, initial-scale=1, shrink-to-fit=no"
-    }), __jsx("link", {
-      rel: "icon",
-      type: "image/png",
-      href: __webpack_require__(/*! ../images/favicon.png */ "./images/favicon.png")
-    })), __jsx("body", null, __jsx(next_document__WEBPACK_IMPORTED_MODULE_1__["Main"], null), __jsx(next_document__WEBPACK_IMPORTED_MODULE_1__["NextScript"], null)));
-  }
-
-}
-
-/* harmony default export */ __webpack_exports__["default"] = (MyDocument);
-
-/***/ }),
-
-/***/ 1:
-/*!*********************************************!*\
-  !*** multi private-next-pages/_document.js ***!
-  \*********************************************/
-/*! no static exports found */
-/***/ (function(module, exports, __webpack_require__) {
-
-module.exports = __webpack_require__(/*! private-next-pages/_document.js */"./pages/_document.js");
+module.exports = __webpack_require__(/*! next/dist/pages/_document */"./node_modules/next/dist/pages/_document.js");
 
 
 /***/ }),

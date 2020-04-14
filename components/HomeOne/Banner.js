@@ -9,10 +9,10 @@ class Banner extends Component {
                     <div className="d-table-cell">
                         <div className="container">
                             <div className="row align-items-center">
-                                <div className="col-lg-11 col-md-12">
+                                <div className="col-lg-9 col-md-9">
                                     <div className="hero-main-banner-content">
                                         <span className="sub-title">NoteTube</span>
-                                        <h1>Easy way to access Class Notes</h1>
+                                        <h2>Easy way to access class notes</h2>
                                         
                                         <form>
                                             <input type="search" className="input-newsletter" placeholder="Enter Class Name" name="SERACH" />
