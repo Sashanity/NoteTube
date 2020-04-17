@@ -1,6 +1,12 @@
 const { db } = require('../util/admin');
 const firebase = require('firebase');
 const firebaseConfig = require('../util/firebaseConfig');
+
+const {
+    validateSignup,
+    validateLogin
+} = require('../util/validation');
+
 firebase.initializeApp(firebaseConfig)
 
 exports.login = (req, res) => {
@@ -8,39 +14,68 @@ exports.login = (req, res) => {
         email: req.body.email,
         password: req.body.password
     };
+    const { valid, errors } = validateLogin(user);
+    if (!valid) return res.status(400).json(errors);
     firebase
         .auth()
         .signInWithEmailAndPassword(user.email, user.password)
-        .then((data) => {
-            return data.user.getIdToken();
-        })
-        .then(token => {
-            return res.json({ token })
+        // .then((data) => {
+        //     return data.user.getIdToken();
+        // })
+        // .then(token => {
+        //     return res.json({ token })
+        // })
+        .then(() => {
+            return res.json({ message: `Successfully logged in to ${user.email}` })
         })
         .catch(err => {
             console.error(err);
-            return res.status(500).json({ error: err.code })
+            return res.status(403).json({ general: 'Email or passwords are incorrect. Please try again' })
         })
-
 }
 
 exports.signup = (req, res) => {
     const newUser = {
-        name: req.body.name,
+        firstname: req.body.firstname,
+        lastname: req.body.lastname,
+        username: req.body.username, // unique
         email: req.body.email,
         password: req.body.password,
         confirmPassword: req.body.confirmPassword,
-    }
-
-    firebase
-        .auth()
-        .createUserWithEmailAndPassword(newUser.email, newUser.password)
+    };
+    const { valid, errors } = validateSignup(newUser);
+    if (!valid) return res.status(400).json(errors);
+    let userId, token;
+    db.doc(`/users/${newUser.username}`).get()
+        .then(doc => {
+            if (doc.exists) {
+                return res.status(400).json({ username: 'this username is already taken' });
+            } else {
+                return firebase
+                    .auth()
+                    .createUserWithEmailAndPassword(newUser.email, newUser.password)
+            }
+        })
         .then((data) => {
+            userId = data.user.uid;
             return data.user.getIdToken();
         })
-        .then(token => {
-            return res.status(201).json({ token }); // use this token for private routing and data acces
-            // add to the user collection here
+        .then((idToken) => {
+            token = idToken;
+            const userCredentials = {
+                firstname: newUser.firstname,
+                lastname: newUser.lastname,
+                username: newUser.username,
+                email: newUser.email,
+                userId
+            };
+            db.doc(`/users/${newUser.username}`).set(userCredentials);
+        })
+        // .then(() => {
+        //     return res.json({ token });
+        // })
+        .then(() => {
+            return res.json({ message: `Signed up new user ${newUser.username} sucessfully!` });
         })
         .catch((err) => {
             console.error(err);
