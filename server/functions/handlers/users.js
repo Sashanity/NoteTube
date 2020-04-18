@@ -19,15 +19,15 @@ exports.login = (req, res) => {
     firebase
         .auth()
         .signInWithEmailAndPassword(user.email, user.password)
-        // .then((data) => {
-        //     return data.user.getIdToken();
-        // })
-        // .then(token => {
-        //     return res.json({ token })
-        // })
-        .then(() => {
-            return res.json({ message: `Successfully logged in to ${user.email}` })
+        .then((data) => {
+            return data.user.getIdToken();
         })
+        .then(token => {
+            return res.json({ token })
+        })
+        // .then(() => {
+        //     return res.json({ message: `Successfully logged in to ${user.email}` })
+        // })
         .catch(err => {
             console.error(err);
             return res.status(403).json({ general: 'Email or passwords are incorrect. Please try again' })
@@ -71,12 +71,12 @@ exports.signup = (req, res) => {
             };
             db.doc(`/users/${newUser.username}`).set(userCredentials);
         })
-        // .then(() => {
-        //     return res.json({ token });
-        // })
         .then(() => {
-            return res.json({ message: `Signed up new user ${newUser.username} sucessfully!` });
+            return res.json({ token });
         })
+        // .then(() => {
+        //     return res.json({ message: `Signed up new user ${newUser.username} sucessfully!` });
+        // })
         .catch((err) => {
             console.error(err);
             if (err.code === 'auth/email-already-in-use') {
