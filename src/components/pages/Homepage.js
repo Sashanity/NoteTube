@@ -1,8 +1,6 @@
 import React, { Component } from 'react';
 import { Grid, Cell } from 'react-mdl';
-import Search from '../components/Layout/search'
-
-
+import Search from '../Layout/search'
 
 class Landing extends Component {
   render() {
