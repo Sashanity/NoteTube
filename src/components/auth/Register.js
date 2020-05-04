@@ -68,7 +68,8 @@ const Register = () => {
         valid = false
         errors.lastPasswordError = "Passwords do not match"
       }
-      if (email.indexOf("@sjsu.edu") === -1){
+      const emailValid = email.split("").reverse().join(""); 
+      if (emailValid.substring(0,9) !== "ude.usjs@"){
         valid = false
         errors.emailError = "Not a valid SJSU email address"
       }

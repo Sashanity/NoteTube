@@ -58,10 +58,6 @@ const Login = () => {
       emailUsernameError: "",
       passwordError: ""
     };
-    if (emailUsername.indexOf("@sjsu.edu") === -1){
-      valid = false
-      errors.emailUsernameError = "Not a valid SJSU email address"
-    }
     if (!valid){
       setForm({...formState, ...errors})
     }

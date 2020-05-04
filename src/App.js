@@ -8,11 +8,15 @@ import Login from "./components/auth/Login"
 import Homepage from "./components/pages/Homepage"
 import Landing from "./components/pages/Landing"
 
+import { Provider } from 'react-redux';
+import store from './store'
 //This is the app
 class App extends Component {
   render() {
+    
     if (localStorage.getItem("token")){
       return (
+        <Provider store = {store}>
         <Router>
           <Navbar />
           <div className="container">
@@ -25,10 +29,12 @@ class App extends Component {
             <Footer></Footer>
           </div>
         </Router>
+        </Provider>
       )
     }
     else{
       return (
+        <Provider store = {store}>
         <Router>
           <div className="container">
             <Switch>
@@ -39,6 +45,7 @@ class App extends Component {
             </Switch>
           </div>
         </Router>
+        </Provider>
       )
     }
   }
