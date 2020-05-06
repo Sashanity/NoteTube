@@ -15,6 +15,8 @@ exports.login = (req, res) => {
         password: req.body.password
     };
 
+    const { valid, errors } = validateLogin(user);
+    if (!valid) return res.status(400).json(errors);
     db.collection('users').doc(user.email).get()
         .then(doc => {
             if (doc.exists) {
@@ -22,8 +24,6 @@ exports.login = (req, res) => {
             }
         })
         .then(() => {
-            const { valid, errors } = validateLogin(user);
-            if (!valid) return res.status(400).json(errors);
             firebase
                 .auth()
                 .signInWithEmailAndPassword(user.email, user.password)
@@ -34,7 +34,6 @@ exports.login = (req, res) => {
                     return res.json({ token })
                 })
                 .catch(err => {
-                    console.error(err);
                     return res.status(403).json({ general: 'Email/username or passwords are incorrect. Please try again' })
                 })
         })
