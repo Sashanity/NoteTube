@@ -4,13 +4,17 @@ import Button from '@material-ui/core/Button';
 import CssBaseline from '@material-ui/core/CssBaseline';
 import TextField from '@material-ui/core/TextField';
 import Paper from '@material-ui/core/Paper';
-import {Link} from 'react-router-dom';
+import {Link, Redirect} from 'react-router-dom';
 import Grid from '@material-ui/core/Grid';
 import LockOutlinedIcon from '@material-ui/icons/LockOutlined';
 import Typography from '@material-ui/core/Typography';
 import { makeStyles } from '@material-ui/core/styles';
 import Container from '@material-ui/core/Container';
 import FormHelperText from '@material-ui/core/FormHelperText';
+
+import {register} from '../../actions/auth.js'
+import PropTypes from 'prop-types'
+import {connect} from 'react-redux'
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -37,7 +41,7 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-const Register = () => {
+const Register = ({register, isAuthenticated}) => {
     const [formState, setForm] = useState({
       firstName: "",
       firstNameError: "",
@@ -64,15 +68,6 @@ const Register = () => {
         emailError: "",
         lastPasswordError: ""
       };
-      if(firstPassword !== lastPassword){
-        valid = false
-        errors.lastPasswordError = "Passwords do not match"
-      }
-      const emailValid = email.split("").reverse().join(""); 
-      if (emailValid.substring(0,9) !== "ude.usjs@"){
-        valid = false
-        errors.emailError = "Not a valid SJSU email address"
-      }
       if (!valid){
         setForm({...formState, ...errors})
       }
@@ -83,6 +78,7 @@ const Register = () => {
       e.preventDefault();
       const valid = validation();
       if (valid){
+        register({firstName, lastName, email, firstPassword, lastPassword})
         setForm({
           firstName: "",
           firstNameError: "",
@@ -99,6 +95,12 @@ const Register = () => {
         })
       }
     }
+
+    //Redirect if Authenticated
+    if(isAuthenticated){
+      return <Redirect to="/homepage"/>
+    }
+
     return (
       <div className = {classes.root}>
         <Grid container spacing = {2} direction = "column">
@@ -235,4 +237,17 @@ const Register = () => {
       </div>
       );}
 
-export default Register
+Register.propTypes = {
+  register: PropTypes.func.isRequired,
+  isAuthenticated: PropTypes.bool.isRequired,
+};
+
+const mapStateToProps = state => ({
+  isAuthenticated: state.auth.isAuthenticated
+})
+
+
+export default connect(
+  mapStateToProps,
+  {register}
+)(Register);

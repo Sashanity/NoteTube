@@ -6,13 +6,17 @@ import Paper from '@material-ui/core/Paper';
 import TextField from '@material-ui/core/TextField';
 import FormControlLabel from '@material-ui/core/FormControlLabel';
 import Checkbox from '@material-ui/core/Checkbox';
-import {Link} from 'react-router-dom';
+import {Link, Redirect} from 'react-router-dom';
 import Grid from '@material-ui/core/Grid';
 import LockOutlinedIcon from '@material-ui/icons/LockOutlined';
 import Typography from '@material-ui/core/Typography';
 import { makeStyles } from '@material-ui/core/styles';
 import Container from '@material-ui/core/Container';
 import FormHelperText from '@material-ui/core/FormHelperText';
+
+import {connect} from 'react-redux';
+import PropTypes from 'prop-types';
+import { login } from '../../actions/auth';
 
 const useStyles = makeStyles((theme) => ({
     root: {
@@ -40,7 +44,7 @@ const useStyles = makeStyles((theme) => ({
     },
   }));
 
-const Login = () => {
+const Login = ({login, isAuthenticated}) => {
   const classes = useStyles();
   const [formState, setForm] = useState({
     emailUsername:"",
@@ -75,7 +79,14 @@ const Login = () => {
         passwordError: "",
       })
     }
+    login(emailUsername, password)
   }
+
+  //Redirect if logged in
+  if(isAuthenticated){
+    return <Redirect to="/homepage"/>
+  }
+
     return (
       <div className = {classes.root}>
         <Grid container spacing = {2} direction = "column">
@@ -155,4 +166,14 @@ const Login = () => {
       </div>
     );
   }
-export default  Login
+
+Login.PropTypes = {
+  login: PropTypes.func.isRequired,
+  isAuthenticated: PropTypes.bool.isRequired,
+}
+
+const mapStateToProps = state => ({
+  isAuthenticated: state.auth.isAuthenticated
+})
+
+export default  connect(mapStateToProps, {login})(Login)
