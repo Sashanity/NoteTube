@@ -10,27 +10,32 @@ const {
 firebase.initializeApp(firebaseConfig)
 
 exports.login = (req, res) => {
-    const user = {
+    let user = {
         email: req.body.email,
         password: req.body.password
     };
+
     const { valid, errors } = validateLogin(user);
     if (!valid) return res.status(400).json(errors);
-    firebase
-        .auth()
-        .signInWithEmailAndPassword(user.email, user.password)
-        .then((data) => {
-            return data.user.getIdToken();
+    db.collection('users').doc(user.email).get()
+        .then(doc => {
+            if (doc.exists) {
+                user.email = doc.data().email;
+            }
         })
-        .then(token => {
-            return res.json({ token })
-        })
-        // .then(() => {
-        //     return res.json({ message: `Successfully logged in to ${user.email}` })
-        // })
-        .catch(err => {
-            console.error(err);
-            return res.status(403).json({ general: 'Email or passwords are incorrect. Please try again' })
+        .then(() => {
+            firebase
+                .auth()
+                .signInWithEmailAndPassword(user.email, user.password)
+                .then((data) => {
+                    return data.user.getIdToken();
+                })
+                .then(token => {
+                    return res.json({ token })
+                })
+                .catch(err => {
+                    return res.status(403).json({ general: 'Email/username or passwords are incorrect. Please try again' })
+                })
         })
 }
 
@@ -74,9 +79,6 @@ exports.signup = (req, res) => {
         .then(() => {
             return res.json({ token });
         })
-        // .then(() => {
-        //     return res.json({ message: `Signed up new user ${newUser.username} sucessfully!` });
-        // })
         .catch((err) => {
             console.error(err);
             if (err.code === 'auth/email-already-in-use') {
