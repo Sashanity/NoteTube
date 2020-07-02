@@ -93,6 +93,7 @@ const Register = () => {
 			errors = {
 				emailError: data.email,
 				usernameError: data.username,
+				passwordError: data.password,
 				confirmPasswordError: data.confirmPassword,
 			};
 			setForm({ ...formState, ...errors });
@@ -209,9 +210,7 @@ const Register = () => {
 												id='password'
 												autoComplete='current-password'
 											/>
-											<FormHelperText color='red'>
-												{passwordError}
-											</FormHelperText>
+											<FormHelperText error>{passwordError}</FormHelperText>
 										</Grid>
 										<Grid item xs={12}>
 											<TextField
