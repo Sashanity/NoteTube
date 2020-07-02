@@ -21,6 +21,7 @@ exports.search = (req, res) => {
 	const input = req.query.searchInput.trim();
 	const input2 = req.query.searchInput.toUpperCase();
 	let map = new Map();
+	let result = [];
 	db.collection('notes')
 		.where('published', '==', true)
 		.where('keywords', 'array-contains', input)
@@ -31,7 +32,7 @@ exports.search = (req, res) => {
 			});
 		})
 		.catch(function (error) {
-			console.log('Error getting notes: ', error);
+			return res.status(400).json(error);
 		});
 	db.collection('notes')
 		.where('published', '==', true)
@@ -41,10 +42,16 @@ exports.search = (req, res) => {
 			querySnapShot.forEach(function (doc) {
 				if (!map.has(doc.id)) map.set(doc.id, doc.data());
 			});
-			console.log(map);
-			res.status(200).send(map);
+			map.forEach((element) => {
+				result.push(element);
+			});
+			var obj = [];
+			for (let [key, value] of map) {
+				obj.push({ key: key, value: value });
+			}
+			return res.status(200).json(obj);
 		})
 		.catch(function (error) {
-			console.log('Error getting notes: ', error);
+			return res.status(400).json(error);
 		});
 };
