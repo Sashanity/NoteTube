@@ -4,35 +4,23 @@ import Search from '../Layout/search'
 
 class Landing extends Component {
   render() {
-    return(
+    return (
       <div className="container">
-    
-      <div className="landing-grid" style={{width: '100%', margin: 'auto'}}>
-      <Grid >
-        <Cell col={12}>
-          <img
-            src="https://www.shareicon.net/download/2015/09/18/103157_man_512x512.png"
-            alt="avatar"
-            className="avatar-img"
-            />
-
-          <div className="banner-text">
-            <h3>Easy way to access the class notes</h3>
-
-          <hr/>
-
-        <p><Search></Search></p>
-
- 
+        <div className="landing-grid">
+          <img src="https://www.shareicon.net/download/2015/09/18/103157_man_512x512.png" alt="avatar" className="avatar-img" />
+          <div className="wrap">
+            <div className="banner-text">
+              <h3>Easy way to access the Class Notes</h3>
+              <hr />
+              <div className="search">
+                <Search></Search>
+              </div>
+            </div>
           </div>
-        </Cell>
-      </Grid>
-    </div>
-    </div>
-  
-    
+        </div>
+      </div>
     )
   }
 }
 
-export default Landing;
+export default Landing
