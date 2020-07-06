@@ -9,6 +9,17 @@ const isEmpty = (string) => {
     else return false;
 };
 
+const isValidLength = (string, minLength) => {
+    if (string.length >= minLength) return true;
+    else return false;
+}
+
+const hasWhiteSpace = (string) => {
+    const regex = /\s/g;
+    return regex.test(string);
+
+}
+
 exports.validateSignup = (data) => {
     let errors = {};
 
@@ -18,10 +29,13 @@ exports.validateSignup = (data) => {
         errors.email = 'Must be a valid email address';
     }
     if (isEmpty(data.password)) errors.password = 'Must not be empty';
+    if (!isValidLength(data.password, 6)) errors.password = 'Must be at least 6 characters';
     if (data.password !== data.confirmPassword)
         errors.confirmPassword = 'Passwords must match';
 
     if (isEmpty(data.username)) errors.username = 'Must not be empty';
+    if (hasWhiteSpace(data.username)) errors.username = 'Must not contain invalid characters';
+    
     if (isEmpty(data.firstname)) errors.firstname = 'Must not be empty';
     if (isEmpty(data.lastname)) errors.lastname = 'Must not be empty';
 
