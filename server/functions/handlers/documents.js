@@ -1,4 +1,5 @@
-const { db } = require('../util/admin');
+const { db, bucket } = require('../util/admin');
+const { ref } = require('firebase-functions/lib/providers/database');
 
 const createKeywords = (input) => {
 	const arrName = [];
@@ -54,4 +55,20 @@ exports.search = (req, res) => {
 		.catch(function (error) {
 			return res.status(400).json(error);
 		});
+};
+
+exports.upload = (req, res) => {
+	try {
+        if(!req.files) {
+            res.send({
+                status: false,
+                message: 'No file uploaded'
+            });
+        } else {
+			const doc = req.files.doc;
+			return res.status(200)
+                }
+	} catch (err) {
+        res.status(500).send(err);
+    }
 };

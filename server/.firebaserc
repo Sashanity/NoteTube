@@ -1,5 +1,6 @@
 {
   "projects": {
-    "development": "notetube-f3f9c"
+    "development": "notetube-f3f9c",
+    "default": "notetube-f3f9c"
   }
 }
