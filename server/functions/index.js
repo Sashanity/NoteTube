@@ -1,19 +1,20 @@
 const db = require('./util/admin');
 const functions = require('firebase-functions');
 const app = require('express')();
-const fileUpload = require('express-fileupload');
+const multer = require('multer');
 const { login, signup, auth } = require('./handlers/users');
 const { search, upload } = require('./handlers/documents');
-const cors = require('cors');
-app.use(cors());
 
-app.use(fileUpload({
-    createParentPath: true
-}));
+const storage = multer({
+    storage: multer.memoryStorage(),
+    limits: {
+      fileSize: 50 * 1024 * 1024 // no larger than 5mb, you can change as needed.
+    }
+  });
 
 app.post('/login', login);
 app.post('/signup', signup);
 app.get('/search', search);
-app.post('/upload', upload);
+app.post('/upload', storage.single('doc'), upload);
 
 exports.api = functions.https.onRequest(app);

@@ -58,17 +58,17 @@ exports.search = (req, res) => {
 };
 
 exports.upload = (req, res) => {
-	try {
-        if(!req.files) {
-            res.send({
-                status: false,
-                message: 'No file uploaded'
-            });
-        } else {
-			const doc = req.files.doc;
-			return res.status(200)
-                }
-	} catch (err) {
-        res.status(500).send(err);
-    }
+	console.log('Upload Image');
+
+	let file = req.file;
+	if (file) {
+		res.status(200).send({
+			status: 'success'
+		});
+	}
+	else{
+		res.status(400).send({
+			status: 'failure to get image'
+		});
+	}
 };
