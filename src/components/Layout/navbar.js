@@ -35,9 +35,6 @@ const Navbar = () => {
 							<Button onClick={logout(history, setUser)}>Logout</Button>
 						</Navigation>
 					</Drawer>
-					<Content>
-						<div className='page-content' />
-					</Content>
 				</Layout>
 			</div>
 		);
