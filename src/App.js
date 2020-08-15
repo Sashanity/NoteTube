@@ -15,6 +15,7 @@ const App = () => {
 	const [user, setUser] = useState(null);
 
 	const User = useMemo(() => ({ user, setUser }), [user, setUser]);
+
 	return (
 		<Router>
 			<UserContext.Provider value={User}>
