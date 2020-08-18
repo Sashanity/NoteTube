@@ -1,5 +1,8 @@
 const { db, bucket } = require('../util/admin');
 const { ref } = require('firebase-functions/lib/providers/database');
+const fs = require('fs');
+const util = require('util');
+var log_file = fs.createWriteStream('../debug.log', {flags : 'w'});
 
 const createKeywords = (input) => {
 	const arrName = [];
@@ -58,17 +61,23 @@ exports.search = (req, res) => {
 };
 
 exports.upload = (req, res) => {
-	console.log('Upload Image');
-
-	let file = req.file;
-	if (file) {
-		res.status(200).send({
-			status: 'success'
-		});
-	}
-	else{
-		res.status(400).send({
-			status: 'failure to get image'
-		});
+	try {
+		let file = req.file;
+		;
+		if (file) {
+			log_file.write(new Date()+ ": status: 200 { success }\n")
+			res.status(200).send({
+				status: 'success'
+			});
+		}
+		else{
+			log_file.write(new Date()+ ": status: 400 { failure to get file }\n");
+			res.status(400).send({
+				status: 'failure to get image'
+			});
+		}
+	} catch (error) {
+		log_file.write(new Date()+ ": " + util.format(error) + "\n");
+		console.log("error");
 	}
 };
