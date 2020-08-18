@@ -15,6 +15,6 @@ const storage = multer({
 app.post('/login', login);
 app.post('/signup', signup);
 app.get('/search', search);
-app.post('/upload', storage.single('doc'), upload);
+app.post('/upload', storage.single('file'), upload);
 
 exports.api = functions.https.onRequest(app);
