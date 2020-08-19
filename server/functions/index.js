@@ -32,7 +32,7 @@ exports.onNoteCreated = functions.firestore
 		return index.saveObject(note);
 	});
 exports.updateIndex = functions.firestore
-	.document('notes/{noteId')
+	.document('notes/{noteId}')
 	.onUpdate((change) => {
 		const newData = change.after.data();
 		const objectID = change.after.id;
