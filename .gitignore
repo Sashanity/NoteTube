@@ -9,6 +9,8 @@
 # testing
 /coverage
 
+# Algolia API keys
+.env
 
 # production
 /build
