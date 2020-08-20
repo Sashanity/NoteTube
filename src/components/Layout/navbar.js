@@ -12,7 +12,7 @@ import Button from '@material-ui/core/Button';
 const Navbar = () => {
 	const history = useHistory();
 	const { user, setUser } = useContext(UserContext);
-	if (localStorage.getItem('token')) {
+	if (user) {
 		return (
 			<div className='demo-big-content'>
 				<Layout>

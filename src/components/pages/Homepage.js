@@ -1,33 +1,38 @@
-import React from 'react';
+import React, { Component } from 'react';
 import { Grid, Cell } from 'react-mdl';
-import CustomizedInputBase from '../Layout/search';
+import Search from '../Layout/search'
 
-const Homepage = () => {
-	return (
-		<div className='container'>
-			<div className='landing-grid' style={{ width: '100%', margin: 'auto' }}>
-				<Grid>
-					<Cell col={12}>
-						<img
-							src='https://www.shareicon.net/download/2015/09/18/103157_man_512x512.png'
-							alt='avatar'
-							className='avatar-img'
-						/>
+class Landing extends Component {
+  render() {
+    return(
+      <div className="container">
+    
+      <div className="landing-grid" style={{width: '100%', margin: 'auto'}}>
+      <Grid >
+        <Cell col={12}>
+          <img
+            src="https://www.shareicon.net/download/2015/09/18/103157_man_512x512.png"
+            alt="avatar"
+            className="avatar-img"
+            />
 
-						<div className='banner-text'>
-							<h3>Easy way to access the class notes</h3>
+          <div className="banner-text">
+            <h3>Easy way to access the class notes</h3>
 
-							<hr />
+          <hr/>
 
-							<p>
-								<CustomizedInputBase></CustomizedInputBase>
-							</p>
-						</div>
-					</Cell>
-				</Grid>
-			</div>
-		</div>
-	);
-};
+        <p><Search></Search></p>
 
-export default Homepage;
+ 
+          </div>
+        </Cell>
+      </Grid>
+    </div>
+    </div>
+  
+    
+    )
+  }
+}
+
+export default Landing;

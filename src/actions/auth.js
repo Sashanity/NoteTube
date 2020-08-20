@@ -66,14 +66,14 @@ export const logout = (history, setUser) => async () => {
 	history.push('/');
 };
 
-// export const getUserData = () => async () => {
-// 	try {
-// 		const res = await axios.get('/user');
-// 		return res.data;
-// 	} catch (err) {
-// 		console.log(err);
-// 	}
-// };
+export const getUserData = () => async () => {
+	try {
+		const res = await axios.get('/user');
+		return res.data;
+	} catch (err) {
+		console.log(err);
+	}
+};
 
 const setAuthHeader = (token) => {
 	const Token = `Bearer ${token}`;
