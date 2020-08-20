@@ -1,7 +1,5 @@
 const functions = require('firebase-functions');
 const algoliasearch = require('algoliasearch');
-
-const { db } = require('../util/admin');
 const ALGOLIA_ID = functions.config().algolia.appid;
 const ALGOLIA_SEARCH_KEY = functions.config().algolia.searchkey;
 // Perform an Algolia search:
@@ -13,7 +11,6 @@ exports.search = (req, res) => {
 	return index.search(req.query.searchInput).then(function (responses) {
 		// Response from Algolia:
 		// https://www.algolia.com/doc/api-reference/api-methods/search/#response-format
-		console.log(responses.hits);
 		return res.status(200).json(responses.hits);
 	});
 };

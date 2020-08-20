@@ -7,6 +7,7 @@ import Register from './components/auth/Register';
 import Login from './components/auth/Login';
 import Homepage from './components/pages/Homepage';
 import Landing from './components/pages/Landing';
+import SearchOverview from './components/pages/SearchOverview';
 import { UserContext } from './UserContext';
 import AuthenticatedRoute from './components/routes/AuthenticatedRoute';
 
@@ -24,6 +25,11 @@ const App = () => {
 					<Switch>
 						<Route exact path='/' component={Landing} />
 						<AuthenticatedRoute exact path='/homepage' component={Homepage} />
+						<AuthenticatedRoute
+							exact
+							path='/searchOverview'
+							component={SearchOverview}
+						/>
 						<Route exact path='/register' component={Register} />
 						<Route exact path='/login' component={Login} />
 					</Switch>

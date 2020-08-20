@@ -1,24 +1,12 @@
 import React, { useState } from 'react';
 import { makeStyles } from '@material-ui/core/styles';
-import TextField from '@material-ui/core/TextField';
 import Paper from '@material-ui/core/Paper';
 import InputBase from '@material-ui/core/InputBase';
-
+import { useHistory } from 'react-router-dom';
+import { search } from '../../actions/documents';
 import IconButton from '@material-ui/core/IconButton';
 
 import SearchIcon from '@material-ui/icons/Search';
-
-import algoliasearch from 'algoliasearch/lite';
-import {
-	InstantSearch,
-	Hits,
-	SearchBox,
-	Pagination,
-	Highlight,
-	ClearRefinements,
-	RefinementList,
-	Configure,
-} from 'react-instantsearch-dom';
 
 const useStyles = makeStyles((theme) => ({
 	root: {
@@ -40,38 +28,16 @@ const useStyles = makeStyles((theme) => ({
 	},
 }));
 
-// const useStyles = makeStyles((theme) => ({
-// 	root: {
-// 		'& > *': {
-// 			margin: theme.spacing(1),
-// 			width: '25ch',
-// 		},
-// 	},
-// }));
-
 const CustomizedInputBase = () => {
 	const classes = useStyles();
 	const [input, setInput] = useState('');
+	const history = useHistory();
 
 	const onSubmit = async (e) => {
 		e.preventDefault();
+		const res = await search(history, input);
 	};
-	const searchClient = algoliasearch(
-		process.env.ALGOLIA_APP_ID,
-		process.env.ALGOLIA_API_KEY
-	);
-
 	return (
-		// <form className={classes.root} noValidate autoComplete='off'>
-		// 	<TextField id='outlined-basic' label='Outlined' variant='outlined' />
-		// </form>
-
-		// <div className='ais-InstantSearch'>
-		// 	<InstantSearch indexName='notes' searchClient={searchClient}>
-		// 		<SearchBox />
-		// 	</InstantSearch>
-		// </div>
-
 		<div>
 			<Paper
 				component='form'

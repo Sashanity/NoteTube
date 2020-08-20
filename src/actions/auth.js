@@ -1,5 +1,9 @@
 import axios from 'axios';
-
+const config = {
+	headers: {
+		'Content-Type': 'application/json',
+	},
+};
 // Register User
 export const register = async (
 	firstname,
@@ -11,11 +15,6 @@ export const register = async (
 	setUser,
 	history
 ) => {
-	const config = {
-		headers: {
-			'Content-Type': 'application/json',
-		},
-	};
 	const body = JSON.stringify({
 		firstname,
 		lastname,
@@ -38,11 +37,6 @@ export const register = async (
 
 // Login User
 export const login = async (emailUsername, password, history, setUser) => {
-	const config = {
-		headers: {
-			'Content-Type': 'application/json',
-		},
-	};
 	const email = emailUsername;
 	const body = JSON.stringify({
 		email,
