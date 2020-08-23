@@ -1,7 +1,6 @@
 const db = require('./util/admin');
 const functions = require('firebase-functions');
 const app = require('express')();
-//const Busboy = require('busboy');
 const { login, signup, auth } = require('./handlers/users');
 const { search, upload } = require('./handlers/documents');
 
