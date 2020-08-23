@@ -17,7 +17,7 @@ exports.upload = (req, res) => {
             console.log(`File [${fieldname}] filename: ${filename}, encoding: ${encoding}, mimetype: ${mimetype}`);
             // Note that os.tmpdir() is an in-memory file system, so should only 
             // be used for files small enough to fit in memory.
-            const filepath = path.join(os.tmpdir(), fieldname); //Gets the temporary directory that the file will go in
+            const filepath = path.join(os.tmpdir(), filename); //Gets the temporary directory that the file will go in
             uploads[fieldname] = { file: filepath } //Add the file to the uploads array
             console.log(`Saving '${fieldname}' to ${filepath}`);
             file.pipe(fs.createWriteStream(filepath)); //Takes the file, reads it, then writes it to the temporary dircetory
