@@ -10,6 +10,7 @@ import Landing from './components/pages/Landing';
 import SearchOverview from './components/pages/SearchOverview';
 import { UserContext } from './UserContext';
 import AuthenticatedRoute from './components/routes/AuthenticatedRoute';
+import RedirectOnceLoggedIn from './components/routes/RedirectOnceLoggedIn';
 
 //This is the app
 const App = () => {
@@ -23,18 +24,18 @@ const App = () => {
 				<Navbar />
 				<div className='container'>
 					<Switch>
-						<Route exact path='/' component={Landing} />
+						<RedirectOnceLoggedIn exact path='/' component={Landing} />
 						<AuthenticatedRoute exact path='/homepage' component={Homepage} />
 						<AuthenticatedRoute
 							exact
 							path='/searchOverview'
 							component={SearchOverview}
 						/>
-						<Route exact path='/register' component={Register} />
-						<Route exact path='/login' component={Login} />
+						<RedirectOnceLoggedIn exact path='/register' component={Register} />
+						<RedirectOnceLoggedIn exact path='/login' component={Login} />
 					</Switch>
-					<Footer />
 				</div>
+				<Footer />
 			</UserContext.Provider>
 		</Router>
 	);

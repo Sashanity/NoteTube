@@ -3,6 +3,7 @@ import algoliasearch from 'algoliasearch/lite';
 import { useHistory } from 'react-router-dom';
 import { makeStyles } from '@material-ui/core/styles';
 import Grid from '@material-ui/core/Grid';
+import 'instantsearch.css/themes/algolia.css';
 import {
 	InstantSearch,
 	Hits,
@@ -17,12 +18,13 @@ import {
 const useStyles = makeStyles((theme) => ({
 	root: {
 		flexGrow: 1,
-		padding: theme.spacing(20),
+		padding: theme.spacing(3),
 	},
-	input: {
-		marginLeft: theme.spacing(1),
-		flex: 1,
-	},
+	// searchBox: {
+	// 	justifyContent: 'center',
+	// 	width: 600,
+	// 	height: 300,
+	// },
 	iconButton: {
 		padding: 10,
 	},
@@ -42,11 +44,20 @@ const SearchOverview = () => {
 	return (
 		<div className={classes.root}>
 			<InstantSearch searchClient={searchClient} indexName='notes'>
-				<div className='right-panel'>
-					<SearchBox />
-					<Hits />
-					<Pagination />
-				</div>
+				<Grid container spacing={2} direction='column'>
+					<Grid item xs={12} container>
+						<Grid item xs={3} />
+						<Grid item xs={5}>
+							<SearchBox onSubmit />
+						</Grid>
+					</Grid>
+					<Grid item xs={12} container>
+						<Grid item xs={3} />
+						<Grid item xs={5}>
+							<Hits />
+						</Grid>
+					</Grid>
+				</Grid>
 			</InstantSearch>
 		</div>
 	);

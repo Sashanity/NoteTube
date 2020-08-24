@@ -14,9 +14,9 @@ const Navbar = () => {
 	const { user, setUser } = useContext(UserContext);
 	if (localStorage.getItem('token')) {
 		return (
-			<div className='demo-big-content'>
+			<div style={{ height: '64px', position: 'relative' }}>
 				<Layout>
-					<Header className='header-color' title='NoteTube' scroll>
+					<Header className='header-color' transparent title='NoteTube'>
 						<Navigation>
 							<Link to='#'>Personal Workspace</Link>
 							<Link to='#'>Class Notes</Link>
@@ -35,6 +35,7 @@ const Navbar = () => {
 							<Button onClick={logout(history, setUser)}>Logout</Button>
 						</Navigation>
 					</Drawer>
+					<Content />
 				</Layout>
 			</div>
 		);

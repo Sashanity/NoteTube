@@ -12,7 +12,8 @@
 		"axios": "^0.19.2",
 		"dotenv": "^8.2.0",
 		"firebase": "^7.17.2",
-		"instantsearch.js": "^4.7.0",
+		"instantsearch.css": "^7.4.3",
+		"instantsearch.js": "^4.7.1",
 		"react": "^16.13.1",
 		"react-dom": "^16.13.1",
 		"react-instantsearch-dom": "^6.7.0",
@@ -41,5 +42,9 @@
 			"last 1 safari version"
 		]
 	},
-	"proxy": "http://localhost:5000/notetube-f3f9c/us-central1/api"
+	"proxy": "http://localhost:5000/notetube-f3f9c/us-central1/api",
+	"devDependencies": {
+		"css-loader": "^4.2.1",
+		"style-loader": "^1.2.1"
+	}
 }
