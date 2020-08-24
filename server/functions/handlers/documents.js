@@ -28,9 +28,16 @@ exports.upload = (req, res) => {
             for (const name in uploads) {
 				//TODO: Add Firebase upload 
                 const upload = uploads[name];
-				const file = upload.file;
-                res.write(`${file}\n`); //Write the file location to the response
-                fs.unlinkSync(file); //Unlinks and deletes the file
+                const file = upload.file;
+                bucket.upload(file, {destination: "test/"}).then(data => {
+                    console.log('upload success');
+                    //res.write(`${file}\n`); //Write the file location to the response
+                    fs.unlinkSync(file); //Unlinks and deletes the file
+                }).catch(err => {
+                    fs.unlinkSync(file); //Unlinks and deletes the file
+                    console.log('error uploading to storage', err);
+                });
+                
             }
             res.end();
         });
