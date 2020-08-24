@@ -33,9 +33,11 @@ exports.upload = (req, res) => {
                     console.log('upload success');
                     //res.write(`${file}\n`); //Write the file location to the response
                     fs.unlinkSync(file); //Unlinks and deletes the file
+                    return res.status(200);
                 }).catch(err => {
                     fs.unlinkSync(file); //Unlinks and deletes the file
                     console.log('error uploading to storage', err);
+                    return res.status(500).err(err);
                 });
                 
             }
