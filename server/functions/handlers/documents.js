@@ -12,7 +12,7 @@ exports.upload = (req, res) => {
         const uploads = {}
 
 		// This callback will be invoked for each file uploaded
-		//TODO: Save the document info to the firebase database
+		
         busboy.on('file', (fieldname, file, filename, encoding, mimetype) => {
             console.log(`File [${fieldname}] filename: ${filename}, encoding: ${encoding}, mimetype: ${mimetype}`);
             // Note that os.tmpdir() is an in-memory file system, so should only 
@@ -26,7 +26,8 @@ exports.upload = (req, res) => {
         // This callback will be invoked after all uploaded files are saved.
         busboy.on('finish', () => {
             for (const name in uploads) {
-				//TODO: Add Firebase upload 
+                //TODO: Firebase upload works. Need to make sure the user is logged in a specify the desintation for where their files go.
+                //TODO: Save the document info to the firebase database
                 const upload = uploads[name];
                 const file = upload.file;
                 bucket.upload(file, {destination: "test/"}).then(data => {
