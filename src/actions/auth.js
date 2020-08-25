@@ -28,7 +28,7 @@ export const register = async (
 		const res = await axios.post('/signup', body, config);
 		setAuthHeader(res.data.token);
 		setUser(res.data.token);
-		history.push('/searchOverview');
+		history.push('/Home');
 	} catch (err) {
 		console.log(err);
 		return err.response.data;
@@ -46,7 +46,7 @@ export const login = async (emailUsername, password, history, setUser) => {
 		const res = await axios.post('/login', body, config);
 		setAuthHeader(res.data.token);
 		setUser(res.data.token);
-		history.push('/searchOverview');
+		history.push('/Home');
 	} catch (err) {
 		return err.response.data;
 	}

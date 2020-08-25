@@ -36,7 +36,7 @@ const useStyles = makeStyles((theme) => ({
 	},
 }));
 
-const SearchOverview = () => {
+const Home = () => {
 	const searchClient = algoliasearch(
 		process.env.REACT_APP_ALGOLIA_APP_ID,
 		process.env.REACT_APP_ALGOLIA_SEARCH_ID
@@ -106,4 +106,4 @@ const SearchOverview = () => {
 	);
 };
 
-export default SearchOverview;
+export default Home;

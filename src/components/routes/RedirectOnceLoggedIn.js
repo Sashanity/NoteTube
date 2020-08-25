@@ -7,7 +7,7 @@ const RedirectOnceLoggedIn = ({ component: RouteComponent, ...rest }) => {
 			{...rest}
 			render={(routeProps) =>
 				localStorage.getItem('token') ? (
-					<Redirect to={'/searchOverview'} />
+					<Redirect to={'/Home'} />
 				) : (
 					<RouteComponent {...routeProps} />
 				)
