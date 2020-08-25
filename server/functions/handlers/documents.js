@@ -1,57 +1,40 @@
-const { db } = require('../util/admin');
+const { db, bucket } = require('../util/admin');
+const { ref } = require('firebase-functions/lib/providers/database');
+const fs = require('fs');
+const os = require('os');
+const Busboy = require('busboy');
+const path = require('path');
 
-const createKeywords = (input) => {
-	const arrName = [];
-	let curName = '';
-	input.split('').forEach((letter) => {
-		curName += letter;
-		arrName.push(curName);
+// ============================================================================
+// Michael's code
+exports.upload = (req, res) => {
+	const busboy = new Busboy({ headers: req.headers });
+	const uploads = {}
+	busboy.on('file', (fieldname, file, filename, encoding, mimetype) => {
+		// console.log(`File [${fieldname}] filename: ${filename}, encoding: ${encoding}, mimetype: ${mimetype}`);
+		const filepath = path.join(os.tmpdir(), filename); //Gets the temporary directory that the file will go in
+		uploads[fieldname] = { file: filepath } //Add the file to the uploads array
+		// console.log(`Saving '${fieldname}' to ${filepath}`);
+		file.pipe(fs.createWriteStream(filepath)); //Takes the file, reads it, then writes it to the temporary dircetory
 	});
-	return arrName;
-};
 
-const generateKeywords = (inputs) => {
-	const [name, course] = inputs;
-	const keywordNameCourse = createKeywords(`${name}`);
-	const keywordCourseName = createKeywords(`${course}`);
-	return [...new Set(['', ...keywordNameCourse, ...keywordCourseName])];
-};
-
-exports.search = (req, res) => {
-	const input = req.query.searchInput.trim();
-	const input2 = req.query.searchInput.toUpperCase();
-	let map = new Map();
-	let result = [];
-	db.collection('notes')
-		.where('published', '==', true)
-		.where('keywords', 'array-contains', input)
-		.get()
-		.then((querySnapShot) => {
-			querySnapShot.forEach(function (doc) {
-				map.set(doc.id, doc.data());
+	// This callback will be invoked after all uploaded files are saved.
+	busboy.on('finish', () => {
+		for (const name in uploads) {
+			const upload = uploads[name];
+			const file = upload.file;
+			bucket.upload(file, { destination: "test/" }).then(data => {
+				console.log('upload success');
+				fs.unlinkSync(file); //Unlinks and deletes the file
+				return res.status(200);
+			}).catch(err => {
+				fs.unlinkSync(file); //Unlinks and deletes the file
+				console.log('error uploading to storage', err);
+				return res.status(500).err(err);
 			});
-		})
-		.catch(function (error) {
-			return res.status(400).json(error);
-		});
-	db.collection('notes')
-		.where('published', '==', true)
-		.where('keywords', 'array-contains', input2)
-		.get()
-		.then((querySnapShot) => {
-			querySnapShot.forEach(function (doc) {
-				if (!map.has(doc.id)) map.set(doc.id, doc.data());
-			});
-			map.forEach((element) => {
-				result.push(element);
-			});
-			var obj = [];
-			for (let [key, value] of map) {
-				obj.push({ key: key, value: value });
-			}
-			return res.status(200).json(obj);
-		})
-		.catch(function (error) {
-			return res.status(400).json(error);
-		});
-};
+		}
+		res.end();
+	});
+	busboy.end(req.rawBody);
+}
+// =======================================================================
