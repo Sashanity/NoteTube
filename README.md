@@ -1,3 +1,5 @@
+<h1 align="center">NoteTube</h1>
+
 ### External Requirements
 - Node.js
 - Firebase, firetools (?)
@@ -44,4 +46,7 @@ $ npm run start
 $ cd NoteTube/server
 $ firebase serve
 ```
+
+# Credits
+Logo: Chiara Brinkmann
 
