@@ -1,3 +1,7 @@
+### External Requirements
+- Node.js
+- Firebase, firetools (?)
+
 ### Run NoteTube
 
 1. **Clone this repo**
