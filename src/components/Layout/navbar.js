@@ -8,6 +8,7 @@ import { logout } from '../../actions/auth';
 import { useHistory } from 'react-router-dom';
 import Button from '@material-ui/core/Button';
 
+import logoNoteTube from '../../img/logoNoteTube.png'
 /* Uses a header that scrolls with the text, rather than staying locked at the top */
 const Navbar = () => {
 	const history = useHistory();
@@ -16,7 +17,7 @@ const Navbar = () => {
 		return (
 			<div className='demo-big-content'>
 				<Layout>
-					<Header className='header-color' title='NoteTube' scroll>
+					<Header className='header-color' title={<img src={logoNoteTube} alt="LogoNoteTube" width='147px' height='64px' />} scroll>
 						<Navigation>
 							<Link to='#'>Personal Workspace</Link>
 							<Link to='#'>Class Notes</Link>
