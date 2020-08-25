@@ -8,7 +8,6 @@ app.use(cors());
 
 app.post('/login', login);
 app.post('/signup', signup);
-app.get('/search', search);
 
 const algoliasearch = require('algoliasearch');
 const ALGOLIA_ID = functions.config().algolia.appid;
