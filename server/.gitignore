@@ -7,7 +7,7 @@ yarn-error.log*
 firebase-debug.log*
 
 #algoliaAPIkeys
-./functions/.runtimeconfig.json
+/functions/.runtimeconfig.json
 .runtimeconfig.json
 
 # Firebase cache
