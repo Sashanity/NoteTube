@@ -1,66 +1,98 @@
 .header-color {
-  background: #c33764; /* fallback for old browsers */
-  background: -webkit-linear-gradient(to right, #1d2671, #c33764); /* Chrome 10-25, Safari 5.1-6 */
-  background: linear-gradient(to right, #1d2671, #c33764); /* W3C, IE 10+/ Edge, Firefox 16+, Chrome 26+, Opera 12+, Safari 7+ */
+	background: #c33764; /* fallback for old browsers */
+	background: -webkit-linear-gradient(
+		to right,
+		#1d2671,
+		#c33764
+	); /* Chrome 10-25, Safari 5.1-6 */
+	background: linear-gradient(
+		to right,
+		#1d2671,
+		#c33764
+	); /* W3C, IE 10+/ Edge, Firefox 16+, Chrome 26+, Opera 12+, Safari 7+ */
 }
 .landing-grid {
-  background: #c33764; /* fallback for old browsers */
-  background: -webkit-linear-gradient(to right, #1d2671, #c33764); /* Chrome 10-25, Safari 5.1-6 */
-  background: linear-gradient(to right, #1d2671, #c33764); /* W3C, IE 10+/ Edge, Firefox 16+, Chrome 26+, Opera 12+, Safari 7+ */
-  text-align: center;
-  width: 100%;
-  height: 100%;
+	background: #c33764; /* fallback for old browsers */
+	background: -webkit-linear-gradient(
+		to right,
+		#1d2671,
+		#c33764
+	); /* Chrome 10-25, Safari 5.1-6 */
+	background: linear-gradient(
+		to right,
+		#1d2671,
+		#c33764
+	); /* W3C, IE 10+/ Edge, Firefox 16+, Chrome 26+, Opera 12+, Safari 7+ */
+	text-align: center;
+	width: 100%;
+	height: 100%;
 }
 
 .container {
-  min-height: 100vh;
-  background: -webkit-linear-gradient(to right, #1d2671, #c33764); /* Chrome 10-25, Safari 5.1-6 */
-  background: linear-gradient(to right, #1d2671, #c33764);
+	min-height: 100vh;
+	background: -webkit-linear-gradient(
+		to right,
+		#1d2671,
+		#c33764
+	); /* Chrome 10-25, Safari 5.1-6 */
+	background: linear-gradient(to right, #1d2671, #c33764);
 }
 
 .logo-img {
-  height: 250px;
+	height: 250px;
 }
 
 .banner-text {
-  background: #c33764; /* fallback for old browsers */
-  background: -webkit-linear-gradient(to right, #1d2671, #c33764); /* Chrome 10-25, Safari 5.1-6 */
-  background: linear-gradient(to right, #1d2671, #c33764);
-  opacity: 0.8;
-  width: 75%;
-  margin: auto;
-  border-radius: 10px;
+	background: #c33764; /* fallback for old browsers */
+	background: -webkit-linear-gradient(
+		to right,
+		#1d2671,
+		#c33764
+	); /* Chrome 10-25, Safari 5.1-6 */
+	background: linear-gradient(to right, #1d2671, #c33764);
+	opacity: 0.8;
+	width: 75%;
+	margin: auto;
+	border-radius: 10px;
 }
 
 .banner-text h3 {
-  font-weight: bold;
-  color: white;
+	font-weight: bold;
+	color: white;
 }
 
 .banner-text p {
-  color: white;
-  font-size: 20px;
-  padding: 1em;
+	color: white;
+	font-size: 20px;
+	padding: 1em;
 }
 
 .social-links {
-  display: flex;
-  justify-content: space-between;
-  width: 50%;
-  margin: auto;
+	display: flex;
+	justify-content: space-between;
+	width: 50%;
+	margin: auto;
 }
 
 .App {
-  text-align: center;
+	text-align: center;
 }
 
 .App-logo {
-  height: 40vmin;
-  pointer-events: none;
+	height: 40vmin;
+	pointer-events: none;
 }
 
 @media (prefers-reduced-motion: no-preference) {
-  .App-logo {
-    animation: App-logo-spin infinite 20s linear;
-  }
+	.App-logo {
+		animation: App-logo-spin infinite 20s linear;
+	}
+}
+
+.ais-SearchBox {
+	width: 700px;
+}
+
+.ais-Hits-item {
+	color: white;
 }

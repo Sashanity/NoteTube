@@ -1,5 +1,9 @@
 import axios from 'axios';
-
+const config = {
+	headers: {
+		'Content-Type': 'application/json',
+	},
+};
 // Register User
 export const register = async (
 	firstname,
@@ -11,11 +15,6 @@ export const register = async (
 	setUser,
 	history
 ) => {
-	const config = {
-		headers: {
-			'Content-Type': 'application/json',
-		},
-	};
 	const body = JSON.stringify({
 		firstname,
 		lastname,
@@ -29,7 +28,7 @@ export const register = async (
 		const res = await axios.post('/signup', body, config);
 		setAuthHeader(res.data.token);
 		setUser(res.data.token);
-		history.push('/homepage');
+		history.push('/Home');
 	} catch (err) {
 		console.log(err);
 		return err.response.data;
@@ -38,11 +37,6 @@ export const register = async (
 
 // Login User
 export const login = async (emailUsername, password, history, setUser) => {
-	const config = {
-		headers: {
-			'Content-Type': 'application/json',
-		},
-	};
 	const email = emailUsername;
 	const body = JSON.stringify({
 		email,
@@ -52,7 +46,7 @@ export const login = async (emailUsername, password, history, setUser) => {
 		const res = await axios.post('/login', body, config);
 		setAuthHeader(res.data.token);
 		setUser(res.data.token);
-		history.push('/homepage');
+		history.push('/Home');
 	} catch (err) {
 		return err.response.data;
 	}
@@ -66,14 +60,14 @@ export const logout = (history, setUser) => async () => {
 	history.push('/');
 };
 
-export const getUserData = () => async () => {
-	try {
-		const res = await axios.get('/user');
-		return res.data;
-	} catch (err) {
-		console.log(err);
-	}
-};
+// export const getUserData = () => async () => {
+// 	try {
+// 		const res = await axios.get('/user');
+// 		return res.data;
+// 	} catch (err) {
+// 		console.log(err);
+// 	}
+// };
 
 const setAuthHeader = (token) => {
 	const Token = `Bearer ${token}`;

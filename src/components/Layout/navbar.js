@@ -12,11 +12,11 @@ import Button from '@material-ui/core/Button';
 const Navbar = () => {
 	const history = useHistory();
 	const { user, setUser } = useContext(UserContext);
-	if (user) {
+	if (localStorage.getItem('token')) {
 		return (
-			<div className='demo-big-content'>
+			<div style={{ height: '64px', position: 'relative' }}>
 				<Layout>
-					<Header className='header-color' title='NoteTube' scroll>
+					<Header className='header-color' transparent title='NoteTube'>
 						<Navigation>
 							<Link to='#'>Personal Workspace</Link>
 							<Link to='#'>Class Notes</Link>
@@ -35,9 +35,7 @@ const Navbar = () => {
 							<Button onClick={logout(history, setUser)}>Logout</Button>
 						</Navigation>
 					</Drawer>
-					<Content>
-						<div className='page-content' />
-					</Content>
+					<Content />
 				</Layout>
 			</div>
 		);
