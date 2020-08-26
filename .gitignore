@@ -29,5 +29,6 @@ yarn-debug.log*
 yarn-error.log*
 
 server/functions/util/firebaseConfig.js
+server/.runtimeconfig.json
 
 *.log
