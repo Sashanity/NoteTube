@@ -21,8 +21,6 @@ const Navbar = () => {
 						<Navigation>
 							<Link to='#'>Personal Workspace</Link>
 							<Link to='#'>Class Notes</Link>
-							<Link to='#'>About</Link>
-							<Link to='#'>Contact</Link>
 							<Link to='#'>
 								<AccountCircleIcon></AccountCircleIcon>
 							</Link>
