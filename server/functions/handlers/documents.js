@@ -7,38 +7,38 @@ const path = require('path');
 
 
 exports.upload = (req, res) => {
-	const busboy = new Busboy({ headers: req.headers });
-        const uploads = {}
+    //TODO: Add Firebase Authentication
+    const busboy = new Busboy({ headers: req.headers });
+    const uploads = {}
 
-		
-        busboy.on('file', (fieldname, file, filename, encoding, mimetype) => {
-            console.log(`File [${fieldname}] filename: ${filename}, encoding: ${encoding}, mimetype: ${mimetype}`);
-            const filepath = path.join(os.tmpdir(), filename); //Gets the temporary directory that the file will go in
-            uploads[fieldname] = { file: filepath, name: filename } //Add the file to the uploads array
-            console.log(`Saving '${fieldname}' to ${filepath}`);
-            file.pipe(fs.createWriteStream(filepath)); //Takes the file, reads it, then writes it to the temporary dircetory
-        });
+    
+    busboy.on('file', (fieldname, file, filename, encoding, mimetype) => {
+        console.log(`File [${fieldname}] filename: ${filename}, encoding: ${encoding}, mimetype: ${mimetype}`);
+        const filepath = path.join(os.tmpdir(), filename); //Gets the temporary directory that the file will go in
+        uploads[fieldname] = { file: filepath, name: filename } //Add the file to the uploads array
+        console.log(`Saving '${fieldname}' to ${filepath}`);
+        file.pipe(fs.createWriteStream(filepath)); //Takes the file, reads it, then writes it to the temporary dircetory
+    });
 
-        busboy.on('finish', () => {
-            for (const name in uploads) {
-                //TODO: Firebase upload works. Need to make sure the user is logged in a specify the desintation for where their files go.
-                //TODO: Save the document info to the firebase database
-                const upload = uploads[name];
-                const file = upload.file;
-                bucket.upload(file, {destination: "test/" + upload.name}).then(data => {
-                    console.log('upload success');
-                    //res.write(`${file}\n`); //Write the file location to the response
-                    fs.unlinkSync(file); //Unlinks and deletes the file
-                    return res.status(200);
-                }).catch(err => {
-                    fs.unlinkSync(file); //Unlinks and deletes the file
-                    console.log('error uploading to storage', err);
-                    return res.status(500).err(err);
-                });
-                
-            }
-            res.end();
-        });
-        busboy.end(req.rawBody);
+    busboy.on('finish', () => {
+        for (const name in uploads) {
+            const upload = uploads[name];
+            const file = upload.file;
+            //TODO: After auth works, change the destination
+            bucket.upload(file, {destination: "test/" + upload.name}).then(data => {
+                console.log('upload success');
+                //res.write(`${file}\n`); //Write the file location to the response
+                fs.unlinkSync(file); //Unlinks and deletes the file
+                return res.status(200)
+            }).catch(err => {
+                fs.unlinkSync(file); //Unlinks and deletes the file
+                console.log('error uploading to storage', err);
+                return res.status(500).json(err);
+            });
+            
+        }
+        res.end();
+    });
+    busboy.end(req.rawBody);
 }
 
