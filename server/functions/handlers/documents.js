@@ -14,7 +14,7 @@ exports.upload = (req, res) => {
         busboy.on('file', (fieldname, file, filename, encoding, mimetype) => {
             console.log(`File [${fieldname}] filename: ${filename}, encoding: ${encoding}, mimetype: ${mimetype}`);
             const filepath = path.join(os.tmpdir(), filename); //Gets the temporary directory that the file will go in
-            uploads[fieldname] = { file: filepath } //Add the file to the uploads array
+            uploads[fieldname] = { file: filepath, name: filename } //Add the file to the uploads array
             console.log(`Saving '${fieldname}' to ${filepath}`);
             file.pipe(fs.createWriteStream(filepath)); //Takes the file, reads it, then writes it to the temporary dircetory
         });
@@ -25,7 +25,7 @@ exports.upload = (req, res) => {
                 //TODO: Save the document info to the firebase database
                 const upload = uploads[name];
                 const file = upload.file;
-                bucket.upload(file, {destination: "test/"}).then(data => {
+                bucket.upload(file, {destination: "test/" + upload.name}).then(data => {
                     console.log('upload success');
                     //res.write(`${file}\n`); //Write the file location to the response
                     fs.unlinkSync(file); //Unlinks and deletes the file
