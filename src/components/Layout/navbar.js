@@ -17,7 +17,7 @@ const Navbar = () => {
 		return (
 			<div style={{ height: '64px', position: 'relative' }}>
 				<Layout>
-					<Header className='header-color' title={<img src={logoNoteTube} alt="LogoNoteTube" width='120px' height='50px' />} scroll>
+					<Header className='header-color' title={<img src={logoNoteTube} alt="LogoNoteTube" width='120px' />} scroll>
 						<Navigation>
 							<Link to='#'>Personal Workspace</Link>
 							<Link to='#'>Class Notes</Link>
