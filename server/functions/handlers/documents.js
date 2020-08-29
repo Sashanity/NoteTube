@@ -1,4 +1,4 @@
-const { db, bucket } = require('../util/admin');
+const { admin, db, bucket } = require('../util/admin');
 const { ref } = require('firebase-functions/lib/providers/database');
 const fs = require('fs');
 const os = require('os');
@@ -7,11 +7,21 @@ const path = require('path');
 
 
 exports.upload = (req, res) => {
-    //TODO: Add Firebase Authentication
     const busboy = new Busboy({ headers: req.headers });
     const uploads = {}
-
+    //TODO: Figure out how to get the token
+    const idToken = "ThisIsNotARealToken";
+    var userID = "";
     
+    //Checks the token to make sure the user is logged in
+    admin.auth().verifyIdToken(idToken).then(function(decodedToken){
+        console.log(decodedToken.uid);
+        userID = decodedToken.uid;
+        busboy.end(req.rawBody);
+    }).catch(function(error) {
+        return res.status(500).json(error);
+    })
+
     busboy.on('file', (fieldname, file, filename, encoding, mimetype) => {
         console.log(`File [${fieldname}] filename: ${filename}, encoding: ${encoding}, mimetype: ${mimetype}`);
         const filepath = path.join(os.tmpdir(), filename); //Gets the temporary directory that the file will go in
@@ -24,12 +34,10 @@ exports.upload = (req, res) => {
         for (const name in uploads) {
             const upload = uploads[name];
             const file = upload.file;
-            //TODO: After auth works, change the destination
-            bucket.upload(file, {destination: "test/" + upload.name}).then(data => {
+            bucket.upload(file, {destination: `notes/${userID}/${upload.name}`}).then(data => {
                 console.log('upload success');
                 //res.write(`${file}\n`); //Write the file location to the response
                 fs.unlinkSync(file); //Unlinks and deletes the file
-                return res.status(200)
             }).catch(err => {
                 fs.unlinkSync(file); //Unlinks and deletes the file
                 console.log('error uploading to storage', err);
@@ -37,8 +45,8 @@ exports.upload = (req, res) => {
             });
             
         }
-        res.end();
+        return res.status(200).json("{Status: Uploaded}");
     });
-    busboy.end(req.rawBody);
+    
 }
 
