@@ -1,8 +1,9 @@
 const { db, admin } = require('../util/admin');
 
 exports.addNote = (req, res) => {
+    const fileURL = "haha.com"
     const newNote = {
-        filename: req.body.filename,
+        name: req.body.name,
         course: req.body.course,
         term: req.body.term,
         instructor: req.body.instructor,
@@ -13,7 +14,8 @@ exports.addNote = (req, res) => {
         timestamp: admin.firestore.Timestamp.fromDate(new Date()),
     };
 
-    db.collection('notes2').add(newNote)
+    newNote.docURL = fileURL
+    db.collection('notes4').add(newNote)
         .then(() => {
             return res.json({ message: 'Note added successfully' });
         })
