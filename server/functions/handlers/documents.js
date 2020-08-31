@@ -8,19 +8,23 @@ const path = require('path');
 
 exports.upload = (req, res) => {
     const busboy = new Busboy({ headers: req.headers });
-    const uploads = {}
+    const uploads = {};
     //TODO: Figure out how to get the token
     //const idToken = "ThisIsNotARealToken";
     var userID = "";
+    var returnval = "";
     
     //Checks the token to make sure the user is logged in
     admin.auth().verifyIdToken(idToken).then(function(decodedToken){
-        console.log(decodedToken.uid);
         userID = decodedToken.uid; //Gets the user ID that will be used to place the file in that user's folder
-        busboy.end(req.rawBody); //Calles the busboy functions below
+        busboy.end(req.rawBody); //Calls the busboy functions below
     }).catch(function(error) {
         return res.status(400).json(error); //Didn't Log in correctly
     })
+
+    busboy.on('field', function(fieldname, val) {
+        returnval += (`${fieldname}: ${val} `);
+      });
 
     busboy.on('file', (fieldname, file, filename, encoding, mimetype) => {
         console.log(`File [${fieldname}] filename: ${filename}, encoding: ${encoding}, mimetype: ${mimetype}`);
@@ -44,12 +48,7 @@ exports.upload = (req, res) => {
             });
             
         }
-        return res.status(200).json({Status: "Uploaded"});
+        return res.status(200).json({Status: "Uploaded", field: returnval});
     });
     
 }
-
-exports.download = (req, res) => {
-    
-}
-
