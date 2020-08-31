@@ -7,6 +7,7 @@ import AccountCircleIcon from '@material-ui/icons/AccountCircle';
 import { logout } from '../../actions/auth';
 import { useHistory } from 'react-router-dom';
 import Button from '@material-ui/core/Button';
+import logoNoteTube from '../../img/logoNoteTube.png'
 
 /* Uses a header that scrolls with the text, rather than staying locked at the top */
 const Navbar = () => {
@@ -16,12 +17,10 @@ const Navbar = () => {
 		return (
 			<div style={{ height: '64px', position: 'relative' }}>
 				<Layout>
-					<Header className='header-color' transparent title='NoteTube'>
+					<Header className='header-color' title={<img src={logoNoteTube} alt="LogoNoteTube" width='120px' />} scroll>
 						<Navigation>
 							<Link to='#'>Personal Workspace</Link>
 							<Link to='#'>Class Notes</Link>
-							<Link to='#'>About</Link>
-							<Link to='#'>Contact</Link>
 							<Link to='#'>
 								<AccountCircleIcon></AccountCircleIcon>
 							</Link>
