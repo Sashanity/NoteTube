@@ -9,6 +9,8 @@
 # testing
 /coverage
 
+# Algolia API keys
+.env
 
 # production
 /build
@@ -27,5 +29,6 @@ yarn-debug.log*
 yarn-error.log*
 
 server/functions/util/firebaseConfig.js
+server/.runtimeconfig.json
 
 *.log
