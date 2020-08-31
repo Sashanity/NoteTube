@@ -22,10 +22,12 @@ exports.upload = (req, res) => {
         return res.status(400).json(error); //Didn't Log in correctly
     })
 
+    //This reads the text fields from the form
     busboy.on('field', function(fieldname, val) {
         returnval += (`${fieldname}: ${val} `);
       });
-
+    
+    //This reads the file fields from the form
     busboy.on('file', (fieldname, file, filename, encoding, mimetype) => {
         console.log(`File [${fieldname}] filename: ${filename}, encoding: ${encoding}, mimetype: ${mimetype}`);
         const filepath = path.join(os.tmpdir(), filename); //Gets the temporary directory that the file will go in
