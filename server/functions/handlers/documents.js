@@ -10,16 +10,16 @@ exports.upload = (req, res) => {
     const busboy = new Busboy({ headers: req.headers });
     const uploads = {}
     //TODO: Figure out how to get the token
-    const idToken = "ThisIsNotARealToken";
+    //const idToken = "ThisIsNotARealToken";
     var userID = "";
     
     //Checks the token to make sure the user is logged in
     admin.auth().verifyIdToken(idToken).then(function(decodedToken){
         console.log(decodedToken.uid);
-        userID = decodedToken.uid;
-        busboy.end(req.rawBody);
+        userID = decodedToken.uid; //Gets the user ID that will be used to place the file in that user's folder
+        busboy.end(req.rawBody); //Calles the busboy functions below
     }).catch(function(error) {
-        return res.status(500).json(error);
+        return res.status(400).json(error); //Didn't Log in correctly
     })
 
     busboy.on('file', (fieldname, file, filename, encoding, mimetype) => {
@@ -36,7 +36,6 @@ exports.upload = (req, res) => {
             const file = upload.file;
             bucket.upload(file, {destination: `notes/${userID}/${upload.name}`}).then(data => {
                 console.log('upload success');
-                //res.write(`${file}\n`); //Write the file location to the response
                 fs.unlinkSync(file); //Unlinks and deletes the file
             }).catch(err => {
                 fs.unlinkSync(file); //Unlinks and deletes the file
@@ -45,8 +44,12 @@ exports.upload = (req, res) => {
             });
             
         }
-        return res.status(200).json("{Status: Uploaded}");
+        return res.status(200).json({Status: "Uploaded"});
     });
+    
+}
+
+exports.download = (req, res) => {
     
 }
 
