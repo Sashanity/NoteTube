@@ -50,10 +50,10 @@ exports.addNote2 = (req, res) => {
                     //res.write(`${file}\n`); //Write the file location to the response
                     // fs.unlinkSync(file); //Unlinks and deletes the file
                     // return res.status(200);
-                    db.collection('notes3').add(newNote)
 
 
-                    return res.json({ message: 'Doc added successfully', fileURL: fileURL });
+
+                    // return res.json({ message: 'Doc added successfully', fileURL: fileURL });
                 })
 
                 .catch(err => {
@@ -61,6 +61,10 @@ exports.addNote2 = (req, res) => {
                     console.log('error uploading to storage', err);
                     return res.status(500).err(err);
                 });
+            // db.collection('notes-full').add(newNote)
+            //     .then(() => {
+            //         return res.json({ message: 'Note added successfully' });
+            //     })
 
         }
 

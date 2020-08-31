@@ -9,6 +9,7 @@ const path = require('path');
 exports.upload = (req, res) => {
     const busboy = new Busboy({ headers: req.headers });
     const uploads = {}
+    let filesURL = {}
 
 
     busboy.on('file', (fieldname, file, filename, encoding, mimetype) => {
@@ -32,7 +33,7 @@ exports.upload = (req, res) => {
                     // console.log(data)
                     // console.log('======================================')
                     // console.log(data[1].selfLink)
-                    const fileURL = data[1].selfLink
+                    let fileURL = data[1].selfLink
 
                     console.log('upload success');
                     //res.write(`${file}\n`); //Write the file location to the response
