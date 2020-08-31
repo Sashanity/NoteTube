@@ -12,7 +12,7 @@ exports.upload = (req, res) => {
     //TODO: Figure out how to get the token
     //const idToken = "ThisIsNotARealToken";
     var userID = "";
-    var returnval = "";
+    var returnval = {};
     
     //Checks the token to make sure the user is logged in
     admin.auth().verifyIdToken(idToken).then(function(decodedToken){
@@ -24,7 +24,7 @@ exports.upload = (req, res) => {
 
     //This reads the text fields from the form
     busboy.on('field', function(fieldname, val) {
-        returnval += (`${fieldname}: ${val} `);
+        returnval[fieldname] = val; //Saves the fields as an object to upload to db.
       });
     
     //This reads the file fields from the form
