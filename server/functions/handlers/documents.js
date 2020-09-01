@@ -62,7 +62,8 @@ exports.upload = (req, res) => {
                     };
                     console.log(newNote)
 
-                    db.collection('notes-url').add(newNote)
+                    db.collection('notes-url').add(newNote); 
+                    //TODO: Return the note ID to send the user to.
                     fs.unlinkSync(file); //Unlinks and deletes the file
                 }).catch(err => {
                     fs.unlinkSync(file); //Unlinks and deletes the file
@@ -78,4 +79,8 @@ exports.upload = (req, res) => {
     //     return res.json({ message: 'Note added successfully' });
     // })
 
+}
+
+exports.download = (req, res) => {
+    return res.status(501).json({ Status: "Not Implemented"})
 }
