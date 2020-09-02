@@ -14,7 +14,7 @@ exports.upload = (req, res) => {
     const busboy = new Busboy({ headers: req.headers });
     const uploads = {};
     //TODO: Figure out how to get the token
-    const idToken = "eyJhbGciOiJSUzI1NiIsImtpZCI6IjUxMDM2YWYyZDgzOWE4NDJhZjQzY2VjZmJiZDU4YWYxYTc1OGVlYTIiLCJ0eXAiOiJKV1QifQ.eyJpc3MiOiJodHRwczovL3NlY3VyZXRva2VuLmdvb2dsZS5jb20vbm90ZXR1YmUtZjNmOWMiLCJhdWQiOiJub3RldHViZS1mM2Y5YyIsImF1dGhfdGltZSI6MTU5OTAyMDQxMCwidXNlcl9pZCI6ImhUdjBYWDEwNkdWRWtrSTJUWDFoaDdBeHlrODMiLCJzdWIiOiJoVHYwWFgxMDZHVkVra0kyVFgxaGg3QXh5azgzIiwiaWF0IjoxNTk5MDIwNDEwLCJleHAiOjE1OTkwMjQwMTAsImVtYWlsIjoibWNpbmVybmV5Lm1pY2hhZWxAc2pzdS5lZHUiLCJlbWFpbF92ZXJpZmllZCI6ZmFsc2UsImZpcmViYXNlIjp7ImlkZW50aXRpZXMiOnsiZW1haWwiOlsibWNpbmVybmV5Lm1pY2hhZWxAc2pzdS5lZHUiXX0sInNpZ25faW5fcHJvdmlkZXIiOiJwYXNzd29yZCJ9fQ.W95c8OcD8WCWKk_ud0NZu3ItnVTeovX7sF5hX48oFDgXOjr9XD-U_RVoLpxJh41scAVfXZLb5KPvi5shKfhVVnhGrnxrkL0zh4t8y4EpFq4MX0X9pPvP3e4aEZA6oGmx0NVuHcyF3N6Lxx0QT2Syi5tnp6_IoLwqCrCc2rD0_RFHq2n2sjVLBkpgD7KvTDmPlTtcqYEvMt4VgfoXgop5HFO3s_TCsYudeA_xv9SlZVBUCRf-mtLgxUCBTHvFrPnDQ52lh0tffx6TLW8GxhH6LOYfdgdsMSk5h8Wz_b8hpzQRyZgoZ38RMuOlVkqsHzu0LClYk-mf7w9EhEPwhzcYGw"
+    const idToken = "eyJhbGciOiJSUzI1NiIsImtpZCI6IjUxMDM2YWYyZDgzOWE4NDJhZjQzY2VjZmJiZDU4YWYxYTc1OGVlYTIiLCJ0eXAiOiJKV1QifQ.eyJpc3MiOiJodHRwczovL3NlY3VyZXRva2VuLmdvb2dsZS5jb20vbm90ZXR1YmUtZjNmOWMiLCJhdWQiOiJub3RldHViZS1mM2Y5YyIsImF1dGhfdGltZSI6MTU5OTAyODY4MywidXNlcl9pZCI6ImhUdjBYWDEwNkdWRWtrSTJUWDFoaDdBeHlrODMiLCJzdWIiOiJoVHYwWFgxMDZHVkVra0kyVFgxaGg3QXh5azgzIiwiaWF0IjoxNTk5MDI4NjgzLCJleHAiOjE1OTkwMzIyODMsImVtYWlsIjoibWNpbmVybmV5Lm1pY2hhZWxAc2pzdS5lZHUiLCJlbWFpbF92ZXJpZmllZCI6ZmFsc2UsImZpcmViYXNlIjp7ImlkZW50aXRpZXMiOnsiZW1haWwiOlsibWNpbmVybmV5Lm1pY2hhZWxAc2pzdS5lZHUiXX0sInNpZ25faW5fcHJvdmlkZXIiOiJwYXNzd29yZCJ9fQ.WCCcUZqciE3OOsEEU8gcLgkPY9xviLRMMaSCYeDyaIpHLL6MhflCGq6Es9uq_eLw_kBYssmGXHHZF99wubmMDc-LDi-QM6NWB7rJ2b3peuSU6NOateDHuRVxeDIzqzAD9Jmc9c3oQQKSe5KWLDEpGNOkAx06qmILDcOHsZYdjk_-VOghvbweQOwKhyGZQtuu5logZeqmeS3sY0JYvjQPkY-1BzkU_flFgrsWabpx7hCm0hVAubERj8-PCSD5pSr2upoPj_QB5vlip5o7nc0WpB4CFufOGzPvY7ChfVvsSZLmkADjCNVTq9_ipb2hT0mvZxrjNvXBlp5J8Jfkxzhcaw"
     var userID = "";
     var returnval = {};
 
@@ -53,6 +53,7 @@ exports.upload = (req, res) => {
                     console.log(data);
                     const newNote = {
                         name: returnval.name,
+                        filename: upload.name,
                         course: returnval.course,
                         term: returnval.term,
                         instructor: returnval.instructor,
@@ -60,7 +61,7 @@ exports.upload = (req, res) => {
                         public: returnval.public,
                         location: `notes/${userID}/${upload.name}`,
                         // this should come from the storage
-                        docURL: data[1].selfLink,
+                        //docURL: data[1].selfLink,
                         timestamp: admin.firestore.Timestamp.fromDate(new Date()),
                     };
                     console.log(newNote)
@@ -84,14 +85,17 @@ exports.upload = (req, res) => {
 
 }
 
-exports.download = (req, res) => {
+exports.preview = (req, res) => {
     var noteRef = db.collection('notes-url').doc(req.query.noteid);
-    var fileDir = path.join(os.tmpdir(), "test.pdf");
+    var fileDir = "";
     noteRef.get().then(function(doc){
         if (doc.exists){
             noteData = doc.data();
+            
             //const fileDest = downloadFile().catch(console.error);
             file = bucket.file(noteData.location);
+            
+            fileDir = path.join(os.tmpdir(), noteData.filename);
             file.createReadStream()
             .on('error', function(err){
                 return res.status(500).json({Status: err});
@@ -102,7 +106,7 @@ exports.download = (req, res) => {
             .on('end', function() {
                 fs.readFile(fileDir, function (err, data){
                     res.contentType("application/pdf");
-                    res.end(data);
+                    res.send(data);
                     fs.unlinkSync(fileDir);
                 });
             })
