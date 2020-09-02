@@ -85,6 +85,8 @@ exports.upload = (req, res) => {
 
 }
 
+//TODO: Validate users to make sure that private notes don't get sent back to just anyone.
+//TODO: Make contentType dynamic rather than hardcoding it. Possibly use response in the readstream
 exports.preview = (req, res) => {
     var noteRef = db.collection('notes-url').doc(req.query.noteid);
     var fileDir = "";
