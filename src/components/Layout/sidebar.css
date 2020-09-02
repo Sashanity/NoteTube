@@ -1,0 +1,10 @@
+.sidebar
+{
+    flex: 0.2;
+}
+.SidebarRow{
+display: flex;
+align-items: center;
+margin-left: 20px;
+
+}

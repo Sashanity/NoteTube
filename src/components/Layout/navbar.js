@@ -18,9 +18,9 @@ const Navbar = () => {
 				<Layout>
 					<Header className='header-color' transparent title='NoteTube'>
 						<Navigation>
-							<Link to='#'>Personal Workspace</Link>
-							<Link to='#'>Class Notes</Link>
-							<Link to='#'>About</Link>
+							<Link to='/personalSapce'>Personal Workspace</Link>
+							<Link to='#'>Upload Notes</Link>
+							<Link to='#'>Followers</Link>
 							<Link to='#'>Contact</Link>
 							<Link to='#'>
 								<AccountCircleIcon></AccountCircleIcon>
@@ -30,7 +30,7 @@ const Navbar = () => {
 					<Drawer title='NoteTube'>
 						<Navigation>
 							<Link to='#'>Profile</Link>
-							<Link to='#'>Upload Notes</Link>
+							<Link to='/uploadNotes'>Upload Notes</Link>
 							<Link to='#'>Followers</Link>
 							<Button onClick={logout(history, setUser)}>Logout</Button>
 						</Navigation>
