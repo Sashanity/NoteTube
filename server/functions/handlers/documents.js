@@ -95,7 +95,7 @@ exports.preview = (req, res) => {
             noteData = doc.data();
             
             //const fileDest = downloadFile().catch(console.error);
-            file = bucket.file(noteData.location);
+            file = bucket.file(`notes/${noteData.uploader}/${noteData.filename}`);
             
             fileDir = path.join(os.tmpdir(), noteData.filename);
             file.createReadStream()
