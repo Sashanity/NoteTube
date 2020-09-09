@@ -59,7 +59,7 @@ exports.upload = (req, res) => {
                         instructor: returnval.instructor,
                         owner: returnval.owner,
                         public: returnval.public,
-                        location: `notes/${userID}/${upload.name}`,
+                        uploader: userID,
                         // this should come from the storage
                         //docURL: data[1].selfLink,
                         timestamp: admin.firestore.Timestamp.fromDate(new Date()),
