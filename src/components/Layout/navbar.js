@@ -18,7 +18,7 @@ const Navbar = () => {
 				<Layout>
 					<Header className='header-color' transparent title='NoteTube'>
 						<Navigation>
-							<Link to='/personalSapce'>Personal Workspace</Link>
+							<Link to='/personalSpace'>Personal Workspace</Link>
 							<Link to='#'>Upload Notes</Link>
 							<Link to='#'>Followers</Link>
 							<Link to='#'>Contact</Link>

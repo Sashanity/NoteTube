@@ -34,8 +34,8 @@ const App = () => {
 						<AuthenticatedRoute exact path='/Home' component={Home} />
 						<RedirectOnceLoggedIn exact path='/register' component={Register} />
 						<RedirectOnceLoggedIn exact path='/login' component={Login} />
-						<Route exact path="/personalSpace" component={PersonalSpace} />
-						<Route exact path="/Modal" component={Modal} />
+						<AuthenticatedRoute exact path="/personalSpace" component={PersonalSpace} />
+						{/* <Route exact path="/Modal" component={Modal} /> */}
 					</Switch>
 				</div>
 				<Footer />
