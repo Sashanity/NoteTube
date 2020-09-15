@@ -57,6 +57,7 @@ body {
       transform: translate(-50%, -50%);
       max-width: 30em;
       max-height: calc(100% - 1em);
+      border-radius: 1rem;
     }
   }
   
