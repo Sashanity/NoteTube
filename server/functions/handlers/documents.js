@@ -93,7 +93,7 @@ exports.preview = (req, res) => {
     var userID = "";
     if (req.body.idToken){
         admin.auth().verifyIdToken(req.body.idToken).then(function(decodedToken){
-            userID = decodedToken.uid;
+            userID = decodedToken.uid; //Get the uid
         }).catch(function (error) {
             return res.status(400).json({Status: "Verification Error"}); //Didn't Log in correctly
         })
