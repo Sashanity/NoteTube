@@ -85,12 +85,11 @@ exports.upload = (req, res) => {
 
 }
 
-//TODO: Validate users to make sure that private notes don't get sent back to just anyone.
-//TODO: Make contentType dynamic rather than hardcoding it. Possibly use response in the readstream
 exports.preview = (req, res) => {
-    var noteRef = db.collection('notes-url').doc(req.query.noteid);
+    const noteRef = db.collection('notes-url').doc(req.query.noteid);
     var fileDir = "";
     var userID = "";
+    var contentType = "application/xml";
     if (req.body.idToken){
         admin.auth().verifyIdToken(req.body.idToken).then(function(decodedToken){
             userID = decodedToken.uid; //Get the uid
@@ -111,11 +110,11 @@ exports.preview = (req, res) => {
                     return res.status(500).json({Status: err});
                 })
                 .on('response', function(response) {
-                    console.log(response);
+                    contentType = response.headers['content-type'];
                 })
                 .on('end', function() {
                     fs.readFile(fileDir, function (err, data){
-                        res.contentType("application/pdf");
+                        res.contentType(contentType);
                         res.send(data);
                         fs.unlinkSync(fileDir);
                     });
