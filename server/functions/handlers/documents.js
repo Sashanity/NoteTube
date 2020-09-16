@@ -90,30 +90,41 @@ exports.upload = (req, res) => {
 exports.preview = (req, res) => {
     var noteRef = db.collection('notes-url').doc(req.query.noteid);
     var fileDir = "";
+    var userID = "";
+    if (req.body.idToken){
+        admin.auth().verifyIdToken(req.body.idToken).then(function(decodedToken){
+            userID = decodedToken.uid;
+        }).catch(function (error) {
+            return res.status(400).json({Status: "Verification Error"}); //Didn't Log in correctly
+        })
+    }
     noteRef.get().then(function(doc){
         if (doc.exists){
             noteData = doc.data();
-            
-            //const fileDest = downloadFile().catch(console.error);
-            file = bucket.file(`notes/${noteData.uploader}/${noteData.filename}`);
-            
-            fileDir = path.join(os.tmpdir(), noteData.filename);
-            file.createReadStream()
-            .on('error', function(err){
-                return res.status(500).json({Status: err});
-            })
-            .on('response', function(response) {
-                console.log(response);
-            })
-            .on('end', function() {
-                fs.readFile(fileDir, function (err, data){
-                    res.contentType("application/pdf");
-                    res.send(data);
-                    fs.unlinkSync(fileDir);
-                });
-            })
-            .pipe(fs.createWriteStream(fileDir));
-            
+            if (noteData.uploader === userID || noteData.public){
+                //const fileDest = downloadFile().catch(console.error);
+                file = bucket.file(`notes/${noteData.uploader}/${noteData.filename}`);
+                
+                fileDir = path.join(os.tmpdir(), noteData.filename);
+                file.createReadStream()
+                .on('error', function(err){
+                    return res.status(500).json({Status: err});
+                })
+                .on('response', function(response) {
+                    console.log(response);
+                })
+                .on('end', function() {
+                    fs.readFile(fileDir, function (err, data){
+                        res.contentType("application/pdf");
+                        res.send(data);
+                        fs.unlinkSync(fileDir);
+                    });
+                })
+                .pipe(fs.createWriteStream(fileDir));
+        }
+            else{
+                 return res.status(404).json({Status: "Not Found"});
+            }
         }
         else{
             return res.status(404).json({Status: "Not Found"});
