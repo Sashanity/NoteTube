@@ -14,7 +14,7 @@ exports.upload = (req, res) => {
     const busboy = new Busboy({ headers: req.headers });
     const uploads = {};
     //TODO: Figure out how to get the token
-    const idToken = "eyJhbGciOiJSUzI1NiIsImtpZCI6IjUxMDM2YWYyZDgzOWE4NDJhZjQzY2VjZmJiZDU4YWYxYTc1OGVlYTIiLCJ0eXAiOiJKV1QifQ.eyJpc3MiOiJodHRwczovL3NlY3VyZXRva2VuLmdvb2dsZS5jb20vbm90ZXR1YmUtZjNmOWMiLCJhdWQiOiJub3RldHViZS1mM2Y5YyIsImF1dGhfdGltZSI6MTU5OTAyODY4MywidXNlcl9pZCI6ImhUdjBYWDEwNkdWRWtrSTJUWDFoaDdBeHlrODMiLCJzdWIiOiJoVHYwWFgxMDZHVkVra0kyVFgxaGg3QXh5azgzIiwiaWF0IjoxNTk5MDI4NjgzLCJleHAiOjE1OTkwMzIyODMsImVtYWlsIjoibWNpbmVybmV5Lm1pY2hhZWxAc2pzdS5lZHUiLCJlbWFpbF92ZXJpZmllZCI6ZmFsc2UsImZpcmViYXNlIjp7ImlkZW50aXRpZXMiOnsiZW1haWwiOlsibWNpbmVybmV5Lm1pY2hhZWxAc2pzdS5lZHUiXX0sInNpZ25faW5fcHJvdmlkZXIiOiJwYXNzd29yZCJ9fQ.WCCcUZqciE3OOsEEU8gcLgkPY9xviLRMMaSCYeDyaIpHLL6MhflCGq6Es9uq_eLw_kBYssmGXHHZF99wubmMDc-LDi-QM6NWB7rJ2b3peuSU6NOateDHuRVxeDIzqzAD9Jmc9c3oQQKSe5KWLDEpGNOkAx06qmILDcOHsZYdjk_-VOghvbweQOwKhyGZQtuu5logZeqmeS3sY0JYvjQPkY-1BzkU_flFgrsWabpx7hCm0hVAubERj8-PCSD5pSr2upoPj_QB5vlip5o7nc0WpB4CFufOGzPvY7ChfVvsSZLmkADjCNVTq9_ipb2hT0mvZxrjNvXBlp5J8Jfkxzhcaw"
+    const idToken = "eyJhbGciOiJSUzI1NiIsImtpZCI6IjczNzVhZmY3MGRmZTNjMzNlOTBjYTM2OWUzYTBlZjQxMzE3MmZkODIiLCJ0eXAiOiJKV1QifQ.eyJpc3MiOiJodHRwczovL3NlY3VyZXRva2VuLmdvb2dsZS5jb20vbm90ZXR1YmUtZjNmOWMiLCJhdWQiOiJub3RldHViZS1mM2Y5YyIsImF1dGhfdGltZSI6MTYwMDI5NTYwMywidXNlcl9pZCI6ImhUdjBYWDEwNkdWRWtrSTJUWDFoaDdBeHlrODMiLCJzdWIiOiJoVHYwWFgxMDZHVkVra0kyVFgxaGg3QXh5azgzIiwiaWF0IjoxNjAwMjk1NjAzLCJleHAiOjE2MDAyOTkyMDMsImVtYWlsIjoibWNpbmVybmV5Lm1pY2hhZWxAc2pzdS5lZHUiLCJlbWFpbF92ZXJpZmllZCI6ZmFsc2UsImZpcmViYXNlIjp7ImlkZW50aXRpZXMiOnsiZW1haWwiOlsibWNpbmVybmV5Lm1pY2hhZWxAc2pzdS5lZHUiXX0sInNpZ25faW5fcHJvdmlkZXIiOiJwYXNzd29yZCJ9fQ.PBeVOOuzz5rLL4ITz_6m1kbDK7ShePvQPLWgtteVdT3Td6G3xrpAoym1G2gfm5y8Uhedyj6_Qg1sXJ3i1aRgdXrY4uRMTZOTAi-dVuvWNZqrWPfut0fyVkqfRRORbVpCFDVGJiCmJvkyfCDDPKEsepGBeRmaYPWO4qmlxTnnpWygG8oHGArk_0VrskdO5Fr2QbBefQZIPMaIHaHC99dt1g90RUuQzQqt2YKuumNRLTW8PVdTtcCoow5iAfduJJifOu6hnRuCzKvPnidXki0UDlYBvVL01vNIK0wFQdqn_1ydnaN9SFmyGBE0LMpydvlnzfNWzL6g6Q8I6vOgXaTD-Q"
     var userID = "";
     var returnval = {};
 
@@ -50,7 +50,6 @@ exports.upload = (req, res) => {
             const file = upload.file;
             bucket.upload(file, { destination: `notes/${userID}/${upload.name}` })
                 .then(data => {
-                    console.log(data);
                     const newNote = {
                         name: returnval.name,
                         filename: upload.name,
@@ -64,11 +63,18 @@ exports.upload = (req, res) => {
                         //docURL: data[1].selfLink,
                         timestamp: admin.firestore.Timestamp.fromDate(new Date()),
                     };
-                    console.log(newNote)
 
-                    db.collection('notes-url').add(newNote); 
-                    //TODO: Return the note ID to send the user to.
-                    fs.unlinkSync(file); //Unlinks and deletes the file
+                    db.collection('notes-url').add(newNote).then(function(uploadDocRef){
+                        
+                        fs.unlinkSync(file); //Unlinks and deletes the file
+                        return res.status(200).json({ Status: "Uploaded", noteID: uploadDocRef.id, field: returnval });
+                    })
+                    .catch(function(error){
+                        //fs.unlinkSync(file); //Unlinks and deletes the file
+                        console.log(error);
+                        return res.status(500).json("Error Uploading");
+                    });
+                    
                 }).catch(err => {
                     fs.unlinkSync(file); //Unlinks and deletes the file
                     console.log('error uploading to storage', err);
@@ -76,7 +82,7 @@ exports.upload = (req, res) => {
                 });
 
         }
-        return res.status(200).json({ Status: "Uploaded", field: returnval });
+        
     });
     // db.collection('notes-url').add(newNote)
     // .then(() => {
@@ -100,7 +106,8 @@ exports.preview = (req, res) => {
     noteRef.get().then(function(doc){
         if (doc.exists){
             noteData = doc.data();
-            if (noteData.uploader === userID || noteData.public){
+            const isPublic = (noteData.public == 'true'); //Converts from string to boolean
+            if (noteData.uploader === userID || isPublic){
                 //const fileDest = downloadFile().catch(console.error);
                 file = bucket.file(`notes/${noteData.uploader}/${noteData.filename}`);
                 
