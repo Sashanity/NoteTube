@@ -19,9 +19,6 @@ const Navbar = () => {
 					<Header className='header-color' transparent title='NoteTube'>
 						<Navigation>
 							<Link to='/personalSpace'>Personal Workspace</Link>
-							<Link to='#'>Upload Notes</Link>
-							<Link to='#'>Followers</Link>
-							<Link to='#'>Contact</Link>
 							<Link to='#'>
 								<AccountCircleIcon></AccountCircleIcon>
 							</Link>
