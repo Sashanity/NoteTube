@@ -17,7 +17,5 @@ function Sidebar() {
       <Container triggerText={addButton} />
     </div>
   );
-
-
 }
 export default Sidebar

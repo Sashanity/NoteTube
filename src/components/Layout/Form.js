@@ -1,21 +1,15 @@
 import React from 'react';
 import './modal.css';
 import { useDropzone } from "react-dropzone"
-import { green, grey, purple } from '@material-ui/core/colors';
-import FormControl from '@material-ui/core/FormControl';
+
+import { green, grey } from '@material-ui/core/colors';
 import { withStyles } from '@material-ui/core/styles';
 import FormGroup from '@material-ui/core/FormGroup';
 import FormControlLabel from '@material-ui/core/FormControlLabel';
 import Switch from '@material-ui/core/Switch';
-
-
 import Button from '@material-ui/core/Button';
 import { makeStyles } from '@material-ui/core/styles';
-
 import CloudUploadIcon from '@material-ui/icons/CloudUpload';
-
-import Icon from '@material-ui/core/Icon';
-
 
 const useStyles = makeStyles((theme) => ({
   button: {
@@ -25,8 +19,8 @@ const useStyles = makeStyles((theme) => ({
 export const Form = ({ onSubmit }) => {
   const classes = useStyles();
   const { acceptedFiles, getRootProps, getInputProps } = useDropzone()
-  //switched state
 
+  //switched state
   const PurpleSwitch = withStyles({
     switchBase: {
       color: grey[300],
@@ -43,19 +37,15 @@ export const Form = ({ onSubmit }) => {
 
   const [state, setState] = React.useState({
     checkedA: true,
-
   });
   const handleChange = (event) => {
     setState({ ...state, [event.target.name]: event.target.checked });
   };
-
-
   const files = acceptedFiles.map((file) => (
     <li key={file.path}>
       {file.path} - {file.size} bytes
     </li>
   ))
-
   return (
     <div className="form_section">
       <form className="form" onSubmit={onSubmit}>
@@ -80,7 +70,7 @@ export const Form = ({ onSubmit }) => {
         <section className="dropzone_container">
           <div {...getRootProps({ className: "dropzone" })}>
             <input {...getInputProps()} />
-            <p>Click here to Upload Notes</p>
+            <p>Click here to Upload Files</p>
           </div>
         </section>
 

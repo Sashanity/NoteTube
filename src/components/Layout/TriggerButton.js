@@ -12,7 +12,6 @@ const useStyles = makeStyles((theme) => ({
     margin: theme.spacing(1),
   },
 }));
-
 const Trigger = ({ triggerText, buttonRef, showModal }) => {
   const classes = useStyles();
   return (
@@ -27,7 +26,6 @@ const Trigger = ({ triggerText, buttonRef, showModal }) => {
     >
       {triggerText}
     </Button>
-
   );
 };
 export default Trigger;
