@@ -4,8 +4,6 @@ import './sidebar.css';
 import Container from './Container';
 import triggerText from './TriggerButton';
 
-
-
 function Sidebar() {
   const triggerText = 'Upload Notes';
   const onSubmit = (event) => {
@@ -14,12 +12,8 @@ function Sidebar() {
     console.log(event.target.email.value);
   };
   return (
-
     <div className="sidebar">
-
-
       <Container triggerText={triggerText} onSubmit={onSubmit} />
-
     </div>
   );
 
