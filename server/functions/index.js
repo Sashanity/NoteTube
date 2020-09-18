@@ -31,16 +31,18 @@ exports.onNoteCreated = functions.firestore
 		return index.saveObject(note);
 	});
 exports.updateIndex = functions.firestore
-	.document('notes/{noteId')
+	.document('notes/{noteId}')
 	.onUpdate((change) => {
 		const newData = change.after.data();
 		const objectID = change.after.id;
+		const index = client.initIndex(ALGOLIA_INDEX_NAME);
 		return index.saveObject({ ...newData, objectID });
 	});
 exports.unindexNotes = functions.firestore
 	.document('notes/{noteId}')
 	.onDelete((snap, context) => {
 		const objectId = snap.id;
+		const index = client.initIndex(ALGOLIA_INDEX_NAME);
 		return index.deleteObject(objectId);
 	});
 
