@@ -2,10 +2,10 @@ import React from 'react';
 
 import './sidebar.css';
 import Container from './Container';
-import triggerText from './TriggerButton';
 
 function Sidebar() {
-  const triggerText = 'Upload Notes';
+  const uploadButton = 'Upload';
+  const addButton = 'New Note';
   const onSubmit = (event) => {
     event.preventDefault(event);
     console.log(event.target.name.value);
@@ -13,7 +13,8 @@ function Sidebar() {
   };
   return (
     <div className="sidebar">
-      <Container triggerText={triggerText} onSubmit={onSubmit} />
+      <Container triggerText={uploadButton} onSubmit={onSubmit} />
+      <Container triggerText={addButton} />
     </div>
   );
 
