@@ -11,10 +11,11 @@ import { UserContext } from './UserContext';
 import AuthenticatedRoute from './components/routes/AuthenticatedRoute';
 import RedirectOnceLoggedIn from './components/routes/RedirectOnceLoggedIn';
 import PersonalSpace from './components/pages/personalSpace';
-import Modal  from './components/Layout/Modal';
+import Modal from './components/Layout/Modal';
 
 
 
+import Editor from './components/editor/editor';
 
 //This is the app
 const App = () => {
@@ -36,6 +37,7 @@ const App = () => {
 						<RedirectOnceLoggedIn exact path='/login' component={Login} />
 						<AuthenticatedRoute exact path="/personalSpace" component={PersonalSpace} />
 						{/* <Route exact path="/Modal" component={Modal} /> */}
+						<Route exact path='/editor' component={Editor} />
 					</Switch>
 				</div>
 				<Footer />
