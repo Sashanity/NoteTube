@@ -4,7 +4,7 @@ import { Layout, Header, Navigation, Drawer, Content } from 'react-mdl';
 import { Link } from 'react-router-dom';
 import AccountCircleIcon from '@material-ui/icons/AccountCircle';
 import HomeIcon from '@material-ui/icons/Home';
-// import SearchIcon from '@material-ui/icons/Search';
+
 import { logout } from '../../actions/auth';
 import { useHistory } from 'react-router-dom';
 import Button from '@material-ui/core/Button';
@@ -21,7 +21,6 @@ const Navbar = () => {
 					<Header className='header-color' title={<img src={logoNoteTube} alt="LogoNoteTube" width='120px' />} scroll>
 						<Navigation>
 							<Link to='/Home'>
-								{/* <SearchIcon></SearchIcon> */}
 								<HomeIcon></HomeIcon>
 							</Link>
 							<Link to='/personalSpace'>Personal Workspace</Link>
