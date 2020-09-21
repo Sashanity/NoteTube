@@ -28,6 +28,7 @@
 		"algoliasearch": "^4.4.0",
 		"axios": "^0.19.2",
 		"dotenv": "^8.2.0",
+		"editorjs-react": "^0.1.9",
 		"firebase": "^7.17.2",
 		"focus-trap-react": "^7.0.1",
 		"framer-motion": "^2.6.0",
