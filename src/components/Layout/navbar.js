@@ -3,6 +3,7 @@ import { UserContext } from '../../UserContext';
 import { Layout, Header, Navigation, Drawer, Content } from 'react-mdl';
 import { Link } from 'react-router-dom';
 import AccountCircleIcon from '@material-ui/icons/AccountCircle';
+import HomeIcon from '@material-ui/icons/Home';
 
 import { logout } from '../../actions/auth';
 import { useHistory } from 'react-router-dom';
@@ -19,8 +20,10 @@ const Navbar = () => {
 				<Layout>
 					<Header className='header-color' title={<img src={logoNoteTube} alt="LogoNoteTube" width='120px' />} scroll>
 						<Navigation>
-							<Link to='#'>Personal Workspace</Link>
-							<Link to='#'>Class Notes</Link>
+							<Link to='/Home'>
+								<HomeIcon></HomeIcon>
+							</Link>
+							<Link to='/personalSpace'>Personal Workspace</Link>
 							<Link to='#'>
 								<AccountCircleIcon></AccountCircleIcon>
 							</Link>
@@ -29,7 +32,7 @@ const Navbar = () => {
 					<Drawer title='NoteTube'>
 						<Navigation>
 							<Link to='#'>Profile</Link>
-							<Link to='#'>Upload Notes</Link>
+							<Link to='/uploadNotes'>Upload Notes</Link>
 							<Link to='#'>Followers</Link>
 							<Button onClick={logout(history, setUser)}>Logout</Button>
 						</Navigation>
