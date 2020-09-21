@@ -1,28 +1,43 @@
 
-import React from 'react';
-import { makeStyles } from '@material-ui/core/styles';
-import Paper from '@material-ui/core/Paper';
+import React from 'react'
+import { Component } from 'react';
+// import EditorJs from 'react-editor-js';
+import { EDITOR_JS_TOOLS } from "./tools";
+import Editor from '@stfy/react-editor.js'
 
-const useStyles = makeStyles((theme) => ({
-    root: {
-        display: 'flex',
-        flexWrap: 'wrap',
-        '& > *': {
-            margin: theme.spacing(1),
-            width: theme.spacing(16),
-            height: theme.spacing(16),
-        },
-    },
-}));
 
-export default function Editor() {
-    const classes = useStyles();
+class myEditor extends Component {
+    render() {
+        return (
+            // <EditorJs tools={EDITOR_JS_TOOLS}
+            // />
+            <Editor
+                tools={EDITOR_JS_TOOLS}
+                autofocus
+                holderId="editorjs-container"
+                excludeDefaultTools={['header']}
+                placeholder="Add content here..."
+                onChange={(data) => console.log(data)}
 
-    return (
-        <div className={classes.root}>
-            <Paper elevation={0} />
-            <Paper />
-            <Paper elevation={3} />
-        </div>
-    );
+                onReady={() => console.log('Start!')}
+                data={{
+                    "time": 1554920381017,
+                    "blocks": [
+                        {
+                            "type": "header",
+                            "data": {
+                                "text": "Hello Editor.js",
+                                "level": 2
+                            }
+                        },
+                    ],
+                    "version": "2.12.4"
+                }}
+            />
+        )
+    }
 }
+
+
+export default myEditor;
+// const editor = new EditorJS('editorjs');
