@@ -47,7 +47,7 @@ export const Form = ({ onSubmit }) => {
     </li>
   ))
   return (
-    <div className="form_section">
+    <div className="form_section" >
       <form className="form" onSubmit={onSubmit}>
         <div className="form_section">
           <label htmlFor="name"> Name </label>
