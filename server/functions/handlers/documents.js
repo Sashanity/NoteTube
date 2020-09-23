@@ -13,8 +13,7 @@ exports.upload = (req, res) => {
 
     const busboy = new Busboy({ headers: req.headers });
     const uploads = {};
-    //TODO: Figure out how to get the token
-    const idToken = "eyJhbGciOiJSUzI1NiIsImtpZCI6IjczNzVhZmY3MGRmZTNjMzNlOTBjYTM2OWUzYTBlZjQxMzE3MmZkODIiLCJ0eXAiOiJKV1QifQ.eyJpc3MiOiJodHRwczovL3NlY3VyZXRva2VuLmdvb2dsZS5jb20vbm90ZXR1YmUtZjNmOWMiLCJhdWQiOiJub3RldHViZS1mM2Y5YyIsImF1dGhfdGltZSI6MTYwMDI5NTYwMywidXNlcl9pZCI6ImhUdjBYWDEwNkdWRWtrSTJUWDFoaDdBeHlrODMiLCJzdWIiOiJoVHYwWFgxMDZHVkVra0kyVFgxaGg3QXh5azgzIiwiaWF0IjoxNjAwMjk1NjAzLCJleHAiOjE2MDAyOTkyMDMsImVtYWlsIjoibWNpbmVybmV5Lm1pY2hhZWxAc2pzdS5lZHUiLCJlbWFpbF92ZXJpZmllZCI6ZmFsc2UsImZpcmViYXNlIjp7ImlkZW50aXRpZXMiOnsiZW1haWwiOlsibWNpbmVybmV5Lm1pY2hhZWxAc2pzdS5lZHUiXX0sInNpZ25faW5fcHJvdmlkZXIiOiJwYXNzd29yZCJ9fQ.PBeVOOuzz5rLL4ITz_6m1kbDK7ShePvQPLWgtteVdT3Td6G3xrpAoym1G2gfm5y8Uhedyj6_Qg1sXJ3i1aRgdXrY4uRMTZOTAi-dVuvWNZqrWPfut0fyVkqfRRORbVpCFDVGJiCmJvkyfCDDPKEsepGBeRmaYPWO4qmlxTnnpWygG8oHGArk_0VrskdO5Fr2QbBefQZIPMaIHaHC99dt1g90RUuQzQqt2YKuumNRLTW8PVdTtcCoow5iAfduJJifOu6hnRuCzKvPnidXki0UDlYBvVL01vNIK0wFQdqn_1ydnaN9SFmyGBE0LMpydvlnzfNWzL6g6Q8I6vOgXaTD-Q"
+    const idToken = req.query.token;
     var userID = "";
     var returnval = {};
 
@@ -96,8 +95,8 @@ exports.preview = (req, res) => {
     var fileDir = "";
     var userID = "";
     var contentType = "application/xml";
-    if (req.body.idToken){
-        admin.auth().verifyIdToken(req.body.idToken).then(function(decodedToken){
+    if (req.query.token){
+        admin.auth().verifyIdToken(req.query.token).then(function(decodedToken){
             userID = decodedToken.uid; //Get the uid
         }).catch(function (error) {
             return res.status(400).json({Status: "Verification Error"}); //Didn't Log in correctly
