@@ -16,6 +16,9 @@ import Modal from './components/Layout/Modal';
 
 
 import Editor from './components/editor/editor';
+import pdfGenerate from './components/editor/jspdf';
+// import MyDocument from './components/editor/topdf';
+
 
 //This is the app
 const App = () => {
@@ -38,6 +41,7 @@ const App = () => {
 						<AuthenticatedRoute exact path="/personalSpace" component={PersonalSpace} />
 						{/* <Route exact path="/Modal" component={Modal} /> */}
 						<Route exact path='/editor' component={Editor} />
+						<Route exact path='/pdf' component={pdfGenerate} />
 					</Switch>
 				</div>
 				<Footer />
