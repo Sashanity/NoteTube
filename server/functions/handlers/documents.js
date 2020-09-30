@@ -53,14 +53,12 @@ exports.upload = (req, res) => {
                     const newNote = {
                         name: returnval.name,
                         filename: upload.name,
-                        course: returnval.course,
+                        subject: returnval.subject,
                         term: returnval.term,
                         instructor: returnval.instructor,
                         owner: returnval.owner,
                         public: returnval.public,
                         uploader: userID,
-                        // this should come from the storage
-                        //docURL: data[1].selfLink,
                         timestamp: admin.firestore.Timestamp.fromDate(new Date()),
                     };
 
