@@ -49,6 +49,7 @@ exports.upload = (req, res) => {
             const file = upload.file;
             bucket.upload(file, { destination: `notes/${userID}/${upload.name}` })
                 .then(data => {
+                    console.log(data);
                     const newNote = {
                         name: returnval.name,
                         filename: upload.name,
@@ -63,7 +64,7 @@ exports.upload = (req, res) => {
                         timestamp: admin.firestore.Timestamp.fromDate(new Date()),
                     };
 
-                    db.collection('notes-url').add(newNote).then(function(uploadDocRef){
+                    db.collection('notes').add(newNote).then(function(uploadDocRef){
                         
                         fs.unlinkSync(file); //Unlinks and deletes the file
                         return res.status(200).json({ Status: "Uploaded", noteID: uploadDocRef.id, field: returnval });
@@ -83,7 +84,7 @@ exports.upload = (req, res) => {
         }
         
     });
-    // db.collection('notes-url').add(newNote)
+    // db.collection('notes').add(newNote)
     // .then(() => {
     //     return res.json({ message: 'Note added successfully' });
     // })
@@ -91,7 +92,7 @@ exports.upload = (req, res) => {
 }
 
 exports.preview = (req, res) => {
-    const noteRef = db.collection('notes-url').doc(req.query.noteid);
+    const noteRef = db.collection('notes').doc(req.query.noteid);
     var fileDir = "";
     var userID = "";
     var contentType = "application/xml";
