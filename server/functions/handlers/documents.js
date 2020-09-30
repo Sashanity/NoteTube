@@ -54,6 +54,7 @@ exports.upload = (req, res) => {
                         name: returnval.name,
                         filename: upload.name,
                         subject: returnval.subject,
+                        course: returnval.course,
                         term: returnval.term,
                         instructor: returnval.instructor,
                         owner: returnval.owner,
