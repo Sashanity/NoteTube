@@ -41,6 +41,7 @@ const App = () => {
 						<AuthenticatedRoute exact path="/personalSpace" component={PersonalSpace} />
 						{/* <Route exact path="/Modal" component={Modal} /> */}
 						<Route exact path='/editor' component={Editor} />
+						{/* <Route exact path='/editor' component={Editor} /> */}
 						<Route exact path='/pdf' component={pdfGenerate} />
 					</Switch>
 				</div>
