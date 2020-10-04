@@ -11,7 +11,7 @@ class myEditor extends Component {
     render() {
         let editorButtons = ['Upload', 'New Note', 'Download']
         return (
-            <div style={{ display: 'flex' }} className="personalSpace">
+            <div style={{ display: 'flex' }} >
                 <Sidebar buttons={editorButtons}></Sidebar>
                 <Paper elevation={20} style={{ width: '700px' }}>
                     <EditorJs
@@ -26,6 +26,4 @@ class myEditor extends Component {
         )
     }
 }
-
-
 export default myEditor;
