@@ -16,6 +16,7 @@ import {
 	RefinementList,
 	Configure,
 	SortBy,
+	connectRefinementList,
 } from 'react-instantsearch-dom';
 
 const useStyles = makeStyles((theme) => ({
@@ -56,8 +57,35 @@ const Home = () => {
 			<p>{hit.name}</p>
 			<p>{hit.instructor}</p>
 			<p>{hit.course}</p>
+			<p>{hit.subject}</p>
 		</div>
 	);
+	const RefinementList = ({ items, currentRefinement, refine }) => (
+		<div>
+			<div>Current refinement: {currentRefinement.join(', ')}</div>
+			<ul>
+				{items.map((item) => (
+					<li key={item.label}>
+						<a
+							href='#'
+							style={{
+								fontWeight: item.isRefined ? 'bold' : '',
+								color: 'white',
+							}}
+							onClick={(event) => {
+								event.preventDefault();
+								refine(item.value);
+							}}
+						>
+							{item.label} ({item.count})
+						</a>
+					</li>
+				))}
+			</ul>
+		</div>
+	);
+	const CustomRefinementList = connectRefinementList(RefinementList);
+
 	return (
 		<div className={classes.root}>
 			<InstantSearch searchClient={searchClient} indexName='notes'>
@@ -122,8 +150,20 @@ const Home = () => {
 						)}
 					</Grid>
 					<Grid item xs={12} container>
-						<Grid item xs={3} />
-
+						<Grid item xs={2} />
+						<Grid item xs={1}>
+							{submit ? (
+								<motion.div
+									initial={{ opacity: 0 }}
+									animate={{ opacity: 1 }}
+									transition={{ delay: 0.5, duration: 1.0 }}
+								>
+									<CustomRefinementList attribute='subject' />
+								</motion.div>
+							) : (
+								<></>
+							)}
+						</Grid>
 						<Grid item xs={5}>
 							{submit ? (
 								<motion.div
