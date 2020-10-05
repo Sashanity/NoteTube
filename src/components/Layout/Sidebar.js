@@ -10,7 +10,7 @@ export default class Sidebar extends Component {
 
   getButtonsUsingMap = () => {
     return this.buttons.map((b) => {
-      return <Container triggerText={b} />
+      return <Container triggerText={b} text={this.data2} />
     })
   }
 
