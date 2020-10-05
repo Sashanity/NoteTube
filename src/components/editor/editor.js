@@ -1,9 +1,6 @@
-
-
-import { Component } from 'react';
 import EditorJs from 'react-editor-js';
 import { EDITOR_JS_TOOLS } from "./tools";
-import React from 'react';
+import React, { Component } from 'react';
 import Sidebar from "../Layout/Sidebar";
 import Paper from '@material-ui/core/Paper';
 
