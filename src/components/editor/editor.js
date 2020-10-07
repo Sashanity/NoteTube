@@ -7,7 +7,6 @@ import Paper from '@material-ui/core/Paper';
 class myEditor extends Component {
     render() {
         let editorButtons = ['Upload', 'New Note', 'Download']
-
         return (
             <div>
                 <div style={{ display: 'flex' }} >
