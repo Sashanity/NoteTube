@@ -10,12 +10,19 @@ import Home from './components/pages/Home';
 import { UserContext } from './UserContext';
 import AuthenticatedRoute from './components/routes/AuthenticatedRoute';
 import RedirectOnceLoggedIn from './components/routes/RedirectOnceLoggedIn';
+import PersonalSpace from './components/pages/personalSpace';
+import Modal  from './components/Layout/Modal';
+
+
+
 
 //This is the app
 const App = () => {
 	const [user, setUser] = useState(null);
 
 	const User = useMemo(() => ({ user, setUser }), [user, setUser]);
+
+
 
 	return (
 		<Router>
@@ -27,6 +34,8 @@ const App = () => {
 						<AuthenticatedRoute exact path='/Home' component={Home} />
 						<RedirectOnceLoggedIn exact path='/register' component={Register} />
 						<RedirectOnceLoggedIn exact path='/login' component={Login} />
+						<AuthenticatedRoute exact path="/personalSpace" component={PersonalSpace} />
+						{/* <Route exact path="/Modal" component={Modal} /> */}
 					</Switch>
 				</div>
 				<Footer />

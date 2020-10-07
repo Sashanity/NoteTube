@@ -14,32 +14,21 @@ const footer = () => {
 				<FooterDropDownSection title='Features'>
 					<FooterLinkList>
 						<Link to='#'>About</Link>
-						<Link to='#'>Terms</Link>
-						<Link to='#'>Partner</Link>
-						<Link to='#'>Logout</Link>
+						
 					</FooterLinkList>
 				</FooterDropDownSection>
 				<FooterDropDownSection title='Details'>
 					<FooterLinkList>
-						<Link to='#'>About</Link>
 						<Link to='#'>Terms</Link>
-						<Link to='#'>Partner</Link>
-						<Link to='#'>Updates</Link>
 					</FooterLinkList>
 				</FooterDropDownSection>
 				<FooterDropDownSection title='Technology'>
 					<FooterLinkList>
-						<Link to='#'>About</Link>
-						<Link to='#'>Terms</Link>
 						<Link to='#'>Partner</Link>
-						<Link to='#'>Updates</Link>
 					</FooterLinkList>
 				</FooterDropDownSection>
 				<FooterDropDownSection title='FAQ'>
 					<FooterLinkList>
-						<Link to='#'>About</Link>
-						<Link to='#'>Terms</Link>
-						<Link to='#'>Partner</Link>
 						<Link to='#'>Updates</Link>
 					</FooterLinkList>
 				</FooterDropDownSection>
