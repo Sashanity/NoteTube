@@ -15,6 +15,7 @@ import {
 	ClearRefinements,
 	RefinementList,
 	Configure,
+	SortBy,
 } from 'react-instantsearch-dom';
 
 const useStyles = makeStyles((theme) => ({
@@ -53,6 +54,7 @@ const Home = () => {
 	const Hit = ({ hit }) => (
 		<div>
 			<p>{hit.name}</p>
+			<p>{hit.instructor}</p>
 			<p>{hit.course}</p>
 		</div>
 	);
@@ -85,7 +87,43 @@ const Home = () => {
 						</Grid>
 					</Grid>
 					<Grid item xs={12} container>
+						<Grid item xs={7} />
+						{submit ? (
+							<motion.div
+								initial={{ opacity: 0 }}
+								animate={{ opacity: 1 }}
+								transition={{ delay: 0.5, duration: 1.0 }}
+							>
+								<SortBy
+									defaultRefinement='notes'
+									items={[
+										{ value: 'notes', label: 'Sort' },
+										{
+											value: 'Instructor Ascending',
+											label: 'Instructor (asc)',
+										},
+										{
+											value: 'Instructor Descending',
+											label: 'Instructor (desc)',
+										},
+										{
+											value: 'Newest to Oldest',
+											label: 'Newest to Oldest',
+										},
+										{
+											value: 'Oldest to Newest',
+											label: 'Oldest to Newest',
+										},
+									]}
+								/>
+							</motion.div>
+						) : (
+							<></>
+						)}
+					</Grid>
+					<Grid item xs={12} container>
 						<Grid item xs={3} />
+
 						<Grid item xs={5}>
 							{submit ? (
 								<motion.div
