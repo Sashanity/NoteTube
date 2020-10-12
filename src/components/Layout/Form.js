@@ -10,12 +10,25 @@ import Switch from '@material-ui/core/Switch';
 import Button from '@material-ui/core/Button';
 import { makeStyles } from '@material-ui/core/styles';
 import CloudUploadIcon from '@material-ui/icons/CloudUpload';
+import Tooltip from '@material-ui/core/Tooltip';
+import Fade from '@material-ui/core/Fade';
 
 const useStyles = makeStyles((theme) => ({
-  button: {
-    margin: theme.spacing(1),
+  customWidth: {
+    maxWidth: 500,
   },
+  noMaxWidth: {
+    maxWidth: 'none',
+  }
+
 }));
+
+const uploadButtonHint = `Upload note to the database`;
+const nameFieldHint = `How would you like to name your note? exp: Lecture 1`;
+const courseFieldHint = `What is the class name the notes are for? exp: CMPE 188`;
+const instrFieldHint = `What was the name of instructor of the class? exp: John Doe `;
+const termFieldHint = `When did you take the class? exp: Fall 2018`;
+const inputFieldHint = `Choose what files to attach (pdf)`
 export const Form = ({ onSubmit }) => {
   const classes = useStyles();
   const { acceptedFiles, getRootProps, getInputProps } = useDropzone()
@@ -50,28 +63,43 @@ export const Form = ({ onSubmit }) => {
     <div className="form_section" >
       <form className="form" onSubmit={onSubmit}>
         <div className="form_section">
-          <label htmlFor="name"> Name </label>
+          <Tooltip arrow placement="right" title={nameFieldHint} classes={{ tooltip: classes.customWidth }} TransitionComponent={Fade} TransitionProps={{ timeout: 600 }}>
+            <label htmlFor="name"> Name </label>
+          </Tooltip>
+
           <input className="form-input" id="name" />
+
         </div>
+
         <div className="form_section">
-          <label htmlFor="name">Course </label>
-          <input className="form-input" id="name" />
-        </div>
-        <div className="form_section">
-          <label htmlFor="name">Instructor Name</label>
+          <Tooltip arrow placement="right" title={courseFieldHint} classes={{ tooltip: classes.customWidth }} TransitionComponent={Fade} TransitionProps={{ timeout: 600 }}>
+            <label htmlFor="name">Course </label>
+          </Tooltip>
+
           <input className="form-input" id="name" />
         </div>
 
         <div className="form_section">
-          <label htmlFor="name">Term (semester)</label>
+          <Tooltip arrow placement="right" title={instrFieldHint} classes={{ tooltip: classes.customWidth }} TransitionComponent={Fade} TransitionProps={{ timeout: 600 }}>
+            <label htmlFor="name">Instructor Name</label>
+          </Tooltip>
+          <input className="form-input" id="name" />
+        </div>
+
+        <div className="form_section">
+          <Tooltip arrow placement="right" title={termFieldHint} classes={{ tooltip: classes.customWidth }} TransitionComponent={Fade} TransitionProps={{ timeout: 600 }}>
+            <label htmlFor="name">Term (semester)</label>
+          </Tooltip>
           <input className="form-input" id="name" />
         </div>
 
         <section className="dropzone_container">
-          <div {...getRootProps({ className: "dropzone" })}>
-            <input {...getInputProps()} />
-            <p>Click here to Upload Files</p>
-          </div>
+          <Tooltip arrow placement="right" title={inputFieldHint} classes={{ tooltip: classes.customWidth }} TransitionComponent={Fade} TransitionProps={{ timeout: 600 }}>
+            <div {...getRootProps({ className: "dropzone" })}>
+              <input {...getInputProps()} />
+              <p>Click here to Upload Files</p>
+            </div>
+          </Tooltip>
         </section>
 
         {/* switched for Publish notes  */}
@@ -84,21 +112,20 @@ export const Form = ({ onSubmit }) => {
         </FormGroup>
 
         <div className="form-group">
-          {/* <button className="form-control btn btn-primary" type="submit">
-          Submit
-        </button> */}
-          <Button
-            variant="contained"
-            color="default"
-            className={classes.button}
-            startIcon={<CloudUploadIcon />}
-          >
-            Upload
+          <Tooltip arrow title={uploadButtonHint} classes={{ tooltip: classes.customWidth }} TransitionComponent={Fade} TransitionProps={{ timeout: 600 }}>
+            <Button
+              variant="contained"
+              color="default"
+              className={classes.button}
+              startIcon={<CloudUploadIcon />}
+            >
+              Upload
       </Button>
+          </Tooltip>
 
         </div>
       </form>
-    </div>
+    </div >
   );
 };
 export default Form;
