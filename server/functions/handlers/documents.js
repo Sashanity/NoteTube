@@ -125,6 +125,11 @@ exports.preview = (req, res) => {
     }).catch(function(error){ //Error: Server couldn't get the document
         return res.status(500).json({Error: error});
     })
+
+
+
+
+    
     
 }
 
