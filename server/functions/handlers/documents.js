@@ -125,6 +125,11 @@ exports.preview = (req, res) => {
     }).catch(function(error){
         return res.status(500).json({Error: error});
     })
+
+
+
+
+    
     
 }
 

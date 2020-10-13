@@ -11,7 +11,7 @@ import { UserContext } from './UserContext';
 import AuthenticatedRoute from './components/routes/AuthenticatedRoute';
 import RedirectOnceLoggedIn from './components/routes/RedirectOnceLoggedIn';
 import PersonalSpace from './components/pages/personalSpace';
-import Modal  from './components/Layout/Modal';
+import Modal  from './components/Upload form/Modal';
 
 
 
