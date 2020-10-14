@@ -128,3 +128,38 @@ exports.preview = (req, res) => {
     
 }
 
+exports.delete = (req, res) => {
+    const noteRef = db.collection('notes').doc(req.query.noteid); //Get the reference of the note data from Firestore using the note ID from the request
+    var fileDir = ""; //The directory of the file
+    var userID = ""; //The ID of the logged in user
+    if (req.query.token){
+        admin.auth().verifyIdToken(req.query.token).then(function(decodedToken){ //Authenticate the token
+            userID = decodedToken.uid; //Get the uid
+        }).catch(function (error) {
+            return res.status(400).json({Status: "Verification Error"}); //Didn't Log in correctly
+        })
+        noteRef.get().then(function(doc){ //Get the note data from Firestore
+            if (doc.exists){ //If the note data was found (I.E. the note ID was correct)
+                noteData = doc.data(); //Put the data in a variable
+                if (noteData.uploader === userID){ //Verifies that the user is allowed to delete the note
+                    bucket.file(`notes/${noteData.uploader}/${noteData.filename}`).delete().then(function(){
+                        noteRef.delete().then(function(){
+                            return res.status(200).json({Status: "Delete Successful"});
+                        }).catch(function(error){return res.status(500).json({Status: error});});
+                    }).catch(function(error){return res.status(500).json({Status: error})});
+                }
+                else{
+                    return res.status(404).json({Status: "Not Authorized"});
+                }
+            }
+            else{
+                return res.status(404).json({Status: "Not Found"});
+            }
+        }).catch(function(error){return res.status(500).json({Error: error})});
+    }
+    else{
+        return res.status(400).json({Error: "No Token was Sent"});
+    }
+
+}
+
