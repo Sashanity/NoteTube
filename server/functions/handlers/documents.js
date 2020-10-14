@@ -129,16 +129,16 @@ exports.preview = (req, res) => {
 }
 
 exports.editNote = (req, res) => {
-    const token = req.query.token;
-    const noteID = req.query.noteid;
+    const token = req.query.token; //Get the token from the request
+    const noteID = req.query.noteid; //Get the note ID from the request
 
-    if (token && noteID){
-        admin.auth().verifyIdToken(token).then(function(decodedToken){
-            var userID = decodedToken.uid;
-            db.collection("notes").doc(noteID).get().then(function(doc){
-                if (doc.exists){
-                    if (doc.data().uploader == userID){
-                        const newNote = { //Create lthe note object that will be uploaded to Firestore
+    if (token && noteID){ //Make sure we got both the note ID and the token
+        admin.auth().verifyIdToken(token).then(function(decodedToken){ //Verify the token is valid
+            var userID = decodedToken.uid; //Get the user ID
+            db.collection("notes").doc(noteID).get().then(function(doc){ //Get the document
+                if (doc.exists){ //If the note exists
+                    if (doc.data().uploader === userID){ //Make sure the user editing the note is the same user who uploaded it
+                        const newNote = { //Create a new note to replace the old note
                             name: req.body.name,
                             filename: doc.data().filename,
                             subject: req.body.subject,
@@ -151,28 +151,27 @@ exports.editNote = (req, res) => {
                             timestamp: doc.data().timestamp,
                         };
                         
-                        db.collection("notes").doc(noteID).update(newNote).then(function(updatedDoc){
-                            console.log("here");
+                        db.collection("notes").doc(noteID).update(newNote).then(function(updatedDoc){ //Update the document
                             return res.status(200).json({Status: "Successful", noteID: noteID});
-                        }).catch(function (error){
+                        }).catch(function (error){ //Error: Issue updating the document
                             return res.status(500).json({Status: "Error Updating Doc"});
                         })
                     }
-                    else{
+                    else{ //Error: User is not the original owner
                         return res.status(400).json({Status: "Not Authorized"});
                     }
                 }
-                else{
+                else{ //Error: Note not found
                     return res.status(400).json({Status: "Note Not Found"});
                 }
-            }).catch(function(error){
+            }).catch(function(error){ //Error: Server issue getting the document
                 res.status(500).json({Status: "Error getting doc"});
             })
-        }).catch(function(error){
+        }).catch(function(error){ //Error: Server issue decoding token
             res.status(500).json({Status: error});
         })
     }
-    else{
+    else{ //Error: User forgot token and/or note ID
         return res.status(400).json({Status: "Token and/or Note ID is missing"});
     }
 }
