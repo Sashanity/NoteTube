@@ -128,3 +128,32 @@ exports.preview = (req, res) => {
     
 }
 
+exports.userList = (req, res) => {
+    const token = req.query.token; //Get the token from the request
+    var retList = []; //The array of note data that will be returned
+    if (token){ //If the token exists
+        admin.auth().verifyIdToken(token).then(function(decodedToken){ //Authenticate the token
+            var userID = decodedToken.uid; //Get the uid
+            var notesRef = db.collection('notes'); //The collection of note data
+            notesRef.where('uploader', '==', userID).get() //Queries the collection based on the user ID
+                .then(function(querySnapshot){
+                    querySnapshot.forEach(function(doc) { //Loop through each result
+                        var addDoc = doc.data(); //Get the data
+                        addDoc['noteID'] = doc.id; //Add the note ID to the object
+                        retList.push(addDoc); //Push the object to the returned array
+                    });
+                    return res.status(200).json(retList); //Send the array back
+                    })
+                    .catch(function(error) { //Error: Server isse with getting the documents
+                        return res.status(500).json({Status: error});
+                    })
+        }).catch(function (error) { //Error: Issue verifying the token
+            return res.status(500).json({Status: "Verification Error"}); //Didn't Log in correctly
+        });
+    }
+    else{ //Error: No token was sent or the token was sent incorrectly (wrong query name, etc.)
+        return res.status(400).json({Status: "No Token Sent"});
+    }
+    
+}
+
