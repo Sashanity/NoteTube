@@ -87,8 +87,8 @@ exports.preview = (req, res) => {
     if (req.query.token){
         admin.auth().verifyIdToken(req.query.token).then(function(decodedToken){ //Authenticate the token
             userID = decodedToken.uid; //Get the uid
-        }).catch(function (error) {
-            return res.status(400).json({Status: "Verification Error"}); //Didn't Log in correctly
+        }).catch(function (error) {//Error: Didn't Log in correctly
+            return res.status(400).json({Status: "Verification Error"}); 
         })
     }
     noteRef.get().then(function(doc){ //Get the note data from Firestore
@@ -99,30 +99,30 @@ exports.preview = (req, res) => {
                 file = bucket.file(`notes/${noteData.uploader}/${noteData.filename}`); //Constructs the url from the note data from Firestore
                 
                 fileDir = path.join(os.tmpdir(), noteData.filename); //Get the location of the temporary directory to place the file
-                file.createReadStream() //Read the file
+                file.createReadStream()
                 .on('error', function(err){
                     return res.status(500).json({Status: err}); //Error reading the file
                 })
                 .on('response', function(response) {
                     contentType = response.headers['content-type']; //Get the type of file that it is
                 })
-                .on('end', function() {
-                    fs.readFile(fileDir, function (err, data){
-                        res.contentType(contentType);
-                        res.send(data);
-                        fs.unlinkSync(fileDir);
+                .on('end', function() { //Finished writing the file
+                    fs.readFile(fileDir, function (err, data){ //Read the file
+                        res.contentType(contentType); //Get the content-type (what kind of file it is) and include in the response
+                        res.send(data); //Send the data
+                        fs.unlinkSync(fileDir); //Unlink and delete the file
                     });
                 })
-                .pipe(fs.createWriteStream(fileDir));
+                .pipe(fs.createWriteStream(fileDir)); //Start the write stream
         }
-            else{
+            else{ //Error: The note is not public and the user is not authorized to see it
                  return res.status(404).json({Status: "Not Found"});
             }
         }
-        else{
+        else{ //Error: Note does not exist
             return res.status(404).json({Status: "Not Found"});
         }
-    }).catch(function(error){
+    }).catch(function(error){ //Error: Server couldn't get the document
         return res.status(500).json({Error: error});
     })
     
