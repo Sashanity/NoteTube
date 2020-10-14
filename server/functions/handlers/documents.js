@@ -138,6 +138,4 @@ exports.preview = (req, res) => {
     
 }
 
-exports.delete = (req, res) => {
-    
-}
+
