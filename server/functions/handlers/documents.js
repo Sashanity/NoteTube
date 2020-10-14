@@ -128,9 +128,8 @@ exports.preview = (req, res) => {
     
 }
 
-exports.delete = (req, res) => {
+exports.deleteNote = (req, res) => {
     const noteRef = db.collection('notes').doc(req.query.noteid); //Get the reference of the note data from Firestore using the note ID from the request
-    var fileDir = ""; //The directory of the file
     var userID = ""; //The ID of the logged in user
     if (req.query.token){
         admin.auth().verifyIdToken(req.query.token).then(function(decodedToken){ //Authenticate the token
