@@ -128,3 +128,51 @@ exports.preview = (req, res) => {
     
 }
 
+exports.editNote = (req, res) => {
+    const token = req.query.token;
+    const noteID = req.query.noteid;
+
+    if (token && noteID){
+        admin.auth().verifyIdToken(token).then(function(decodedToken){
+            var userID = decodedToken.uid;
+            db.collection("notes").doc(noteID).get().then(function(doc){
+                if (doc.exists){
+                    if (doc.data().uploader == userID){
+                        const newNote = { //Create lthe note object that will be uploaded to Firestore
+                            name: req.body.name,
+                            filename: doc.data().filename,
+                            subject: req.body.subject,
+                            course: req.body.course,
+                            term: req.body.term,
+                            instructor: req.body.instructor,
+                            owner: doc.data().owner,
+                            public: req.body.public,
+                            uploader: doc.data().uploader,
+                            timestamp: doc.data().timestamp,
+                        };
+                        
+                        db.collection("notes").doc(noteID).update(newNote).then(function(updatedDoc){
+                            console.log("here");
+                            return res.status(200).json({Status: "Successful", noteID: noteID});
+                        }).catch(function (error){
+                            return res.status(500).json({Status: "Error Updating Doc"});
+                        })
+                    }
+                    else{
+                        return res.status(400).json({Status: "Not Authorized"});
+                    }
+                }
+                else{
+                    return res.status(400).json({Status: "Note Not Found"});
+                }
+            }).catch(function(error){
+                res.status(500).json({Status: "Error getting doc"});
+            })
+        }).catch(function(error){
+            res.status(500).json({Status: error});
+        })
+    }
+    else{
+        return res.status(400).json({Status: "Token and/or Note ID is missing"});
+    }
+}
