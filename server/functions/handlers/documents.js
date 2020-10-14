@@ -45,6 +45,15 @@ exports.upload = (req, res) => {
         for (const name in uploads) {
             const upload = uploads[name]; //Get the object with the file
             const file = upload.file; //Get the file from the object
+            bucket.file(`notes/${userID}/${upload.name}`).exists().then(function(data) { //TODO: Figure out how to fix the same file name issue
+                if (data[0] == true){
+                    upload.name = Math.floor(Math.random() * 999) + "-" + upload.name;
+                }
+            })
+            .catch(function(error){
+                //return res.status(500).json({Status: error});
+            })
+            .finally(function(){
             bucket.upload(file, { destination: `notes/${userID}/${upload.name}` }) //Uploads the file to the storage bucket
                 .then(data => {
                     const newNote = { //Create the note object that will be uploaded to Firestore
@@ -73,6 +82,7 @@ exports.upload = (req, res) => {
                     fs.unlinkSync(file); //Unlinks and deletes the file
                     return res.status(500).json(err); //Error uploading to storage
                 });
+            });
 
         }
         
@@ -128,3 +138,6 @@ exports.preview = (req, res) => {
     
 }
 
+exports.delete = (req, res) => {
+    
+}
