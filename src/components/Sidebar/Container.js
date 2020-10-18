@@ -1,8 +1,8 @@
 import React, { Component } from 'react';
 import  Modal from '../Upload form/Modal';
-import TriggerButton from '../Upload form/TriggerButton';
+import TriggerButton from '../Sidebar/TriggerButton';
 
-import '../Upload form/modal.css';
+import "../Upload form/modal.css";
 
 export class Container extends Component {
   state = { isShown: false };
