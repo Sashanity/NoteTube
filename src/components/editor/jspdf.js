@@ -2,118 +2,139 @@ import React, { PureComponent } from 'react';
 import { Button, } from '@material-ui/core';
 
 import jsPDF from 'jspdf'
-let data = {
+// let data = {
+//     "time": 1554920381017,
+//     "blocks": [
+//         {
+//             type: "paragraph",
+//             data: {
+//                 text:
+//                     "This is a test one line paragraph"
+//             }
+//         },
+//         {
+//             type: "paragraph",
+//             data: {
+//                 text:
+//                     "It is a long established fact that a reader will be distracted by the readable content of a page when looking at its layout. The point of using Lorem Ipsum is that it has a more-or-less normal distribution of letters, as opposed to using 'Content here, content here', making it look like readable English. Many desktop publishing packages and web page editors now use Lorem Ipsum as their default model text, and a search for 'lorem ipsum' will uncover many web sites still in their infancy. Various versions have evolved over the years, sometimes by accident, sometimes on purpose (injected humour and the like)."
+//             }
+//         },
+//         {
+//             type: "paragraph",
+//             data: {
+//                 text:
+//                     "This is a test one line paragraph 2"
+//             }
+//         },
+
+//         {
+//             "type": "list",
+//             "data": {
+//                 "style": "unordered",
+//                 "items": [
+//                     "It is a block-styled editor",
+//                     "It returns clean data output in JSON",
+//                     "Designed to be extendable and pluggable with a simple API"
+//                 ]
+//             }
+//         },
+
+//         {
+//             "type": "header",
+//             "data": {
+//                 "text": "Header 1 level 2",
+//                 "level": 2
+//             }
+//         },
+//         {
+//             type: "paragraph",
+//             data: {
+//                 text:
+//                     "This is a test sentence number one.It is a long established fact that a reader will be distracted by the readable content of a page when looking at its layout. The point of using Lorem Ipsum is that it has a more-or-less normal distribution of letters, as opposed to using 'Content here, content here', making it look like readable English. Many desktop publishing packages and web page editors now use Lorem Ipsum as their default model text, and a search for 'lorem ipsum' will uncover many web sites still in their infancy. Various versions have evolved over the years, sometimes by accident, sometimes on purpose (injected humour and the like)."
+//             }
+//         },
+//         {
+//             "type": "list",
+//             "data": {
+//                 "style": "ordered",
+//                 "items": [
+//                     "It is a block-styled editor",
+//                     "It returns clean data output in JSON",
+//                     "Designed to be extendable and pluggable with a simple API"
+//                 ]
+//             }
+//         },
+//         {
+//             "type": "header",
+//             "data": {
+//                 "text": "Header 2 level 1",
+//                 "level": 1
+//             }
+//         },
+//         {
+//             type: "paragraph",
+//             data: {
+//                 text:
+//                     "This is a test sentence number two"
+//             }
+//         },
+//         {
+//             type: "header",
+//             "data": {
+//                 "text": "Header 3 level 5",
+//                 "level": 5
+//             }
+//         },
+
+//         {
+//             type: "paragraph",
+//             data: {
+//                 text:
+//                     "This is a test sentence number three. Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged. It was popularised in the 1960s with the release of Letraset sheets containing Lorem Ipsum passages, and more recently with desktop publishing software like Aldus PageMaker including versions of Lorem Ipsum."
+//             }
+//         },
+//         {
+//             type: "paragraph",
+//             data: {
+//                 text:
+//                     "This is a test sentence number four"
+//             }
+//         },
+//         {
+//             type: "paragraph",
+//             data: {
+//                 text:
+//                     "This is a test sentence number five.It is a long established fact that a reader will be distracted by the readable content of a page when looking at its layout. The point of using Lorem Ipsum is that it has a more-or-less normal distribution of letters, as opposed to using 'Content here, content here', making it look like readable English. Many desktop publishing packages and web page editors now use Lorem Ipsum as their default model text, and a search for 'lorem ipsum' will uncover many web sites still in their infancy. Various versions have evolved over the years, sometimes by accident, sometimes on purpose (injected humour and the like). It is a long established fact that a reader will be distracted by the readable content of a page when looking at its layout. The point of using Lorem Ipsum is that it has a more-or-less normal distribution of letters, as opposed to using 'Content here, content here', making it look like readable English. Many desktop publishing packages and web page editors now use Lorem Ipsum as their default model text, and a search for 'lorem ipsum' will uncover many web sites still in their infancy. Various versions have evolved over the years, sometimes by accident, sometimes on purpose (injected humour and the like)."
+//             }
+//         },
+//         {
+//             type: "paragraph",
+//             data: {
+//                 text:
+//                     "This is a test sentence number six."
+//             }
+//         },
+
+
+//     ],
+//     "version": "2.12.4"
+// }
+
+let myData = {
     "time": 1554920381017,
     "blocks": [
         {
             type: "paragraph",
             data: {
                 text:
-                    "This is a test one line paragraph"
+                    "Hi sasha"
             }
-        },
-        {
-            type: "paragraph",
-            data: {
-                text:
-                    "It is a long established fact that a reader will be distracted by the readable content of a page when looking at its layout. The point of using Lorem Ipsum is that it has a more-or-less normal distribution of letters, as opposed to using 'Content here, content here', making it look like readable English. Many desktop publishing packages and web page editors now use Lorem Ipsum as their default model text, and a search for 'lorem ipsum' will uncover many web sites still in their infancy. Various versions have evolved over the years, sometimes by accident, sometimes on purpose (injected humour and the like)."
-            }
-        },
-        {
-            type: "paragraph",
-            data: {
-                text:
-                    "This is a test one line paragraph 2"
-            }
-        },
-
-        {
-            "type": "list",
-            "data": {
-                "style": "unordered",
-                "items": [
-                    "It is a block-styled editor",
-                    "It returns clean data output in JSON",
-                    "Designed to be extendable and pluggable with a simple API"
-                ]
-            }
-        },
-
-        {
-            "type": "header",
-            "data": {
-                "text": "Header 1 level 2",
-                "level": 2
-            }
-        },
-        {
-            type: "paragraph",
-            data: {
-                text:
-                    "This is a test sentence number one.It is a long established fact that a reader will be distracted by the readable content of a page when looking at its layout. The point of using Lorem Ipsum is that it has a more-or-less normal distribution of letters, as opposed to using 'Content here, content here', making it look like readable English. Many desktop publishing packages and web page editors now use Lorem Ipsum as their default model text, and a search for 'lorem ipsum' will uncover many web sites still in their infancy. Various versions have evolved over the years, sometimes by accident, sometimes on purpose (injected humour and the like)."
-            }
-        },
-        {
-            "type": "list",
-            "data": {
-                "style": "ordered",
-                "items": [
-                    "It is a block-styled editor",
-                    "It returns clean data output in JSON",
-                    "Designed to be extendable and pluggable with a simple API"
-                ]
-            }
-        },
-        {
-            "type": "header",
-            "data": {
-                "text": "Header 2 level 1",
-                "level": 1
-            }
-        },
-        {
-            type: "paragraph",
-            data: {
-                text:
-                    "This is a test sentence number two"
-            }
-        },
-        {
-            type: "header",
-            "data": {
-                "text": "Header 3 level 5",
-                "level": 5
-            }
-        },
-
-        {
-            type: "paragraph",
-            data: {
-                text:
-                    "This is a test sentence number three"
-            }
-        },
-        {
-            type: "paragraph",
-            data: {
-                text:
-                    "This is a test sentence number four"
-            }
-        },
-        {
-            type: "paragraph",
-            data: {
-                text:
-                    "This is a test sentence number five"
-            }
-        }
-
-
-    ],
-    "version": "2.12.4"
+        }]
 }
 
 export default class pdfGenerate extends PureComponent {
+    data = this.props.data
+    // data = myData
 
     // JSpdf Generator For generating the PDF
     jsPdfGenerator = () => {
@@ -128,7 +149,7 @@ export default class pdfGenerate extends PureComponent {
         doc.setFont('Roboto-Regular');
         // doc.setTextColor(255, 0, 0)
 
-        data.blocks.forEach((block, i) => {
+        this.data.blocks.forEach((block, i) => {
             // block.type === 'header' ? doc.setFontSize(20) : doc.setFontSize(10)
 
             if (block.type === 'header') {
