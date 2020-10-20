@@ -16,7 +16,7 @@ import Modal from './components/Layout/Modal';
 
 
 import Editor from './components/editor/editor';
-import pdfGenerate from './components/editor/jspdf';
+
 import myEditor from './components/editor/editor';
 // import MyDocument from './components/editor/topdf';
 
@@ -43,7 +43,7 @@ const App = () => {
 						{/* <Route exact path="/Modal" component={Modal} /> */}
 						<Route exact path='/editor' component={myEditor} />
 						{/* <Route exact path='/editor' component={Editor} /> */}
-						<Route exact path='/pdf' component={pdfGenerate} />
+
 					</Switch>
 				</div>
 				<Footer />

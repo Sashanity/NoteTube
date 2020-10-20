@@ -5,7 +5,6 @@ import Sidebar from "../Layout/Sidebar";
 import Paper from '@material-ui/core/Paper';
 
 function myEditor() {
-
     let editorButtons = ['Upload', 'New Note', 'Download']
     return (
         <div>
@@ -16,7 +15,7 @@ function myEditor() {
                         tools={EDITOR_JS_TOOLS}
                         autofocus
                         placeholder="Add content here..."
-                        onChange={(data) => { this.data = data }}
+                        onChange={(data) => console.log(data)}
                         onReady={() => console.log('Start typing!')}
                     />
                 </Paper >
