@@ -6,6 +6,7 @@ import { makeStyles } from '@material-ui/core/styles';
 import CloudUploadIcon from '@material-ui/icons/CloudUpload';
 import AddIcon from '@material-ui/icons/Add';
 import CloudDownloadIcon from '@material-ui/icons/CloudDownload';
+import { save } from '../../actions/editorSave'
 
 const useStyles = makeStyles((theme) => ({
   button: {
@@ -18,6 +19,12 @@ let openEditor = (e) => {
   window.open("/editor", "_blank")
 }
 
+let downloadData = (e) => {
+  e.preventDefault();
+  save()
+}
+
+
 const Trigger = ({ triggerText, buttonRef, showModal }) => {
   const classes = useStyles();
   return (
@@ -28,7 +35,7 @@ const Trigger = ({ triggerText, buttonRef, showModal }) => {
       className={classes.button}
       startIcon={triggerText === 'Upload' ? <CloudUploadIcon /> : triggerText === 'New Note' ? <AddIcon /> : triggerText === 'Download' ? <CloudDownloadIcon /> : ''}
       ref={buttonRef}
-      onClick={triggerText === 'Upload' ? showModal : triggerText === 'New Note' ? openEditor : ""}
+      onClick={triggerText === 'Upload' ? showModal : triggerText === 'New Note' ? openEditor : triggerText === 'Download' ? downloadData : ""}
     >
       {triggerText}
     </Button>
