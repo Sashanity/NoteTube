@@ -1,5 +1,5 @@
 import React from "react";
-import NotesList from "../NotesList/NotesList"
+import DisplayNots from "../NotesList/displayNotes"
 import Sidebar from "../Sidebar/Sidebar";
 import "./personalSpace.css";
 
@@ -10,8 +10,12 @@ return(
     <Sidebar></Sidebar>
 
         <div className="personalSpace">
-        <NotesList></NotesList>
-            
+       <DisplayNots></DisplayNots>
+        <div className="personalSpace">
+            <br></br>
+            <br></br>
+            <br></br>
+        </div>
         
 </div>
 </div>
