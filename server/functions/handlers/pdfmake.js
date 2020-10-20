@@ -64,6 +64,16 @@ let myData = {
           "level": 5
         }
       },
+      // {
+      //   "type": "image",
+      //   "data": {
+      //     "url": "https://www.tesla.com/tesla_theme/assets/img/_vehicle_redesign/roadster_and_semi/roadster/hero.jpg",
+      //     "caption": "Roadster // tesla.com",
+      //     "withBorder": false,
+      //     "withBackground": false,
+      //     "stretched": true
+      //   }
+      // },
       {
         "type": "list",
         "data": {
@@ -198,6 +208,9 @@ function processData(data) {
           i++
         })
         break;
+      case 'image':
+        content[i] = { image: block.data.url }
+        break;
       default:
         content[i] = block.data.text;
     }
@@ -205,3 +218,4 @@ function processData(data) {
   })
   return content
 }
+
