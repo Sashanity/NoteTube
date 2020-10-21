@@ -95,3 +95,7 @@ exports.signup = (req, res) => {
 			}
 		});
 };
+
+exports.verifyToken = (req, res) => {
+	
+};
