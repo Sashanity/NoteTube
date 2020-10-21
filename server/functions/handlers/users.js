@@ -1,4 +1,4 @@
-const { db } = require('../util/admin');
+const { admin, db } = require('../util/admin');
 const firebase = require('firebase');
 const firebaseConfig = require('../util/firebaseConfig');
 
@@ -97,5 +97,24 @@ exports.signup = (req, res) => {
 };
 
 exports.verifyToken = (req, res) => {
-	
+	const token = req.query.token;
+	if (token){
+		admin.auth().verifyIdToken(token, true).then(function(decodedToken){
+			return res.status(200).json({Status: "Successful", Token: token});
+		})
+		.catch(function(error){
+			if (error.code == 'auth/id-token-revoked'){
+				return res.status(400).json({Status: "Revoked", Error: error});
+			}
+			else if (error.code == 'auth/id-token-expired'){
+				return res.status(400).json({Status: "Expired", Error: error})
+			}
+			else{
+				return res.status(400).json({Status: "Invalid", Error: error});
+			}
+		});
+	}
+	else{
+		return res.status(400).json({Status: "Need a Token in the parameters"});
+	}
 };
