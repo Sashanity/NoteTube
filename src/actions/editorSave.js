@@ -6,7 +6,8 @@ const config = {
 };
 
 // export const save = (data) => {
-export const save = () => {
+export const save = async (data) => {
+    const body = JSON.stringify({data})
     try {
         // axios.post('/post/pdfmake', data)
         axios.post('/pdfmake')
