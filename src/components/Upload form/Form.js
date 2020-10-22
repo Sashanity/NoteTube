@@ -42,9 +42,9 @@ export const Form = () => {
 
   const [state, setState] = React.useState({
     checkedA: true,
-		name: '',
-		course: '',
-		instructor: '',
+    name: '',
+    course: '',
+    instructor: '',
     term: '',
     subject: ''
   });
@@ -81,16 +81,16 @@ export const Form = () => {
 
   const {getRootProps, getInputProps} = useDropzone({onDrop})
 
-	const onChange = (e) =>
-		setState({ ...state, [e.target.name]: e.target.value });
+  const onChange = (e) =>
+    setState({ ...state, [e.target.name]: e.target.value });
 
-  const { checkedA,	name, course,	instructor,  term,   subject } = state;
+  const { checkedA, name, course, instructor,  term,   subject } = state;
 
 
   const handleSubmit = (event) => {
     event.preventDefault();
     console.log(state, fileState)
-    upload(checkedA,	name, course,	instructor,  term,   subject, fileState)
+    upload(checkedA,  name, course, instructor,  term,   subject, fileState)
   }
   const subjects = [
     { title: 'Arts'},
@@ -136,16 +136,15 @@ export const Form = () => {
           <input  onChange={onChange}  className="form-input" name="term" />
         </div>
 
-        <Autocomplete
+        <Autocomplete className="dropdown"
       id="combo-box-demo"
       options={subjects}
       getOptionLabel={(option) => option.title}
-      style={{ width: 200, borderBlockColor:"white"}}
+      style={{ width: 200, color:"white"}}
       renderInput={(params) => <TextField {...params} label="Subject" variant="outlined" />}
     />
 
-        <Dropzone
-        >
+        <Dropzone className="dropzone">
         {() => ( <section className="dropzone_container">
           <div {...getRootProps()}>
             <input {...getInputProps()} />
