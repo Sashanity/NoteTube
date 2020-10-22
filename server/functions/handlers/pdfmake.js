@@ -135,10 +135,8 @@ exports.pdf = (req, res) => {
     var PdfPrinter = require('pdfmake');
     var printer = new PdfPrinter(fonts);
     var fs = require('fs');
-
-    //let data = req.body.data
-    let data = myData.data
-
+    let data = req.body.data
+    //let data = myData.data
     let content = processData(data)
 
     console.log('CONTENT:', content)

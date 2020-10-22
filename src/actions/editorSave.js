@@ -10,7 +10,7 @@ export const save = async (data) => {
     const body = JSON.stringify({data})
     try {
         // axios.post('/post/pdfmake', data)
-        axios.post('/pdfmake')
+        await axios.post('/pdfmake',body,config)
     } catch (err) {
         console.log(err);
     }

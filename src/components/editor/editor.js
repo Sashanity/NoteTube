@@ -15,7 +15,6 @@ function myEditor() {
     let data
     const setData = (e) =>{
         data = e
-        console.log(data)
     }
     const openEditor = (e) => {
         e.preventDefault();
@@ -23,7 +22,6 @@ function myEditor() {
       }
       
     const downloadData = (e) => {
-
         e.preventDefault();
         save(data)
       }
@@ -31,20 +29,22 @@ function myEditor() {
     return (
         <div style={{ display: 'flex' }} >
             <Grid container spacing={2} direction='column'>
-                <Grid item xs={12} container>
+                <Grid item xs={10} container>
                     <Grid item xs={2} />
-                    <Grid item xs={1}>
+                    <Grid item xs={2} >
                         <Button 
                          variant="contained"
-                         style={{ width: '130px', margin: 1}}
+                         style={{ width: '130px'}}
                          color={"primary"}
                          startIcon={ <AddIcon />}
                          onClick={openEditor}>
                          {"New Note"}
                         </Button>
+                        <br/>
+                        <br/>
                         <Button
                         variant="contained"
-                        style={{ width: '130px', margin: 1}}
+                        style={{ width: '130px'}}
                         color={"primary"}
                         startIcon={<CloudDownloadIcon />}
                         onClick={downloadData}>
@@ -52,7 +52,7 @@ function myEditor() {
                         </Button>
                     </Grid>
                     <Grid item xs={5}>
-                        <Paper elevation={20} style={{ width: '700px' }}>
+                        <Paper elevation={20} style={{ width: '800px' }}>
                             <EditorJs
                                 tools={EDITOR_JS_TOOLS}
                                 autofocus
