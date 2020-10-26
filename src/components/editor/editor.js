@@ -21,14 +21,11 @@ const MyEditor = () => {
             console.log('Saving failed: ', e)
         }
     }
-
     let data
-
     const openEditor = (e) => {
         e.preventDefault();
         window.open("/editor", "_blank")
     }
-
     return (
         <div style={{ display: 'flex' }} >
             <Grid container spacing={2} direction='column'>
@@ -50,7 +47,6 @@ const MyEditor = () => {
                             style={{ width: '130px' }}
                             color={"primary"}
                             startIcon={<CloudDownloadIcon />}
-                            // onClick={downloadData}>
                             onClick={onSave}
                         >
                             {"Download"}
@@ -81,6 +77,11 @@ const MyEditor = () => {
 }
 export default MyEditor;
 
+/**
+ * pdfmake instance, creates and downloads a pdf file constructed from editor text data
+ * 
+ * @param {Object} data 
+ */
 const downloadPDF = (data) => {
     let pdfMake = require('pdfmake/build/pdfmake.js');
     let pdfFonts = require('pdfmake/build/vfs_fonts.js');
@@ -94,6 +95,14 @@ const downloadPDF = (data) => {
     pdfMake.createPdf(docDefinition).download();
 }
 
+/**
+ * Helper funciton to process JSON object,
+ * converts incoming data in array of String objects
+ * strips html tags
+ * @param {Object} data text data from editor
+ * 
+ * @returns {array} content  array of Strings/nested array of strings
+ */
 function processData(data) {
     console.log("in process function")
     console.log(data.blocks)

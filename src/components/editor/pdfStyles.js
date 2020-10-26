@@ -1,3 +1,4 @@
+// styles for the pdf file that would be created by pdfmake
 export const styles = {
     header1: {
         fontSize: 22,
@@ -26,7 +27,6 @@ export const styles = {
 
     italicStyle: {
         italics: true
-        // alignment: 'right'
     },
     boldStyle: {
         bold: true
