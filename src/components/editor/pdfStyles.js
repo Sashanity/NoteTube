@@ -1,0 +1,34 @@
+export const styles = {
+    header1: {
+        fontSize: 22,
+        bold: true
+    },
+    header2: {
+        fontSize: 20,
+        bold: true
+    },
+    header3: {
+        fontSize: 18,
+        bold: true
+    },
+    header4: {
+        fontSize: 16,
+        bold: true
+    },
+    header5: {
+        fontSize: 14,
+        bold: true
+    },
+    header6: {
+        fontSize: 12,
+        bold: true
+    },
+
+    italicStyle: {
+        italics: true
+        // alignment: 'right'
+    },
+    boldStyle: {
+        bold: true
+    }
+}

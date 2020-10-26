@@ -31,6 +31,6 @@ export const EDITOR_JS_TOOLS = {
     // checklist: CheckList,
     // delimiter: Delimiter,
     // inlineCode: InlineCode,
-    simpleImage: SimpleImage,
+    image: SimpleImage,
     // image: ImageTool
 };
