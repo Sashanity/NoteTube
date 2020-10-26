@@ -11,7 +11,6 @@ import Avatar from '@material-ui/core/Avatar';
 import IconButton from '@material-ui/core/IconButton';
 import Typography from '@material-ui/core/Typography';
 import { red } from '@material-ui/core/colors';
-import FavoriteIcon from '@material-ui/icons/Favorite';
 import ShareIcon from '@material-ui/icons/Share';
 import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
 import MoreVertIcon from '@material-ui/icons/MoreVert';
@@ -20,7 +19,9 @@ import OpenInNewIcon from '@material-ui/icons/OpenInNew';
 import Img1 from '../../img/notes.png';
 import Img2 from '../../img/book-img.png';
 import './NotesList.css';
-import { Subject } from '@material-ui/icons';
+import ListofItems from "./listofItems";
+import EditNotes from "./ClassNotes";
+import {DisplayClassNotes} from "../../actions/documents"
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -57,6 +58,13 @@ export default function NotesList(props)
     setExpanded(!expanded);
   };
 
+  // actions
+const displayNotes= async () =>{
+let resolved = await DisplayClassNotes();
+
+}
+
+
   return (
       <div className="PublicNotes">
         <div className="NotesList">
@@ -67,11 +75,7 @@ export default function NotesList(props)
            src={Img1}>
           </Avatar>
         }
-        action={
-          <IconButton aria-label="settings">
-            {/* <MoreVertIcon /> */}
-          </IconButton>
-        }
+        action={<EditNotes />}
         title={Notes_title}
         subheader={timestamp}
       />
@@ -87,6 +91,7 @@ export default function NotesList(props)
       </CardContent>
 
       <CardActions disableSpacing>
+    
         <IconButton aria-label="Download">
           <ArrowDownwardOutlinedIcon />
         </IconButton>
@@ -112,7 +117,9 @@ export default function NotesList(props)
         <p>{subject}</p>
           </Typography>
         </CardContent>
+       
       </Collapse>
+     
     </Card>
     </div>
     </div>

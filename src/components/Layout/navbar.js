@@ -29,14 +29,14 @@ const Navbar = () => {
 							</Link>
 						</Navigation>
 					</Header>
-					<Drawer title='NoteTube'>
+					{/* <Drawer title='NoteTube'>
 						<Navigation>
 							<Link to='#'>Profile</Link>
 							<Link to='/uploadNotes'>Upload Notes</Link>
 							<Link to='#'>Followers</Link>
 							<Button onClick={logout(history, setUser)}>Logout</Button>
 						</Navigation>
-					</Drawer>
+					</Drawer> */}
 					<Content />
 				</Layout>
 			</div>

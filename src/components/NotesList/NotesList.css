@@ -26,7 +26,6 @@ width: 250px;
 display: flex;
 flex-wrap: wrap;
 
-
 }
 
 .Class_info
@@ -52,3 +51,14 @@ font-size: 14px;
 color:goldenrod
 
 }
+
+/* 
+.listofitems
+{
+    display: flex;
+    flex: 1 0 auto;
+    align-items: flex-end;
+    justify-content: center;
+    flex-direction: column;
+    z-index: 10;
+} */

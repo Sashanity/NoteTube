@@ -20,6 +20,7 @@
 		"instantsearch.js": "^4.8.3",
 		"react": "^16.13.1",
 		"react-dom": "^16.13.1",
+		"react-draggable": "^4.4.3",
 		"react-dropzone": "^11.2.0",
 		"react-instantsearch-dom": "^6.7.0",
 		"react-mdl": "^2.1.0",

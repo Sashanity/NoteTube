@@ -93,15 +93,7 @@ subject="Computer Science"
 >
 </NotesList>
 
-<NotesList
-Notes_title="Intro To Database"
-courseName="CS 157A"
-semester="Fall 2019"
-timestamp="15 September 2019"
-instructor="John Smith"
-subject="Computer Science"
->
-</NotesList>
+
 </div>
 
 

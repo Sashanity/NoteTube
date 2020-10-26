@@ -23,6 +23,19 @@ export const upload = (checkedA,	name, course,	instructor,  term,  subject, file
 	  }
   }
 
+
+  export const DisplayClassNotes = () => {
+	
+
+	try { 
+	  axios.get('/preview') 
+	} catch (err) {
+	  console.log(err);
+	  }
+  }
+
+
+
 export const search = async (history, searchInput) => {
 	try {
 		const res = await axios.get(
