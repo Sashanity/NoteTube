@@ -1,4 +1,5 @@
 import React, { useCallback} from 'react';
+import { useState } from 'react';
 import './modal.css';
 import Dropzone, { useDropzone } from "react-dropzone"
 import axios from 'axios'
@@ -92,6 +93,10 @@ export const Form = () => {
     console.log(state, fileState)
     upload(checkedA,  name, course, instructor,  term,   subject, fileState)
   }
+
+  // set subject value
+  const handleOnChange = ({ target }) => console.log(target.value);
+
   const subjects = [
     { title: 'Arts'},
     { title: 'Accounting'},
@@ -136,12 +141,22 @@ export const Form = () => {
           <input  onChange={onChange}  className="form-input" name="term" />
         </div>
 
-        <Autocomplete className="dropdown"
+
+          {/* Select subjects */}
+          <Autocomplete
       id="combo-box-demo"
       options={subjects}
-      getOptionLabel={(option) => option.title}
-      style={{ width: 200, color:"white"}}
-      renderInput={(params) => <TextField {...params} label="Subject" variant="outlined" />}
+      getOptionLabel={option => option.title}
+      style={{ width: 300 }}
+      renderInput={params => (
+        <TextField
+          {...params}
+          label="Combo box"
+          variant="outlined"
+          fullWidth
+          onChange={handleOnChange}
+        />
+      )}
     />
 
         <Dropzone className="dropzone">
@@ -186,3 +201,4 @@ export const Form = () => {
 
 };
 export default Form;
+

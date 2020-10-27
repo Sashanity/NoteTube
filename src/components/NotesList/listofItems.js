@@ -7,9 +7,12 @@ import ListItemText from '@material-ui/core/ListItemText';
 import Divider from '@material-ui/core/Divider';
 import EditIcon from '@material-ui/icons/Edit';
 import DeleteIcon from '@material-ui/icons/Delete';
-import AlertDeleteBox from "./AlertDeleteBox";
-import { DialogContent } from '@material-ui/core';
-
+import Button from '@material-ui/core/Button';
+import Dialog from '@material-ui/core/Dialog';
+import DialogActions from '@material-ui/core/DialogActions';
+import DialogContent from '@material-ui/core/DialogContent';
+import DialogContentText from '@material-ui/core/DialogContentText';
+import DialogTitle from '@material-ui/core/DialogTitle';
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -28,13 +31,19 @@ export default function SelectedListItem() {
   };
 
 
-      // AlertBox 
-
-    // const [alert,SetAlert]= useState(false);
+  const [open, setOpen] = React.useState(false);
     
-    // const alertBox =()=>(alert ? SetAlert(false) : SetAlert(true));
+  const deleteNote =()=>(open ? setOpen(false) : setOpen(true));
 
 
+  const handleClickOpen = () => {
+    setOpen(true);
+  };
+
+  const handleClose = () => {
+    setOpen(false);
+
+  };
 
   return (
     <div className={classes.root}>
@@ -52,17 +61,35 @@ export default function SelectedListItem() {
         <ListItem
           button
           // selected={selectedIndex === 1}
-         >
-        
+          >
+      
 
-        {/* <div onClick={alertBox}> */}
-           <ListItemIcon >
-          
+          {/* Dialogbox */}
+          <Dialog
+        open={open}
+        onClose={handleClose}
+        aria-labelledby="alert-dialog-title"
+        aria-describedby="alert-dialog-description"
+      >
+        <DialogTitle id="alert-dialog-title">{"Delete Class Note? "}</DialogTitle>
+        <DialogContent>
+          <DialogContentText id="alert-dialog-description">
+           Do you want to Delete ClassNotes?
+          </DialogContentText>
+        </DialogContent>
+        <DialogActions>
+          <Button onClick={handleClose} color="primary">
+            No
+          </Button>
+          <Button onClick={handleClose} color="primary" autoFocus>
+            Yes
+          </Button>
+        </DialogActions>
+      </Dialog>
+           <ListItemIcon onClick={deleteNote} >
           <DeleteIcon></DeleteIcon>
-          {/* {alert ? <AlertDeleteBox></AlertDeleteBox>:null} */}
-         
           </ListItemIcon>
-          {/* </div> */}
+     
           <ListItemText primary="Delete"/>   
             
         </ListItem>

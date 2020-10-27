@@ -26,8 +26,8 @@ export const upload = (checkedA,	name, course,	instructor,  term,  subject, file
 
   export const DisplayClassNotes = () => {
 	
-
 	try { 
+		// change the Url /preview
 	  axios.get('/preview') 
 	} catch (err) {
 	  console.log(err);

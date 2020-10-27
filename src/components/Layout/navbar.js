@@ -27,6 +27,8 @@ const Navbar = () => {
 							<Link to='#'>
 								<AccountCircleIcon></AccountCircleIcon>
 							</Link>
+							<Button onClick={logout(history, setUser)}>Logout</Button>
+
 						</Navigation>
 					</Header>
 					{/* <Drawer title='NoteTube'>
