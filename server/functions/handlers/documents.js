@@ -234,7 +234,7 @@ exports.favoriteNote = (req, res) => {
                                 noteid: noteID,
                                 timestamp: admin.firestore.Timestamp.fromDate(new Date())
                             }
-                            favCollection.add(newFav),then(function(favRef){ //Adds the favorite to firestore and returns a successful response
+                            favCollection.add(newFav).then(function(favRef){ //Adds the favorite to firestore and returns a successful response
                                 return res.status(200).json({Status: "Successful"});
                             })
                             .catch(function(error){ //Returns server error if fails during favorite upload
@@ -246,8 +246,8 @@ exports.favoriteNote = (req, res) => {
                         }
                     })
                     .catch(function(error){ //Returns server error if issue looking at the favorites
-                        return res.status(500).json({Status: error});
-                    })
+                        return res.status(500).json({Status: error2});
+                    });
                    
                 }
                 else{ //Returns user error if the note doesn't exist
@@ -256,7 +256,7 @@ exports.favoriteNote = (req, res) => {
             })
             
             .catch(function(error){ //Returns server error if fails during retrival of note
-                return res.status(500).json({Status: error});
+                return res.status(500).json({Status: "error"});
             })
         
         })
