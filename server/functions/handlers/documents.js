@@ -331,7 +331,7 @@ exports.deleteNote = (req, res) => {
 
 /***
  *Favorite Note
- **Saves the users favorites to Firestore
+ **Saves the users favorites to Firestore or removes it if they already favorited it
  **PARAMS:
  ***token: The authentication token of the user
  ***noteid: The ID  of the note the user wants to favorite
@@ -360,12 +360,17 @@ exports.favoriteNote = (req, res) => {
                                 return res.status(500).json({Status: error});
                             });
                         }
-                        else{
-                            return res.status(400).json({Status: "User already favoirted the note"})
+                        else{ //Returns user error if the user already favorited the note
+                            favCollection.where("noteid", "==", noteID).where("userid", "==", userID).delete().then(function(){
+                                return res.status(200).json({Status: "Successful"});
+                            })
+                            .catch(function(error){
+                                return res.status(500).json({Status: error});
+                            })
                         }
                     })
                     .catch(function(error){ //Returns server error if issue looking at the favorites
-                        return res.status(500).json({Status: error2});
+                        return res.status(500).json({Status: error});
                     });
                    
                 }
@@ -387,4 +392,3 @@ exports.favoriteNote = (req, res) => {
         return res.status(400).json({Status: "Need both the token and the ID of the note"});
     }
 }
-
