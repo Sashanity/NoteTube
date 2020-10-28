@@ -13,6 +13,6 @@ app.post('/upload', upload);
 app.get('/preview', preview);
 app.put('/editNote', editNote);
 app.delete('/deleteNote', deleteNote);
-app.put('/favoriteNote', favoriteNote);
+app.post('/favoriteNote', favoriteNote);
 
 exports.api = functions.https.onRequest(app);
