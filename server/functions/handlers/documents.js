@@ -212,7 +212,7 @@ exports.deleteNote = (req, res) => {
 
 /***
  *Favorite Note
- **Saves the users favorites to Firestore or removes it if they already favorited it
+ **Saves the users favorites to Firestore
  **PARAMS:
  ***token: The authentication token of the user
  ***noteid: The ID  of the note the user wants to favorite
@@ -242,12 +242,104 @@ exports.favoriteNote = (req, res) => {
                             });
                         }
                         else{ //Returns user error if the user already favorited the note
-                            favCollection.where("noteid", "==", noteID).where("userid", "==", userID).delete().then(function(){
-                                return res.status(200).json({Status: "Successful"});
-                            })
-                            .catch(function(error){
-                                return res.status(500).json({Status: error});
-                            })
+                            return res.status(400).json({Status: "User already favoirted the note"})
+                        }
+                    })
+                    .catch(function(error){ //Returns server error if issue looking at the favorites
+                        return res.status(500).json({Status: error2});
+                    });
+                   
+                }
+                else{ //Returns user error if the note doesn't exist
+                    return res.status(400).json({Status: "Note not found"});
+                }
+            })
+            
+            .catch(function(error){ //Returns server error if fails during retrival of note
+                return res.status(500).json({Status: error});
+            })
+        
+        })
+        .catch(function(error){ //Returns user error if fails during verification
+            return res.status(400).json({Status: error});
+        });
+    }
+    else{ //Returns user error if either the token or note are not there
+        return res.status(400).json({Status: "Need both the token and the ID of the note"});
+    }
+}
+
+/***
+ *Unfavorite Note
+ **Remvoes the specified note from the users favorites in Firestore
+ **PARAMS:
+ ***token: The authentication token of the user
+ ***noteid: The ID  of the note the user wants to favorite
+ **RETURNS:
+ ***Status: The status of the request. Will be an error if the note was not favorited correctly, either due to server error or due to user error
+ ***/
+exports.unfavoriteNote = (req, res) => { 
+    const favCollection = db.collection("favorites");
+    if (req.query.token && req.query.noteid){ //Checks to make sure the note id and token are in the request params.
+        admin.auth().verifyIdToken(req.query.token).then(function(decodedToken) { //Admin decodes the token
+            const userID = decodedToken.uid; //Get the user id
+            const noteID = req.query.noteid; //Get the note id
+            db.collection('notes').doc(noteID).get().then(function(doc){
+                if (doc.exists){ //If the note id is real
+                    favCollection.where("noteid", "==", noteID).where("userid", "==", userID).get().then(function(querySnapshot){
+                        querySnapshot.forEach(function(doc){
+                            doc.ref.delete();
+                        })
+                        return res.status(200).json({Status: "Successful"});
+                    })
+                    .catch(function(error){ //Returns server error if issue looking at the favorites
+                        return res.status(500).json({Status: error});
+                    });
+                   
+                }
+                else{ //Returns user error if the note doesn't exist
+                    return res.status(400).json({Status: "Note not found"});
+                }
+            })
+            
+            .catch(function(error){ //Returns server error if fails during retrival of note
+                return res.status(500).json({Status: error});
+            })
+        
+        })
+        .catch(function(error){ //Returns user error if fails during verification
+            return res.status(400).json({Status: error});
+        });
+    }
+    else{ //Returns user error if either the token or note are not there
+        return res.status(400).json({Status: "Need both the token and the ID of the note"});
+    }
+}
+
+/***
+ *Has Favorited Note
+ **Checks to see if the note if a part of the users favorites in Firestore
+ **PARAMS:
+ ***token: The authentication token of the user
+ ***noteid: The ID  of the note the user wants to favorite
+ **RETURNS:
+ ***Status: The status of the request. Will be an error if the note was not favorited correctly, either due to server error or due to user error
+ ***Favorited: If Status = "Successful", will return whether the user has favorited the note or not
+ ***/
+exports.hasFavoritedNote = (req, res) => { 
+    const favCollection = db.collection("favorites");
+    if (req.query.token && req.query.noteid){ //Checks to make sure the note id and token are in the request params.
+        admin.auth().verifyIdToken(req.query.token).then(function(decodedToken) { //Admin decodes the token
+            const userID = decodedToken.uid; //Get the user id
+            const noteID = req.query.noteid;
+            db.collection('notes').doc(noteID).get().then(function(doc){
+                if (doc.exists){ //If the note id is real
+                    favCollection.where("noteid", "==", noteID).where("userid", "==", userID).get().then(function(querySnapshot){
+                        if(querySnapshot.empty){
+                            return res.status(200).json({Status: "Successful", Favorited: false});
+                        }
+                        else{ //Returns user error if the user already favorited the note
+                            return res.status(200).json({Status: "Successful", Favorited: true});
                         }
                     })
                     .catch(function(error){ //Returns server error if issue looking at the favorites
