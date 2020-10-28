@@ -2,7 +2,7 @@ const db = require('./util/admin');
 const functions = require('firebase-functions');
 const app = require('express')();
 const { login, signup, auth, verifyToken } = require('./handlers/users');
-const { upload, preview, userList, editNote, deleteNote } = require('./handlers/documents');
+const { upload, preview, editNote, deleteNote, favoriteNote } = require('./handlers/documents');
 
 const cors = require('cors');
 app.use(cors());
@@ -15,5 +15,6 @@ app.get('/verifyToken', verifyToken);
 app.get('/userList', userList);
 app.put('/editNote', editNote);
 app.delete('/deleteNote', deleteNote);
+app.put('/favoriteNote', favoriteNote);
 
 exports.api = functions.https.onRequest(app);
