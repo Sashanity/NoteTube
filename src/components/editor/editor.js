@@ -92,7 +92,8 @@ const downloadPDF = (data) => {
         content: content,
         styles: styles
     };
-    pdfMake.createPdf(docDefinition).download();
+    let fileName = Math.random().toString(36).substring(2, 15) + Math.random().toString(36).substring(2, 15);
+    pdfMake.createPdf(docDefinition).download(fileName);
 }
 
 /**
