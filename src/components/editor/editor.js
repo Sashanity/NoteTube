@@ -10,6 +10,11 @@ import { styles } from './pdfStyles'
 
 const MyEditor = () => {
     let editor = null
+    const onChange = () => {
+        // https://editorjs.io/configuration#editor-modifications-callback
+        console.log("Now I know that Editor's content changed!")
+        console.log('DATA:', data)
+    }
     const onSave = async () => {
         // https://editorjs.io/saving-data
         try {
@@ -68,7 +73,16 @@ const MyEditor = () => {
                             >
                                 <div id="custom-editor-container" />
                             </EditorJs>
+
                         </Paper>
+
+                        {/* {editor} */}
+                        {/* <Box>
+                        <Paper elevation={20} style={{ width: '794px' }}>
+                         {'ddddddd'} 
+                        {editor} 
+                        </Paper>
+                        </Box> */}
                     </Grid>
                 </Grid>
             </Grid>
@@ -138,7 +152,7 @@ function processData(data) {
                 content[i] = { text: block.data.text.replace(/<\/?[^>]+>/gi, '').replace("&nbsp;", " "), style: style }
                 break;
             case 'paragraph':
-                content[i] = block.data.text.replace(/<\/?[^>]+>/gi, '').replace("&nbsp;", " ")
+                content[i] = block.data.text.replace(/<\/?[^>]+>/gi, '').replace("&nbsp;", " ") + '\n\n'
                 break;
             case 'list':
                 let itemsClean = [];
@@ -149,7 +163,8 @@ function processData(data) {
                 break;
             case 'image':
                 // content[i] = { image: block.data.url, width: 500 }
-                content[i] = { image: block.data.url }
+                content[i] = { image: block.data.url, width: 350 }
+
                 break;
             case 'table':
                 console.log(block.data.content)
