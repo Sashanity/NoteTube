@@ -10,11 +10,6 @@ import { styles } from './pdfStyles'
 
 const MyEditor = () => {
     let editor = null
-    const onChange = () => {
-        // https://editorjs.io/configuration#editor-modifications-callback
-        console.log("Now I know that Editor's content changed!")
-        console.log('DATA:', data)
-    }
     const onSave = async () => {
         // https://editorjs.io/saving-data
         try {
@@ -73,16 +68,7 @@ const MyEditor = () => {
                             >
                                 <div id="custom-editor-container" />
                             </EditorJs>
-
                         </Paper>
-
-                        {/* {editor} */}
-                        {/* <Box>
-                        <Paper elevation={20} style={{ width: '794px' }}>
-                         {'ddddddd'} 
-                        {editor} 
-                        </Paper>
-                        </Box> */}
                     </Grid>
                 </Grid>
             </Grid>
