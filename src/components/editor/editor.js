@@ -7,6 +7,7 @@ import Paper from '@material-ui/core/Paper';
 import Button from '@material-ui/core/Button';
 import Grid from '@material-ui/core/Grid';
 import { styles } from './pdfStyles'
+var htmlToPdfmake = require("html-to-pdfmake");
 
 const MyEditor = () => {
     let editor = null
@@ -84,6 +85,14 @@ export default MyEditor;
  */
 const downloadPDF = (data) => {
     let pdfMake = require('pdfmake/build/pdfmake.js');
+    // var pdfFonts = {
+    //     Roboto: {
+    //         normal: 'fonts/Roboto/Roboto-Regular.ttf',
+    //         bold: 'fonts/Roboto/Roboto-Medium.ttf',
+    //         italics: 'fonts/Roboto/Roboto-Italic.ttf',
+    //         bolditalics: 'fonts/Roboto/Roboto-MediumItalic.ttf'
+    //     }
+    // };
     let pdfFonts = require('pdfmake/build/vfs_fonts.js');
     pdfMake.vfs = pdfFonts.pdfMake.vfs;
 
@@ -108,11 +117,13 @@ function processData(data) {
     console.log("in process function")
     console.log(data.blocks)
     let content = []
-    data.blocks.forEach((block, i) => {
+    let i = 0
+    let style
+    data.blocks.forEach((block) => {
         console.log('working on block: ', i, block.type)
         switch (block.type) {
             case 'header':
-                let style
+
                 switch (block.data.level) {
                     case 1:
                         style = 'header1';
@@ -138,7 +149,10 @@ function processData(data) {
                 content[i] = { text: block.data.text.replace(/<\/?[^>]+>/gi, '').replace("&nbsp;", " "), style: style }
                 break;
             case 'paragraph':
-                content[i] = block.data.text.replace(/<\/?[^>]+>/gi, '').replace("&nbsp;", " ") + '\n\n'
+                // content[i] = block.data.text.replace(/<\/?[^>]+>/gi, '').replace("&nbsp;", " ") + '\n\n'
+                // content[i] = checkHTMLstyles(block.data.text)
+                content[i] = { text: htmlToPdfmake(block.data.text) }
+                content[++i] = { text: '\n' }
                 break;
             case 'list':
                 let itemsClean = [];
@@ -150,21 +164,28 @@ function processData(data) {
             case 'image':
                 // content[i] = { image: block.data.url, width: 500 }
                 content[i] = { image: block.data.url, width: 350 }
-
+                content[++i] = { text: block.data.caption + '\n\n' }
                 break;
             case 'table':
                 console.log(block.data.content)
                 content[i] = {
                     table: {
-                        // headerRows: 1,
-                        // widths: ['*', 'auto', 100, '*'],
                         body: block.data.content
                     }
                 }
                 break;
+            case 'delimiter':
+                style = 'delimiter'
+                content[i] = { text: '* * *', style: style }
+                break;
+            case 'code':
+                style = 'code'
+                content[i] = { text: block.data.code, style: style }
+                break;
             default:
                 content[i] = block.data.text.replace(/<\/?[^>]+>/gi, '').replace("&nbsp;", " ")
         }
+        i++
     })
     return content
 }

@@ -33,6 +33,7 @@
 		"firebase": "^7.17.2",
 		"focus-trap-react": "^7.0.1",
 		"framer-motion": "^2.6.0",
+		"html-to-pdfmake": "^2.1.0",
 		"i": "^0.3.6",
 		"instantsearch.css": "^7.4.3",
 		"instantsearch.js": "^4.7.1",
@@ -72,6 +73,7 @@
 	"devDependencies": {
 		"@editorjs/simple-image": "^1.4.0",
 		"css-loader": "^4.2.1",
+		"gulp": "^4.0.2",
 		"react-editor-js": "^1.6.2",
 		"style-loader": "^1.2.1"
 	}

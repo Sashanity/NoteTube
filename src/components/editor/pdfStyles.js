@@ -24,11 +24,13 @@ export const styles = {
         fontSize: 12,
         bold: true
     },
-
-    italicStyle: {
-        italics: true
-    },
-    boldStyle: {
+    delimiter: {
+        alignment: 'center',
+        fontSize: 18,
         bold: true
+    },
+    code: {
+        fontSize: 10,
+        background: '#e5e5e5'
     }
 }

@@ -11,7 +11,7 @@ import Header from "@editorjs/header";
 // import Quote from "@editorjs/quote";
 import Marker from "@editorjs/marker";
 // import CheckList from "@editorjs/checklist";
-// import Delimiter from "@editorjs/delimiter";
+import Delimiter from "@editorjs/delimiter";
 import InlineCode from "@editorjs/inline-code";
 // import ImageTool from '@editorjs/image';
 import SimpleImage from "@editorjs/simple-image";
@@ -23,13 +23,13 @@ export const EDITOR_JS_TOOLS = {
     list: List,
     // warning: Warning,
     // code: Code,
-    linkTool: LinkTool,
+    // linkTool: LinkTool,
     // image: Image,
     // raw: Raw,
     header: Header,
     // quote: Quote,
     // checklist: CheckList,
-    // delimiter: Delimiter,
+    delimiter: Delimiter,
     // inlineCode: InlineCode,
     image: SimpleImage,
     // image: ImageTool
