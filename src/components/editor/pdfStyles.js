@@ -31,6 +31,15 @@ export const styles = {
     },
     code: {
         fontSize: 10,
+        font: 'Courier',
         background: '#e5e5e5'
+    },
+    'html-code': {
+        fontSize: 10,
+        font: 'Courier',
+    },
+    'html-mark': {
+        background: 'yellow' // it will add a yellow background to all <STRONG> elements
     }
+
 }

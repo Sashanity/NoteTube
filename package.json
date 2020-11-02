@@ -37,7 +37,6 @@
 		"i": "^0.3.6",
 		"instantsearch.css": "^7.4.3",
 		"instantsearch.js": "^4.7.1",
-		"jspdf": "^2.1.1",
 		"pdfmake": "^0.1.68",
 		"react": "^16.13.1",
 		"react-dom": "^16.13.1",
