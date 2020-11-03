@@ -39,7 +39,7 @@ export const styles = {
         font: 'Courier',
     },
     'html-mark': {
-        background: 'yellow' // it will add a yellow background to all <STRONG> elements
+        background: 'yellow' // it will add a yellow background to all <mark> elements
     }
 
 }
