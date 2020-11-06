@@ -96,14 +96,26 @@ exports.signup = (req, res) => {
 		});
 };
 
+/***
+ *Verify Token
+ **Verifies the user's token to make sure it is still active
+ **PARAMS:
+ ***token: The authentication token of the user
+ **RETURNS:
+ ***Status: The status of the request. Will be an error if the note was not favorited correctly, either due to server error or due to user error
+ ***Returns only on Success:
+ ****Token: The user's token
+ ***Returns only on Failure:
+ ****Error: The error with verifying the token
+ ***/
 exports.verifyToken = (req, res) => {
-	const token = req.query.token;
-	if (token){
-		admin.auth().verifyIdToken(token, true).then(function(decodedToken){
-			return res.status(200).json({Status: "Successful", Token: token});
+	const token = req.query.token; //Get the token of the user from the URL
+	if (token){ //Check to make sure the token was passed through
+		admin.auth().verifyIdToken(token, true).then(function(decodedToken){//Decodes the token to make sure it is still valid
+			return res.status(200).json({Status: "Successful", Token: token}); //Sends a 200 response to make sure the 
 		})
 		.catch(function(error){
-			if (error.code == 'auth/id-token-revoked'){
+			if (error.code == 'auth/id-token-revoked'){ //If the token had to be revoked, send error
 				return res.status(400).json({Status: "Revoked", Error: error});
 			}
 			else if (error.code == 'auth/id-token-expired'){
