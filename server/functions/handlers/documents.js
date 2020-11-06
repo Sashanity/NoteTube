@@ -154,6 +154,84 @@ exports.userList = (req, res) => {
     else{ //Error: No token was sent or the token was sent incorrectly (wrong query name, etc.)
         return res.status(400).json({Status: "No Token Sent"});
     }
-    
+}
+exports.editNote = (req, res) => {
+    const token = req.query.token; //Get the token from the request
+    const noteID = req.query.noteid; //Get the note ID from the request
+
+    if (token && noteID){ //Make sure we got both the note ID and the token
+        admin.auth().verifyIdToken(token).then(function(decodedToken){ //Verify the token is valid
+            var userID = decodedToken.uid; //Get the user ID
+            db.collection("notes").doc(noteID).get().then(function(doc){ //Get the document
+                if (doc.exists){ //If the note exists
+                    if (doc.data().uploader === userID){ //Make sure the user editing the note is the same user who uploaded it
+                        const newNote = { //Create a new note to replace the old note
+                            name: req.body.name,
+                            filename: doc.data().filename,
+                            subject: req.body.subject,
+                            course: req.body.course,
+                            term: req.body.term,
+                            instructor: req.body.instructor,
+                            owner: doc.data().owner,
+                            public: req.body.public,
+                            uploader: doc.data().uploader,
+                            timestamp: doc.data().timestamp,
+                        };
+                        
+                        db.collection("notes").doc(noteID).update(newNote).then(function(updatedDoc){ //Update the document
+                            return res.status(200).json({Status: "Successful", noteID: noteID});
+                        }).catch(function (error){ //Error: Issue updating the document
+                            return res.status(500).json({Status: "Error Updating Doc"});
+                        })
+                    }
+                    else{ //Error: User is not the original owner
+                        return res.status(400).json({Status: "Not Authorized"});
+                    }
+                }
+                else{ //Error: Note not found
+                    return res.status(400).json({Status: "Note Not Found"});
+                }
+            }).catch(function(error){ //Error: Server issue getting the document
+                res.status(500).json({Status: "Error getting doc"});
+            })
+        }).catch(function(error){ //Error: Server issue decoding token
+            res.status(500).json({Status: error});
+        })
+    }
+    else{ //Error: User forgot token and/or note ID
+        return res.status(400).json({Status: "Token and/or Note ID is missing"});
+    }
 }
 
+exports.deleteNote = (req, res) => {
+    const noteRef = db.collection('notes').doc(req.query.noteid); //Get the reference of the note data from Firestore using the note ID from the request
+    var userID = ""; //The ID of the logged in user
+    if (req.query.token){
+        admin.auth().verifyIdToken(req.query.token).then(function(decodedToken){ //Authenticate the token
+            userID = decodedToken.uid; //Get the uid
+        }).catch(function (error) {
+            return res.status(400).json({Status: "Verification Error"}); //Didn't Log in correctly
+        })
+        noteRef.get().then(function(doc){ //Get the note data from Firestore
+            if (doc.exists){ //If the note data was found (I.E. the note ID was correct)
+                noteData = doc.data(); //Put the data in a variable
+                if (noteData.uploader === userID){ //Verifies that the user is allowed to delete the note
+                    bucket.file(`notes/${noteData.uploader}/${noteData.filename}`).delete().then(function(){
+                        noteRef.delete().then(function(){
+                            return res.status(200).json({Status: "Delete Successful"});
+                        }).catch(function(error){return res.status(500).json({Status: error});});
+                    }).catch(function(error){return res.status(500).json({Status: error})});
+                }
+                else{
+                    return res.status(404).json({Status: "Not Authorized"});
+                }
+            }
+            else{
+                return res.status(404).json({Status: "Not Found"});
+            }
+        }).catch(function(error){return res.status(500).json({Error: error})});
+    }
+    else{
+        return res.status(400).json({Error: "No Token was Sent"});
+    }
+}
