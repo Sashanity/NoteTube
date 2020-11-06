@@ -58,7 +58,7 @@ export default function SelectedListItem() {
           </ListItemIcon>
           <ListItemText primary="Edit" />
         </ListItem>
-        <ListItem
+        <ListItem onClick={deleteNote}
           button
           // selected={selectedIndex === 1}
           >
@@ -85,8 +85,8 @@ export default function SelectedListItem() {
             Yes
           </Button>
         </DialogActions>
-      </Dialog>
-           <ListItemIcon onClick={deleteNote} >
+      </Dialog >
+           <ListItemIcon  >
           <DeleteIcon></DeleteIcon>
           </ListItemIcon>
      
