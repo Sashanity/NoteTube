@@ -5,34 +5,34 @@ const config = {
 	},
 };
 
-export const upload = (checkedA,	name, course,	instructor,  term,  subject, files ) => {
+export const upload = (checkedA, name, course, instructor, term, subject, files) => {
 	let data = {
-	  checkedA,
-	  name,
-	  course,
-	  instructor,
-	  term, 
-	  subject,
-	  files 
+		checkedA,
+		name,
+		course,
+		instructor,
+		term,
+		subject,
+		files
 	}
 
-	try { 
-	  axios.post('/post/upload', data) 
+	try {
+		axios.post('/post/upload', data)
 	} catch (err) {
-	  console.log(err);
-	  }
-  }
+		console.log(err);
+	}
+}
 
 
-  export const DisplayClassNotes = () => {
-	
-	try { 
+export const DisplayClassNotes = () => {
+
+	try {
 		// change the Url /preview
-	  axios.get('/preview') 
+		axios.get('/preview')
 	} catch (err) {
-	  console.log(err);
-	  }
-  }
+		console.log(err);
+	}
+}
 
 
 
@@ -53,3 +53,17 @@ export const search = async (history, searchInput) => {
 		return err.response.data;
 	}
 };
+
+export const getUserNotes = () => {
+
+	try {
+		axios.get('/userList')
+			.then((response) => {
+				console.log('response data', response.data);
+				// return response.data
+			})
+
+	} catch (err) {
+		console.log(err);
+	}
+}

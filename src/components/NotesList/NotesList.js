@@ -1,127 +1,88 @@
 import React from 'react';
-import { makeStyles } from '@material-ui/core/styles';
-import clsx from 'clsx';
-import Card from '@material-ui/core/Card';
-import CardHeader from '@material-ui/core/CardHeader';
-import CardMedia from '@material-ui/core/CardMedia';
-import CardContent from '@material-ui/core/CardContent';
-import CardActions from '@material-ui/core/CardActions';
-import Collapse from '@material-ui/core/Collapse';
-import Avatar from '@material-ui/core/Avatar';
-import IconButton from '@material-ui/core/IconButton';
-import Typography from '@material-ui/core/Typography';
-import { red } from '@material-ui/core/colors';
-import ShareIcon from '@material-ui/icons/Share';
-import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
-import MoreVertIcon from '@material-ui/icons/MoreVert';
-import ArrowDownwardOutlinedIcon from '@material-ui/icons/ArrowDownwardOutlined';
-import OpenInNewIcon from '@material-ui/icons/OpenInNew';
-import Img1 from '../../img/notes.png';
-import Img2 from '../../img/book-img.png';
-import './NotesList.css';
-import ListofItems from "./listofItems";
-import EditNotes from "./ClassNotes";
-import {DisplayClassNotes} from "../../actions/documents"
+import './NotesListItem.css';
+import NotesListItem from './NotesListIem';
+import { getUserNotes } from '../../actions/documents';
 
-const useStyles = makeStyles((theme) => ({
-  root: {
-    maxWidth: 345,
-  },
-  media: {
-    height: 0,
-    paddingTop: '56.25%', // 16:9
-  },
-  expand: {
-    transform: 'rotate(0deg)',
-    marginLeft: 'auto',
-    transition: theme.transitions.create('transform', {
-      duration: theme.transitions.duration.shortest,
-    }),
-  },
-  expandOpen: {
-    transform: 'rotate(180deg)',
-  },
-  avatar: {
-    backgroundColor: red[500],
-  },
-}));
+let test = [
+    {
+        "course": "cmpe188",
+        "name": "mylecture",
+        "usersFavorited": [],
+        "term": "fall2021",
+        "public": "false",
+        "uploader": "kAswU2od7yeFReIOn1gcnUItUrz2",
+        "owner": "sashanity",
+        "timestamp": {
+            "_seconds": 1603321496,
+            "_nanoseconds": 753000000
+        },
+        "subject": "cs",
+        "filename": "lec1-2.pdf",
+        "instructor": "wer",
+        "noteID": "99yv1rpYvBEnaj4lgjMm"
+    },
+    {
+        "owner": "sashanity",
+        "name": "mylecture",
+        "term": "fall2020",
+        "instructor": "werber",
+        "uploader": "kAswU2od7yeFReIOn1gcnUItUrz2",
+        "timestamp": {
+            "_seconds": 1604644106,
+            "_nanoseconds": 543000000
+        },
+        "course": "cmpe189",
+        "subject": "cs",
+        "public": "false",
+        "filename": "lec1-2.pdf",
+        "noteID": "ijzH0HSUlmOxnyP5eALz"
+    }
+]
+function displayNotes() {
+    console.log('IN DISPLAY NOTES');
 
-export default function NotesList(props)
- {
-    const {Notes_title,timestamp,courseName,semester,instructor,subject}=props
+    let notesArr = getUserNotes()
+    console.log('notes array', test)
+    let output = test.map(item =>
+
+        < NotesListItem
+            Notes_title={item.name}
+            courseName={item.course}
+            semester={item.term}
+            // timestamp={item.timestamp} //  figure outhow to convert to Date
+            instructor={item.instructor}
+            subject={item.subject} >
+
+        </NotesListItem >)
+    console.log('output', output)
+
+    return (
 
 
-  const classes = useStyles();
-  const [expanded, setExpanded] = React.useState(false);
+        <div className="NotesListItem">
 
-  const handleExpandClick = () => {
-    setExpanded(!expanded);
-  };
+            <h2>List of Notes</h2>
 
-  // actions
-const displayNotes= async () =>{
-let resolved = await DisplayClassNotes();
+            <div className="PublicNotes">
+                {output}
+
+                {/* <NotesListItem
+                    Notes_title="Intro To Database"
+                    courseName="CS 157A"
+                    semester="Fall 2019"
+                    timestamp="15 September 2019"
+                    instructor="John Smith"
+                    subject="Computer Science"
+                >
+                </NotesListItem> */}
+
+
+            </div>
+
+
+        </div>
+    )
+
 
 }
-
-
-  return (
-      <div className="PublicNotes">
-        <div className="NotesList">
-    <Card className={classes.root}>
-      <CardHeader
-        avatar={
-          <Avatar aria-label="notes" className={classes.avatar}
-           src={Img1}>
-          </Avatar>
-        }
-        action={<EditNotes />}
-        title={Notes_title}
-        subheader={timestamp}
-      />
-      <CardMedia
-        className={classes.media}
-        image={Img2}
-        title={courseName}
-      />
-      <CardContent>
-        <Typography variant="body2" color="textSecondary" component="p">
-        <p>{courseName}</p>
-        </Typography>
-      </CardContent>
-
-      <CardActions disableSpacing>
-    
-        <IconButton aria-label="Download">
-          <ArrowDownwardOutlinedIcon />
-        </IconButton>
-        <IconButton aria-label="OpenInNewTab">
-          <OpenInNewIcon/>
-        </IconButton>
-        <IconButton
-          className={clsx(classes.expand, {
-            [classes.expandOpen]: expanded,
-          })}
-          onClick={handleExpandClick}
-          aria-expanded={expanded}
-          aria-label="show more"
-        >
-          <ExpandMoreIcon />
-        </IconButton>
-      </CardActions>
-      <Collapse in={expanded} timeout="auto" unmountOnExit>
-        <CardContent>
-          <Typography paragraph><b>Description:</b></Typography>
-          <Typography paragraph>
-        <p> {instructor} . {semester}</p>
-        <p>{subject}</p>
-          </Typography>
-        </CardContent>
-       
-      </Collapse>
-     
-    </Card>
-    </div>
-    </div>
-  );
-}
+export default displayNotes

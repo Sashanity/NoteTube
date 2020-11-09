@@ -1,25 +1,25 @@
 import React from "react";
-import DisplayNots from "../NotesList/displayNotes"
+import NotesList from "../NotesList/NotesList"
 import Sidebar from "../Sidebar/Sidebar";
 import "./personalSpace.css";
 
-function PersonalSpace(){
+function PersonalSpace() {
 
-return(
-<div className="app__page">
-    <Sidebar></Sidebar>
+    return (
+        <div className="app__page">
+            <Sidebar></Sidebar>
 
-        <div className="personalSpace">
-       <DisplayNots></DisplayNots>
-        <div className="personalSpace">
-            <br></br>
-            <br></br>
-            <br></br>
+            <div className="personalSpace">
+                <NotesList></NotesList>
+                <div className="personalSpace">
+                    <br></br>
+                    <br></br>
+                    <br></br>
+                </div>
+
+            </div>
         </div>
-        
-</div>
-</div>
-)
+    )
 
 }
 export default PersonalSpace
