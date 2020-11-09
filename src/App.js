@@ -10,8 +10,8 @@ import Home from './components/pages/Home';
 import { UserContext } from './UserContext';
 import AuthenticatedRoute from './components/routes/AuthenticatedRoute';
 import RedirectOnceLoggedIn from './components/routes/RedirectOnceLoggedIn';
-import PersonalSpace from './components/pages/personalSpace';
-import Modal  from './components/Layout/Modal';
+import PersonalSpace from './components/personalSpace/personalSpace';
+import Modal  from './components/Upload form/Modal';
 
 
 
