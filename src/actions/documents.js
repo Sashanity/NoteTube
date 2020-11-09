@@ -60,7 +60,7 @@ export const getUserNotes = () => {
 		axios.get('/userList')
 			.then((response) => {
 				console.log('response data', response.data);
-				// return response.data
+				return response.data
 			})
 
 	} catch (err) {
