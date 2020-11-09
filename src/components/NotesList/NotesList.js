@@ -46,23 +46,20 @@ function displayNotes() {
     let output = test.map(item =>
 
         < NotesListItem
+            key={item.noteID} // unique key for each element
             Notes_title={item.name}
             courseName={item.course}
             semester={item.term}
             // timestamp={item.timestamp} //  figure outhow to convert to Date
             instructor={item.instructor}
-            subject={item.subject} >
-
+            subject={item.subject}
+        >
         </NotesListItem >)
     console.log('output', output)
 
     return (
-
-
         <div className="NotesListItem">
-
             <h2>List of Notes</h2>
-
             <div className="PublicNotes">
                 {output}
 
@@ -75,14 +72,8 @@ function displayNotes() {
                     subject="Computer Science"
                 >
                 </NotesListItem> */}
-
-
             </div>
-
-
         </div>
     )
-
-
 }
 export default displayNotes

@@ -64,6 +64,16 @@ export const getUserNotes = () => {
 			})
 
 	} catch (err) {
+		console.log('Error: ', err);
+	}
+}
+
+export const deleteNoteDB = async (noteid) => {
+	try {
+		const res = await axios.delete('/deleteNote', { params: { noteid: noteid } })
+		return res.status
+	}
+	catch (err) {
 		console.log(err);
 	}
 }

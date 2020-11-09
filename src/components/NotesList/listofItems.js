@@ -13,7 +13,7 @@ import DialogActions from '@material-ui/core/DialogActions';
 import DialogContent from '@material-ui/core/DialogContent';
 import DialogContentText from '@material-ui/core/DialogContentText';
 import DialogTitle from '@material-ui/core/DialogTitle';
-
+import { deleteNoteDB } from '../../actions/documents'
 const useStyles = makeStyles((theme) => ({
   root: {
     width: '100%',
@@ -32,8 +32,8 @@ export default function SelectedListItem() {
 
 
   const [open, setOpen] = React.useState(false);
-    
-  const deleteNote =()=>(open ? setOpen(false) : setOpen(true));
+
+  const deleteNote = () => (open ? setOpen(false) : setOpen(true));
 
 
   const handleClickOpen = () => {
@@ -60,38 +60,38 @@ export default function SelectedListItem() {
         </ListItem>
         <ListItem onClick={deleteNote}
           button
-          // selected={selectedIndex === 1}
-          >
-      
+        // selected={selectedIndex === 1}
+        >
+
 
           {/* Dialogbox */}
           <Dialog
-        open={open}
-        onClose={handleClose}
-        aria-labelledby="alert-dialog-title"
-        aria-describedby="alert-dialog-description"
-      >
-        <DialogTitle id="alert-dialog-title">{"Delete Class Note? "}</DialogTitle>
-        <DialogContent>
-          <DialogContentText id="alert-dialog-description">
-           Do you want to Delete ClassNotes?
+            open={open}
+            onClose={handleClose}
+            aria-labelledby="alert-dialog-title"
+            aria-describedby="alert-dialog-description"
+          >
+            <DialogTitle id="alert-dialog-title">{"Delete Class Note? "}</DialogTitle>
+            <DialogContent>
+              <DialogContentText id="alert-dialog-description">
+                Do you want to Delete ClassNotes?
           </DialogContentText>
-        </DialogContent>
-        <DialogActions>
-          <Button onClick={handleClose} color="primary">
-            No
+            </DialogContent>
+            <DialogActions>
+              <Button onClick={handleClose} color="primary">
+                No
           </Button>
-          <Button onClick={handleClose} color="primary" autoFocus>
-            Yes
+              <Button onClick={deleteNoteDB} color="primary" autoFocus>
+                Yes
           </Button>
-        </DialogActions>
-      </Dialog >
-           <ListItemIcon  >
-          <DeleteIcon></DeleteIcon>
+            </DialogActions>
+          </Dialog >
+          <ListItemIcon  >
+            <DeleteIcon></DeleteIcon>
           </ListItemIcon>
-     
-          <ListItemText primary="Delete"/>   
-            
+
+          <ListItemText primary="Delete" />
+
         </ListItem>
       </List>
       <Divider />
