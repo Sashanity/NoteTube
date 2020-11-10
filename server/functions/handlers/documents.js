@@ -136,6 +136,7 @@ exports.preview = (req, res) => {
 exports.userList = (req, res) => {
     console.log('hi from user list')
     const token = req.query.token; //Get the token from the request
+    console.log('token:', token)
     var retList = []; //The array of note data that will be returned
     if (token) { //If the token exists
         admin.auth().verifyIdToken(token).then(function (decodedToken) { //Authenticate the token
@@ -148,7 +149,9 @@ exports.userList = (req, res) => {
                         addDoc['noteID'] = doc.id; //Add the note ID to the object
                         retList.push(addDoc); //Push the object to the returned array
                     });
-                    return res.status(200).json(retList); //Send the array back
+                    console.log('sending list back:', retList)
+
+                    return res.status(200).json({ retList }); //Send the array back
                 })
                 .catch(function (error) { //Error: Server isse with getting the documents
                     return res.status(500).json({ Status: error });

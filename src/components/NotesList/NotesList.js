@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import './NotesListItem.css';
 import NotesListItem from './NotesListIem';
 import { getUserNotes } from '../../actions/documents';
@@ -20,48 +20,46 @@ let test = [
         "filename": "lec1-2.pdf",
         "instructor": "wer",
         "noteID": "99yv1rpYvBEnaj4lgjMm"
-    },
-    {
-        "owner": "sashanity",
-        "name": "mylecture",
-        "term": "fall2020",
-        "instructor": "werber",
-        "uploader": "kAswU2od7yeFReIOn1gcnUItUrz2",
-        "timestamp": {
-            "_seconds": 1604644106,
-            "_nanoseconds": 543000000
-        },
-        "course": "cmpe189",
-        "subject": "cs",
-        "public": "false",
-        "filename": "lec1-2.pdf",
-        "noteID": "ijzH0HSUlmOxnyP5eALz"
     }
+
 ]
-function displayNotes() {
-    console.log('IN DISPLAY NOTES');
+const NotesList = () => {
 
     let notesArr = getUserNotes()
-    console.log('notes array', test)
-    let output = test.map(item =>
+    const [notes, setNotes] = useState();
+    setNotes(test)
+    console.log('IN NOTESLIST');
 
-        < NotesListItem
-            key={item.noteID} // unique key for each element
-            Notes_title={item.name}
-            courseName={item.course}
-            semester={item.term}
-            // timestamp={item.timestamp} //  figure outhow to convert to Date
-            instructor={item.instructor}
-            subject={item.subject}
-        >
-        </NotesListItem >)
-    console.log('output', output)
+    console.log('notes array, noteArr', notesArr)
+    // let output = test.map(item =>
+    //     < NotesListItem
+    //         key={item.noteID} // unique key for each element
+    //         Notes_title={item.name}
+    //         courseName={item.course}
+    //         semester={item.term}
+    //         // timestamp={item.timestamp} //  figure outhow to convert to Date
+    //         instructor={item.instructor}
+    //         subject={item.subject}
+    //     >
+    //     </NotesListItem >)
+    // console.log('output', output)
 
     return (
         <div className="NotesListItem">
             <h2>List of Notes</h2>
             <div className="PublicNotes">
-                {output}
+                {notes.map(item =>
+                    < NotesListItem
+                        key={item.noteID} // unique key for each element
+                        Notes_title={item.name}
+                        courseName={item.course}
+                        semester={item.term}
+                        // timestamp={item.timestamp} //  figure outhow to convert to Date
+                        instructor={item.instructor}
+                        subject={item.subject}
+                    >
+                    </NotesListItem >)}
+                {/* {output} */}
 
                 {/* <NotesListItem
                     Notes_title="Intro To Database"
@@ -76,4 +74,4 @@ function displayNotes() {
         </div>
     )
 }
-export default displayNotes
+export default NotesList

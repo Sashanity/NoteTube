@@ -55,12 +55,13 @@ export const search = async (history, searchInput) => {
 };
 
 export const getUserNotes = () => {
-
+	let token = localStorage.getItem('token');
+	console.log('TOKEN,', token)
 	try {
-		axios.get('/userList')
+		axios.get('/userList', { params: { token } })
 			.then((response) => {
 				console.log('response data', response.data);
-				return response.data
+				return response
 			})
 
 	} catch (err) {

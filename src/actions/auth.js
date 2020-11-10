@@ -70,7 +70,7 @@ export const logout = (history, setUser) => async () => {
 // };
 
 const setAuthHeader = (token) => {
-	const Token = `Bearer ${token}`;
+	const Token = `${token}`;
 	localStorage.setItem('token', Token);
 	axios.defaults.headers.common['Authorization'] = Token;
 };
