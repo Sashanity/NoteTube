@@ -67,8 +67,9 @@ export const getUserNotes = async () => {
 }
 
 export const deleteNoteDB = async (noteid) => {
+	let token = localStorage.getItem('token');
 	try {
-		const res = await axios.delete('/deleteNote', { params: { noteid: noteid } })
+		const res = await axios.delete('/deleteNote', { params: { noteid, token } })
 		return res.status
 	}
 	catch (err) {

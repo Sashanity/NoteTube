@@ -213,6 +213,10 @@ exports.editNote = (req, res) => {
 }
 
 exports.deleteNote = (req, res) => {
+    const token = req.query.token;
+    console.log('hi from delete program')
+    console.log('noteID: ', req.query.noteid)
+    console.log('token:', req.query.token)
     const noteRef = db.collection('notes').doc(req.query.noteid); //Get the reference of the note data from Firestore using the note ID from the request
     var userID = ""; //The ID of the logged in user
     if (req.query.token) {
