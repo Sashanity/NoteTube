@@ -17,12 +17,12 @@ export const downloadPDF = (data) => {
         content: content,
         styles: styles
     };
-    let fileName = Math.random().toString(36).substring(2, 15) + Math.random().toString(36).substring(2, 15);
+    let fileName = 'NoteTube_note_' + Math.random().toString(36).substring(2, 15) + Math.random().toString(36).substring(2, 15);
     pdfMake.createPdf(docDefinition).download(fileName);
 }
 
 /**
- * Helper funciton to process JSON object,
+ * Helper function to process JSON object,
  * converts incoming data in array of String objects
  * strips html tags
  * @param {Object} data text data from editor
@@ -62,7 +62,7 @@ function processData(data) {
                     default:
                         style = 'header1'
                 }
-                content[i] = { text: block.data.text.replace(/<\/?[^>]+>/gi, '').replace("&nbsp;", " "), style: style }
+                content[i] = { text: block.data.text.replace(/<\/?[^>]+>/gi, '').replace("&nbsp;", " ") + '\n\n', style: style }
                 break;
             case 'paragraph':
                 // content[i] = block.data.text.replace(/<\/?[^>]+>/gi, '').replace("&nbsp;", " ") + '\n\n'
