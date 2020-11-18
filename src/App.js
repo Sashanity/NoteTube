@@ -11,9 +11,14 @@ import { UserContext } from './UserContext';
 import AuthenticatedRoute from './components/routes/AuthenticatedRoute';
 import RedirectOnceLoggedIn from './components/routes/RedirectOnceLoggedIn';
 import PersonalSpace from './components/pages/personalSpace';
-import Modal  from './components/Layout/Modal';
+import Modal from './components/Layout/Modal';
 
 
+
+import Editor from './components/editor/editor';
+
+import MyEditor from './components/editor/editor';
+// import MyDocument from './components/editor/topdf';
 
 
 //This is the app
@@ -36,6 +41,9 @@ const App = () => {
 						<RedirectOnceLoggedIn exact path='/login' component={Login} />
 						<AuthenticatedRoute exact path="/personalSpace" component={PersonalSpace} />
 						{/* <Route exact path="/Modal" component={Modal} /> */}
+						<Route exact path='/editor' component={MyEditor} />
+						{/* <Route exact path='/editor' component={Editor} /> */}
+
 					</Switch>
 				</div>
 				<Footer />
