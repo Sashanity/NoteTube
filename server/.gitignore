@@ -9,10 +9,13 @@ firebase-debug.log*
 #algoliaAPIkeys
 /functions/.runtimeconfig.json
 .runtimeconfig.json
+/functions/runtimeconfig.json
 
 # Firebase cache
 .firebase/
 
+# pdf
+*.pdf
 
 # Firebase config
 /functions/util/firebaseConfig.js
