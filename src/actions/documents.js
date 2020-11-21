@@ -67,9 +67,11 @@ export const getUserNotes = async () => {
 }
 
 export const deleteNoteDB = async (noteid) => {
+	console.log('IN DELETE ACTION')
 	let token = localStorage.getItem('token');
 	try {
 		const res = await axios.delete('/deleteNote', { params: { noteid, token } })
+		console.log("running delete, noteid=", noteid)
 		return res.status
 	}
 	catch (err) {

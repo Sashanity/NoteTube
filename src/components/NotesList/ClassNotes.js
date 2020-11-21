@@ -1,13 +1,13 @@
 import React, { useState } from 'react';
 import { makeStyles } from '@material-ui/core/styles';
 import IconButton from '@material-ui/core/IconButton';
-import ListofItems from "./listofItems";
+import SelectedListItem from "./listofItems";
 import "./NotesListItem.css"
 import MoreVertIcon from '@material-ui/icons/MoreVert';
 
 
-function ClassNotes() {
-
+function ClassNotes(props) {
+    const {key} = props
     const [edit, detele] = useState(false);
 
     const editNotes = () => (edit ? detele(false) : detele(true));
@@ -20,9 +20,8 @@ function ClassNotes() {
                 </MoreVertIcon>
 
             </IconButton>
-            {edit ? <div style={{ position: "absolute", zIndex: 10 }}><ListofItems ></ListofItems></div> : null}
+            {edit ? <div style={{ position: "absolute", zIndex: 10 }}><SelectedListItem noteID={key}></SelectedListItem></div> : null}
         </div>
-
 
     )
 }

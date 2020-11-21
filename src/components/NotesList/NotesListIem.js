@@ -20,7 +20,7 @@ import Img1 from '../../img/notes.png';
 import Img2 from '../../img/book-img.png';
 import './NotesListItem.css';
 import ListofItems from "./listofItems";
-import EditNotes from "./ClassNotes";
+import ClassNotes from "./ClassNotes";
 import { DisplayClassNotes } from "../../actions/documents"
 
 const useStyles = makeStyles((theme) => ({
@@ -47,7 +47,7 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 export default function NotesListItem(props) {
-  const { Notes_title, timestamp, courseName, semester, instructor, subject } = props
+  const {key, Notes_title, timestamp, courseName, semester, instructor, subject, } = props
 
 
   const classes = useStyles();
@@ -74,7 +74,7 @@ export default function NotesListItem(props) {
                 src={Img1}>
               </Avatar>
             }
-            action={<EditNotes />}
+            action={<ClassNotes key={key}/>}
             title={Notes_title}
             subheader={timestamp}
           />
