@@ -24,18 +24,6 @@ export const upload = (checkedA, name, course, instructor, term, subject, files)
 }
 
 
-export const DisplayClassNotes = () => {
-
-	try {
-		// change the Url /preview
-		axios.get('/preview')
-	} catch (err) {
-		console.log(err);
-	}
-}
-
-
-
 export const search = async (history, searchInput) => {
 	try {
 		const res = await axios.get(
@@ -67,14 +55,27 @@ export const getUserNotes = async () => {
 }
 
 export const deleteNoteDB = async (noteid) => {
-	console.log('IN DELETE ACTION')
+	// console.log('IN DELETE ACTION')
+	// console.log('NOTEID', noteid)
 	let token = localStorage.getItem('token');
 	try {
 		const res = await axios.delete('/deleteNote', { params: { noteid, token } })
-		console.log("running delete, noteid=", noteid)
 		return res.status
 	}
 	catch (err) {
+		console.log(err);
+	}
+}
+
+
+export const notePreview = async (noteid) => {
+	console.log('IN NOTE PREVIEW ACTION')
+	console.log('NOTEID', noteid)
+
+	try {
+		let res = await axios.get('/preview', { params: { noteid } })
+		return res.status
+	} catch (err) {
 		console.log(err);
 	}
 }

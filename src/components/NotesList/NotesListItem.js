@@ -21,7 +21,7 @@ import Img2 from '../../img/book-img.png';
 import './NotesListItem.css';
 import ListofItems from "./listofItems";
 import ClassNotes from "./ClassNotes";
-import { DisplayClassNotes } from "../../actions/documents"
+import { notePreview } from '../../actions/documents'
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -47,8 +47,8 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 export default function NotesListItem(props) {
-  const {key, Notes_title, timestamp, courseName, semester, instructor, subject, } = props
-
+  const { noteID, Notes_title, timestamp, courseName, semester, instructor, subject } = props
+  console.log('noteID:', noteID)
 
   const classes = useStyles();
   const [expanded, setExpanded] = React.useState(false);
@@ -56,14 +56,10 @@ export default function NotesListItem(props) {
   const handleExpandClick = () => {
     setExpanded(!expanded);
   };
-
-  // actions
-  const displayNotes = async () => {
-    let resolved = await DisplayClassNotes();
-
+  const handlePreview = (noteID) => {
+    console.log("HANDLING PREVIEW, NOTEID", noteID)
+    notePreview(noteID)
   }
-
-
   return (
     <div className="PublicNotes">
       <div className="NotesListItem">
@@ -74,7 +70,7 @@ export default function NotesListItem(props) {
                 src={Img1}>
               </Avatar>
             }
-            action={<ClassNotes key={key}/>}
+            action={<ClassNotes noteID={noteID} />}
             title={Notes_title}
             subheader={timestamp}
           />
@@ -93,8 +89,10 @@ export default function NotesListItem(props) {
 
             <IconButton aria-label="Download">
               <ArrowDownwardOutlinedIcon />
+
             </IconButton>
-            <IconButton aria-label="OpenInNewTab">
+            <IconButton aria-label="OpenInNewTab"
+              onClick={handlePreview(noteID)}>
               <OpenInNewIcon />
             </IconButton>
             <IconButton

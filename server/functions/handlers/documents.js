@@ -80,6 +80,8 @@ exports.upload = (req, res) => {
 }
 
 exports.preview = (req, res) => {
+    console.log('hi from preview')
+    console.log('noteID:', req.query.noteid)
     const noteRef = db.collection('notes').doc(req.query.noteid); //Get the reference of the note data from Firestore using the note ID from the request
     var fileDir = ""; //The directory of the file
     var userID = ""; //The ID of the logged in user
@@ -93,10 +95,10 @@ exports.preview = (req, res) => {
     }
     noteRef.get().then(function (doc) { //Get the note data from Firestore
         if (doc.exists) { //If the note data was found (I.E. the note ID was correct)
-            noteData = doc.data(); //Put the data in a variable
+            let noteData = doc.data(); //Put the data in a variable
             const isPublic = (noteData.public == 'true'); //Converts from string to boolean
             if (noteData.uploader === userID || isPublic) { //Verifies that the user is allowed to view the note (either they created it or it is public)
-                file = bucket.file(`notes/${noteData.uploader}/${noteData.filename}`); //Constructs the url from the note data from Firestore
+                let file = bucket.file(`notes/${noteData.uploader}/${noteData.filename}`); //Constructs the url from the note data from Firestore
 
                 fileDir = path.join(os.tmpdir(), noteData.filename); //Get the location of the temporary directory to place the file
                 file.createReadStream()
@@ -214,7 +216,7 @@ exports.editNote = (req, res) => {
 
 exports.deleteNote = (req, res) => {
     const token = req.query.token;
-    console.log('hi from delete program')
+    console.log('hi from delete')
     console.log('noteID: ', req.query.noteid)
     console.log('token:', req.query.token)
     const noteRef = db.collection('notes').doc(req.query.noteid); //Get the reference of the note data from Firestore using the note ID from the request
@@ -247,4 +249,33 @@ exports.deleteNote = (req, res) => {
     else {
         return res.status(400).json({ Error: "No Token was Sent" });
     }
+}
+
+exports.getdownloadURL = async (req, res) => {
+    const token = req.query.token;
+    const noteid = req.query.noteid;
+    console.log('hi from getdownl URL')
+    console.log('token:', token)
+    console.log('noteid:', noteid)
+
+    // admin.auth().verifyIdToken(token)
+    //     .then(decodedToken){
+    //     let userId = decodedToken.uid
+    // }
+
+    console.log("UserId:", userId)
+
+    // const srcFilename = `notes/${userId}/${filename}`;
+    // const destFilename = `./${filename}`;
+    // let url = await firebase.storage().ref(srcFilename).getDownloadURL();
+    // console.log('download url:', url)
+    // return res.status(200).json({ url: url });
+    // console.log('download url:', url)
+    // return res.status(200).json({ url: url });
+
+    // // get the url for download
+    // // print out url
+
+
+
 }

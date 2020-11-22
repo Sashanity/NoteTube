@@ -15,6 +15,7 @@ import DialogContentText from '@material-ui/core/DialogContentText';
 import DialogTitle from '@material-ui/core/DialogTitle';
 import { deleteNoteDB } from '../../actions/documents'
 
+
 const useStyles = makeStyles((theme) => ({
   root: {
     width: '100%',
@@ -24,7 +25,8 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 export default function SelectedListItem(props) {
-const {noteID} =props
+  const { noteID } = props
+  console.log('noteID list of items:', noteID)
 
   const classes = useStyles();
   const [selectedIndex, setSelectedIndex] = React.useState(1);
@@ -47,6 +49,11 @@ const {noteID} =props
     setOpen(false);
 
   };
+
+  const handleDeleteDB = async (noteID) => {
+    console.log('handling delete, passing noteId:', noteID)
+    await deleteNoteDB(noteID)
+  }
 
   return (
     <div className={classes.root}>
@@ -84,7 +91,7 @@ const {noteID} =props
               <Button onClick={handleClose} color="primary">
                 No
           </Button>
-              <Button onClick={deleteNoteDB(noteID)} color="primary" autoFocus>
+              <Button onClick={handleDeleteDB(noteID)} color="primary" autoFocus>
                 Yes
           </Button>
             </DialogActions>

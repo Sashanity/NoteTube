@@ -1,37 +1,19 @@
 import React, { useState, useEffect } from 'react';
 import './NotesListItem.css';
-import NotesListItem from './NotesListIem';
+import NotesListItem from './NotesListItem';
 import { getUserNotes } from '../../actions/documents';
 
-let test = [
-    {
-        "course": "cmpe188",
-        "name": "mylecture",
-        "usersFavorited": [],
-        "term": "fall2021",
-        "public": "false",
-        "uploader": "kAswU2od7yeFReIOn1gcnUItUrz2",
-        "owner": "sashanity",
-        "timestamp": {
-            "_seconds": 1603321496,
-            "_nanoseconds": 753000000
-        },
-        "subject": "cs",
-        "filename": "lec1-2.pdf",
-        "instructor": "wer",
-        "noteID": "99yv1rpYvBEnaj4lgjMm"
-    }
 
-]
 const NotesList = () => {
     const [notes, setNotes] = useState();
-    let output
     const returningNotes = async() =>{
         try{
             let notes = await getUserNotes()
-            setNotes(notes.map(item =>
+            console.log('RECEIVED LIST OF NOTES:', notes)
+            setNotes(notes.map(item =>                
                 < NotesListItem
                     key={item.noteID} // unique key for each element
+                    noteID={item.noteID}
                     Notes_title={item.name}
                     courseName={item.course}
                     semester={item.term}

@@ -7,7 +7,7 @@ import MoreVertIcon from '@material-ui/icons/MoreVert';
 
 
 function ClassNotes(props) {
-    const {key} = props
+    const {noteID} = props
     const [edit, detele] = useState(false);
 
     const editNotes = () => (edit ? detele(false) : detele(true));
@@ -20,7 +20,7 @@ function ClassNotes(props) {
                 </MoreVertIcon>
 
             </IconButton>
-            {edit ? <div style={{ position: "absolute", zIndex: 10 }}><SelectedListItem noteID={key}></SelectedListItem></div> : null}
+            {edit ? <div style={{ position: "absolute", zIndex: 10 }}><SelectedListItem noteID={noteID}></SelectedListItem></div> : null}
         </div>
 
     )
