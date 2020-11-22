@@ -89,8 +89,8 @@ export default function NotesListItem(props) {
 
             <IconButton aria-label="Download">
               <ArrowDownwardOutlinedIcon />
-
             </IconButton>
+
             <IconButton aria-label="OpenInNewTab"
               onClick={handlePreview(noteID)}>
               <OpenInNewIcon />

@@ -47,12 +47,12 @@ export default function SelectedListItem(props) {
 
   const handleClose = () => {
     setOpen(false);
-
   };
 
   const handleDeleteDB = async (noteID) => {
     console.log('handling delete, passing noteId:', noteID)
     await deleteNoteDB(noteID)
+
   }
 
   return (
