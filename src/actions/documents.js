@@ -79,9 +79,9 @@ export const notePreview = async (history, noteid) => {
   console.log('NOTEID', noteid);
   window.open(
     'http://localhost:5000/notetube-f3f9c/us-central1/api/preview?noteid=' +
-      noteid +
-      '&token=' +
-      localStorage.getItem('token'),
+    noteid +
+    '&token=' +
+    localStorage.getItem('token'),
     '_blank'
   );
 };

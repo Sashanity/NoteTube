@@ -70,7 +70,10 @@ export default function NotesListItem(props) {
   };
   return (
     <div className='PublicNotes'>
-      <div className='NotesListItem'>
+      <div className='NotesListItem' onClick={(e) => {
+        e.preventDefault();
+        handlePreview(noteID);
+      }}>
         <Card className={classes.root}>
           <CardHeader
             avatar={
