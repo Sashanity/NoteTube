@@ -1,19 +1,25 @@
-import React from 'react';
+import React, { useContext } from 'react';
 import { Route, Redirect } from 'react-router-dom';
+import { UserContext } from '../../UserContext';
 
 const RedirectOnceLoggedIn = ({ component: RouteComponent, ...rest }) => {
-	return (
-		<Route
-			{...rest}
-			render={(routeProps) =>
-				localStorage.getItem('token') ? (
-					<Redirect to={'/Home'} />
-				) : (
-					<RouteComponent {...routeProps} />
-				)
-			}
-		/>
-	);
+  const { value } = useContext(UserContext);
+  return (
+    <UserContext.Consumer>
+      {(value) => (
+        <Route
+          {...rest}
+          render={(routeProps) => {
+            if (value.user) {
+              return <Redirect to={'/Home'} />;
+            } else {
+              return <RouteComponent {...routeProps} />;
+            }
+          }}
+        />
+      )}
+    </UserContext.Consumer>
+  );
 };
 
 export default RedirectOnceLoggedIn;
