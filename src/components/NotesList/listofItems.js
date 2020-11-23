@@ -13,8 +13,7 @@ import DialogActions from '@material-ui/core/DialogActions';
 import DialogContent from '@material-ui/core/DialogContent';
 import DialogContentText from '@material-ui/core/DialogContentText';
 import DialogTitle from '@material-ui/core/DialogTitle';
-import { deleteNoteDB } from '../../actions/documents'
-
+import { deleteNoteDB } from '../../actions/documents';
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -25,8 +24,8 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 export default function SelectedListItem(props) {
-  const { noteID } = props
-  console.log('noteID list of items:', noteID)
+  const { noteID, setNotes } = props;
+  console.log('noteID list of items:', noteID);
 
   const classes = useStyles();
   const [selectedIndex, setSelectedIndex] = React.useState(1);
@@ -35,11 +34,9 @@ export default function SelectedListItem(props) {
     setSelectedIndex(index);
   };
 
-
   const [open, setOpen] = React.useState(false);
 
   const deleteNote = () => (open ? setOpen(false) : setOpen(true));
-
 
   const handleClickOpen = () => {
     setOpen(true);
@@ -49,15 +46,16 @@ export default function SelectedListItem(props) {
     setOpen(false);
   };
 
-  const handleDeleteDB = async (noteID) => {
-    console.log('handling delete, passing noteId:', noteID)
-    await deleteNoteDB(noteID)
-
-  }
+  const handleDeleteDB = async (noteID, setNotes) => {
+    console.log('handling delete, passing noteId:', noteID);
+    await deleteNoteDB(noteID);
+    setNotes();
+    handleClose();
+  };
 
   return (
     <div className={classes.root}>
-      <List component="nav" aria-label="main mailbox folders">
+      <List component='nav' aria-label='main mailbox folders'>
         <ListItem
           button
           // selected={selectedIndex === 0}
@@ -66,46 +64,52 @@ export default function SelectedListItem(props) {
           <ListItemIcon>
             <EditIcon />
           </ListItemIcon>
-          <ListItemText primary="Edit" />
+          <ListItemText primary='Edit' />
         </ListItem>
-        <ListItem onClick={deleteNote}
+        <ListItem
+          onClick={deleteNote}
           button
-        // selected={selectedIndex === 1}
+          // selected={selectedIndex === 1}
         >
-
-
           {/* Dialogbox */}
           <Dialog
             open={open}
             onClose={handleClose}
-            aria-labelledby="alert-dialog-title"
-            aria-describedby="alert-dialog-description"
+            aria-labelledby='alert-dialog-title'
+            aria-describedby='alert-dialog-description'
           >
-            <DialogTitle id="alert-dialog-title">{"Delete Class Note? "}</DialogTitle>
+            <DialogTitle id='alert-dialog-title'>
+              {'Delete Class Note? '}
+            </DialogTitle>
             <DialogContent>
-              <DialogContentText id="alert-dialog-description">
+              <DialogContentText id='alert-dialog-description'>
                 Do you want to Delete ClassNotes?
-          </DialogContentText>
+              </DialogContentText>
             </DialogContent>
             <DialogActions>
-              <Button onClick={handleClose} color="primary">
+              <Button onClick={handleClose} color='primary'>
                 No
-          </Button>
-              <Button onClick={handleDeleteDB(noteID)} color="primary" autoFocus>
+              </Button>
+              <Button
+                onClick={(e) => {
+                  e.preventDefault();
+                  handleDeleteDB(noteID, setNotes);
+                }}
+                color='primary'
+                autoFocus
+              >
                 Yes
-          </Button>
+              </Button>
             </DialogActions>
-          </Dialog >
-          <ListItemIcon  >
+          </Dialog>
+          <ListItemIcon>
             <DeleteIcon></DeleteIcon>
           </ListItemIcon>
 
-          <ListItemText primary="Delete" />
-
+          <ListItemText primary='Delete' />
         </ListItem>
       </List>
       <Divider />
-
     </div>
   );
 }

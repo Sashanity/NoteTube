@@ -55,6 +55,7 @@ export default function NotesListItem(props) {
     semester,
     instructor,
     subject,
+    setNotes,
   } = props;
   console.log('noteID:', noteID);
 
@@ -70,7 +71,7 @@ export default function NotesListItem(props) {
   };
   return (
     <div className='PublicNotes'>
-      <div className='NotesListItem' >
+      <div className='NotesListItem'>
         <Card className={classes.root}>
           <CardHeader
             avatar={
@@ -80,7 +81,7 @@ export default function NotesListItem(props) {
                 src={Img1}
               ></Avatar>
             }
-            action={<ClassNotes noteID={noteID} />}
+            action={<ClassNotes noteID={noteID} setNotes={setNotes} />}
             title={Notes_title}
             subheader={timestamp}
           />
