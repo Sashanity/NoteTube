@@ -19,10 +19,10 @@ import OpenInNewIcon from '@material-ui/icons/OpenInNew';
 import Img1 from '../../img/notes.png';
 import Img2 from '../../img/book-img.png';
 import './NotesListItem.css';
-import ListofItems from "./listofItems";
-import ClassNotes from "./ClassNotes";
-import { notePreview } from '../../actions/documents'
-
+import ListofItems from './listofItems';
+import ClassNotes from './ClassNotes';
+import { notePreview } from '../../actions/documents';
+import { useHistory } from 'react-router-dom';
 const useStyles = makeStyles((theme) => ({
   root: {
     maxWidth: 345,
@@ -47,28 +47,38 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 export default function NotesListItem(props) {
-  const { noteID, Notes_title, timestamp, courseName, semester, instructor, subject } = props
-  console.log('noteID:', noteID)
+  const {
+    noteID,
+    Notes_title,
+    timestamp,
+    courseName,
+    semester,
+    instructor,
+    subject,
+  } = props;
+  console.log('noteID:', noteID);
 
   const classes = useStyles();
   const [expanded, setExpanded] = React.useState(false);
-
+  const history = useHistory();
   const handleExpandClick = () => {
     setExpanded(!expanded);
   };
   const handlePreview = (noteID) => {
-    console.log("HANDLING PREVIEW, NOTEID", noteID)
-    notePreview(noteID)
-  }
+    console.log('HANDLING PREVIEW, NOTEID', noteID);
+    notePreview(history, noteID);
+  };
   return (
-    <div className="PublicNotes">
-      <div className="NotesListItem">
+    <div className='PublicNotes'>
+      <div className='NotesListItem'>
         <Card className={classes.root}>
           <CardHeader
             avatar={
-              <Avatar aria-label="notes" className={classes.avatar}
-                src={Img1}>
-              </Avatar>
+              <Avatar
+                aria-label='notes'
+                className={classes.avatar}
+                src={Img1}
+              ></Avatar>
             }
             action={<ClassNotes noteID={noteID} />}
             title={Notes_title}
@@ -80,19 +90,23 @@ export default function NotesListItem(props) {
             title={courseName}
           />
           <CardContent>
-            <Typography variant="body2" color="textSecondary" component="p">
+            <Typography variant='body2' color='textSecondary' component='p'>
               <p>{courseName}</p>
             </Typography>
           </CardContent>
 
           <CardActions disableSpacing>
-
-            <IconButton aria-label="Download">
+            <IconButton aria-label='Download'>
               <ArrowDownwardOutlinedIcon />
             </IconButton>
 
-            <IconButton aria-label="OpenInNewTab"
-              onClick={handlePreview(noteID)}>
+            <IconButton
+              aria-label='OpenInNewTab'
+              onClick={(e) => {
+                e.preventDefault();
+                handlePreview(noteID);
+              }}
+            >
               <OpenInNewIcon />
             </IconButton>
             <IconButton
@@ -101,22 +115,25 @@ export default function NotesListItem(props) {
               })}
               onClick={handleExpandClick}
               aria-expanded={expanded}
-              aria-label="show more"
+              aria-label='show more'
             >
               <ExpandMoreIcon />
             </IconButton>
           </CardActions>
-          <Collapse in={expanded} timeout="auto" unmountOnExit>
+          <Collapse in={expanded} timeout='auto' unmountOnExit>
             <CardContent>
-              <Typography paragraph><b>Description:</b></Typography>
               <Typography paragraph>
-                <p> {instructor} . {semester}</p>
+                <b>Description:</b>
+              </Typography>
+              <Typography paragraph>
+                <p>
+                  {' '}
+                  {instructor} . {semester}
+                </p>
                 <p>{subject}</p>
               </Typography>
             </CardContent>
-
           </Collapse>
-
         </Card>
       </div>
     </div>
