@@ -56,8 +56,7 @@ export const login = async (emailUsername, password, history, setUser) => {
 };
 
 export const logout = (history, setUser) => async () => {
-  console.log('errors?');
-  setUser(null);
+  setUser(false);
   localStorage.removeItem('token');
   delete axios.defaults.headers.common['Authorization'];
   history.push('/');

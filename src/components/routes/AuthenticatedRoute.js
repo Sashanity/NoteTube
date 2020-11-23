@@ -10,7 +10,7 @@ const AuthenticatedRoute = ({ component: RouteComponent, ...rest }) => {
         <Route
           {...rest}
           render={(routeProps) => {
-            if (value.user) {
+            if (localStorage.getItem('token') && value.user) {
               return <RouteComponent {...routeProps} />;
             } else {
               return <Redirect to={'/'} />;

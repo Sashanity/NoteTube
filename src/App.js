@@ -19,6 +19,9 @@ import { verifyToken } from './actions/auth';
 
 //This is the app
 const App = () => {
+  useEffect(() => {
+    check();
+  }, []);
   const check = async () => {
     if (localStorage.getItem('token')) {
       const just = await verifyToken(localStorage.getItem('token'));

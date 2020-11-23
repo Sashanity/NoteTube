@@ -14,7 +14,7 @@ import logoNoteTube from '../../img/logoNoteTube.png';
 const Navbar = () => {
   const history = useHistory();
   const { user, setUser } = useContext(UserContext);
-  if (user) {
+  if (localStorage.getItem('token') && user) {
     return (
       <div style={{ height: '64px', position: 'relative' }}>
         <Layout>
