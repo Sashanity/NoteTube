@@ -45,11 +45,13 @@ exports.upload = (req, res) => {
         for (const name in uploads) {
             const upload = uploads[name]; //Get the object with the file
             const file = upload.file; //Get the file from the object
-            bucket.upload(file, { destination: `notes/${userID}/${upload.name}` }) //Uploads the file to the storage bucket
+            const timestamp = admin.firestore.Timestamp.fromDate(new Date());
+            const filename = timestamp + upload.name;
+            bucket.upload(file, { destination: `notes/${userID}/${filename}` }) //Uploads the file to the storage bucket
                 .then(data => {
                     const newNote = { //Create the note object that will be uploaded to Firestore
                         name: returnval.name,
-                        filename: upload.name,
+                        filename: filename,
                         subject: returnval.subject,
                         course: returnval.course,
                         term: returnval.term,
@@ -57,7 +59,7 @@ exports.upload = (req, res) => {
                         owner: returnval.owner,
                         public: returnval.public,
                         uploader: userID,
-                        timestamp: admin.firestore.Timestamp.fromDate(new Date()),
+                        timestamp: timestamp,
                     };
 
                     db.collection('notes').add(newNote).then(function(uploadDocRef){ //
