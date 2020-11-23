@@ -53,6 +53,9 @@ const useStyles = makeStyles((theme) => ({
         // opacity: 1,
         color: 'white'
     },
+    mytheme: {
+        backgroundColor: 'white'
+    }
 }));
 
 export default function ScrollableTabsButtonForce() {
@@ -67,7 +70,7 @@ export default function ScrollableTabsButtonForce() {
     return (
         <div className={classes.root}>
             <AppBar position="static" color="default" style={{ background: 'transparent' }}>
-                <Tabs
+                <Tabs classname={classes.mytheme}
                     value={value}
                     onChange={handleChange}
                     variant="scrollable"
@@ -86,7 +89,6 @@ export default function ScrollableTabsButtonForce() {
             <TabPanel value={value} index={1}>
                 Your Favorites
       </TabPanel>
-
         </div>
     );
 }
