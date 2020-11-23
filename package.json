@@ -18,6 +18,7 @@
 		"i": "^0.3.6",
 		"instantsearch.css": "^7.4.5",
 		"instantsearch.js": "^4.8.3",
+		"node-url-downloader": "^0.1.9",
 		"react": "^16.13.1",
 		"react-dom": "^16.13.1",
 		"react-draggable": "^4.4.3",

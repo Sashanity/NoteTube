@@ -70,10 +70,7 @@ export default function NotesListItem(props) {
   };
   return (
     <div className='PublicNotes'>
-      <div className='NotesListItem' onClick={(e) => {
-        e.preventDefault();
-        handlePreview(noteID);
-      }}>
+      <div className='NotesListItem' >
         <Card className={classes.root}>
           <CardHeader
             avatar={
@@ -91,6 +88,10 @@ export default function NotesListItem(props) {
             className={classes.media}
             image={Img2}
             title={courseName}
+            onClick={(e) => {
+              e.preventDefault();
+              handlePreview(noteID);
+            }}
           />
           <CardContent>
             <Typography variant='body2' color='textSecondary' component='p'>

@@ -257,25 +257,105 @@ exports.getdownloadURL = async (req, res) => {
     console.log('hi from getdownl URL')
     console.log('token:', token)
     console.log('noteid:', noteid)
+    let userID = ''
+    // const firebase = require('firebase');
+    // var storage = firebase.storage();
 
-    // admin.auth().verifyIdToken(token)
-    //     .then(decodedToken){
-    //     let userId = decodedToken.uid
-    // }
+    const noteRef = db.collection('notes').doc(noteid);
+    if (token) {
+        admin.auth().verifyIdToken(token)
+            .then((decodedToken) => {
+                userID = decodedToken.uid
+                console.log("UserID:", userID)
 
-    console.log("UserId:", userId)
-
-    // const srcFilename = `notes/${userId}/${filename}`;
-    // const destFilename = `./${filename}`;
-    // let url = await firebase.storage().ref(srcFilename).getDownloadURL();
-    // console.log('download url:', url)
-    // return res.status(200).json({ url: url });
-    // console.log('download url:', url)
-    // return res.status(200).json({ url: url });
-
-    // // get the url for download
-    // // print out url
-
+            }).catch(function (error) {
+                return res.status(400).json({ Status: "Verification Error" });
+            })
+        noteRef.get().then(function (doc) { //Get the note data from Firestore
+            if (doc.exists) { //If the note data was found (I.E. the note ID was correct)
+                noteData = doc.data(); //Put the data in a variable
+                console.log('filename', noteData.filename)
+                // let file = bucket.file(`notes/${noteData.uploader}/${noteData.filename}`).getdownloadURL()
+                // console.log('file', file)
 
 
+                const srcFilename = `notes/${noteData.uploader}/${noteData.filename}`;
+                const destFilename = `./${filename}`;
+
+                console.log(srcFilename)
+                async function downloadFile() {
+                    console.log('in download')
+                    const options = {
+                        // The path to which the file should be downloaded, e.g. "./file.txt"
+                        destination: destFilename,
+                    };
+
+                    //     // Downloads the file
+                    await bucket.file(srcFilename).download(options);
+
+                    // console.log(
+                    //     `gs://${bucketName}/${srcFilename} downloaded to ${destFilename}.`
+                    // );
+                }
+
+                downloadFile().catch(console.error);
+                // await bucket.file(srcFilename).download();
+                // return res.sendFile(file)
+
+                // var pathReference = storage.ref(`notes/${noteData.uploader}/${noteData.filename}`);
+                // let pathReference = bucket.storage.ref(`notes/${noteData.uploader}/${noteData.filename}`);
+                // console.log('reference', pathReference)
+            }
+            else {
+                return res.status(404).json({ Status: "Not Found" });
+            }
+        }).catch(function (error) { return res.status(500).json({ Error: error }) });
+
+
+    }
+
+}
+
+const firebase = require('firebase');
+
+
+exports.download = (req, res) => {
+    let noteObj = db.collection('notes').doc(req.query.noteid);
+    // var fileDir = "";
+    console.log("note id:", req.query.noteid)
+    let userId = 'kAswU2od7yeFReIOn1gcnUItUrz2'
+    noteObj.get().then((doc) => {
+        const noteData = doc.data();
+        const filename = noteData.filename;
+        console.log("note filename associated:", filename);
+        console.log("UserId:", userId)
+        // const bucketName = 'notetube-f3f9c.appspot.com';
+        // notes/userid/filename
+        const srcFilename = `notes/${userId}/${filename}`;
+        const destFilename = `./${filename}`;
+
+
+        async function downloadFile() {
+            const options = {
+                // The path to which the file should be downloaded, e.g. "./file.txt"
+                destination: destFilename,
+            };
+
+            //     // Downloads the file
+            await bucket.file(srcFilename).download(options);
+            console.log('download;', bucket.file.getdownloadURL())
+            // console.log(
+            //     `gs://${bucketName}/${srcFilename} downloaded to ${destFilename}.`
+            // );
+        }
+
+        downloadFile().catch(console.error);
+
+
+        res.status(200).json({ Status: "Doc found and downloaded to server", data: noteData });
+    })
+
+
+
+    //return res.status(200).json({ Status: "Found"})
 }

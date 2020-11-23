@@ -77,11 +77,10 @@ export const deleteNoteDB = async (noteid) => {
 export const notePreview = async (history, noteid) => {
   console.log('IN NOTE PREVIEW ACTION');
   console.log('NOTEID', noteid);
-  window.open(
-    'http://localhost:5000/notetube-f3f9c/us-central1/api/preview?noteid=' +
+  let url = 'http://localhost:5000/notetube-f3f9c/us-central1/api/preview?noteid=' +
     noteid +
     '&token=' +
-    localStorage.getItem('token'),
-    '_blank'
-  );
+    localStorage.getItem('token')
+  window.open(url, '_blank');
+
 };

@@ -2,6 +2,7 @@ import React from "react";
 import NotesList from "../NotesList/NotesList"
 import Sidebar from "../Sidebar/Sidebar";
 import "./personalSpace.css";
+import ScrollableTabsButtonForce from './tabpanel'
 
 function PersonalSpace() {
 
@@ -10,7 +11,7 @@ function PersonalSpace() {
             <Sidebar></Sidebar>
 
             <div className="personalSpace">
-                <NotesList></NotesList>
+                <ScrollableTabsButtonForce></ScrollableTabsButtonForce>
                 <div className="personalSpace">
                     <br></br>
                     <br></br>
