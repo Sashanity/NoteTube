@@ -2,7 +2,7 @@ import React, { useState, useMemo, useEffect } from 'react';
 import { BrowserRouter as Router, Route, Switch } from 'react-router-dom';
 import './App.css';
 import Navbar from './components/Layout/navbar';
-import Footer from './components/Layout/footer';
+
 import Register from './components/auth/Register';
 import Login from './components/auth/Login';
 import Landing from './components/pages/Landing';
@@ -10,9 +10,8 @@ import Home from './components/pages/Home';
 import { UserContext } from './UserContext';
 import AuthenticatedRoute from './components/routes/AuthenticatedRoute';
 import RedirectOnceLoggedIn from './components/routes/RedirectOnceLoggedIn';
-import PersonalSpace from './components/pages/personalSpace';
-import Modal from './components/Layout/Modal';
-import Editor from './components/editor/editor';
+import PersonalSpace from './components/personalSpace/personalSpace';
+
 import MyEditor from './components/editor/editor';
 import { verifyToken } from './actions/auth';
 // import MyDocument from './components/editor/topdf';
@@ -56,7 +55,6 @@ const App = () => {
             {/* <Route exact path='/editor' component={Editor} /> */}
           </Switch>
         </div>
-        <Footer />
       </UserContext.Provider>
     </Router>
   );
