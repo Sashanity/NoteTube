@@ -31,16 +31,9 @@ const Navbar = () => {
               <Link to='#'>
                 <AccountCircleIcon></AccountCircleIcon>
               </Link>
-            </Navigation>
-          </Header>
-          <Drawer title='NoteTube'>
-            <Navigation>
-              <Link to='#'>Profile</Link>
-              <Link to='/uploadNotes'>Upload Notes</Link>
-              <Link to='#'>Followers</Link>
               <Button onClick={logout(history, setUser)}>Logout</Button>
             </Navigation>
-          </Drawer>
+          </Header>
           <Content />
         </Layout>
       </div>

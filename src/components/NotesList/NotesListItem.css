@@ -1,0 +1,64 @@
+.NotesListItem{
+    flex: 0.8px;
+    padding: 40px 20px;
+    padding-bottom: 0;
+}
+
+.NotesListItem >h2{
+    margin-left: 5px;
+    margin-bottom: 20px;
+}
+
+/* classNotes card CSS */
+.ClassNotes{
+    margin-bottom: 40px;
+    width: 270px;
+}
+
+.classNotes_thumbnail
+{
+height: 140px;
+width: 250px;
+
+}
+.PublicNotes
+{
+display: flex;
+flex-wrap: wrap;
+
+}
+
+.Class_info
+{
+display: flex;
+margin-top: 10px;
+padding-right: 30px;
+}
+.ClassNotes_Description
+{
+margin-left: 15px;
+
+}
+.ClassNotes_Description>h4
+{
+font-size: 14px;
+margin-bottom: 5px;
+}
+
+.ClassNotes_Description >p
+{
+font-size: 14px;
+color:goldenrod
+
+}
+
+/* 
+.listofitems
+{
+    display: flex;
+    flex: 1 0 auto;
+    align-items: flex-end;
+    justify-content: center;
+    flex-direction: column;
+    z-index: 10;
+} */

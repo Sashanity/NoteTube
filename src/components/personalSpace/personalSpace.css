@@ -1,0 +1,7 @@
+
+.app__page{
+    display:flex;    
+}
+.personalSpace{
+    flex: 0.8;
+}
