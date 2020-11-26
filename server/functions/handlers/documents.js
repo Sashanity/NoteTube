@@ -7,7 +7,34 @@ const path = require('path');
 const { testLab } = require('firebase-functions');
 const { response } = require('express');
 
-
+/***
+ *Upload Note
+ **Uploads a note to Firebase for a logged in user
+ **PARAMS:
+    ***token: The authentication token of the user
+ **FORM BODY:
+    ***file: The file the user wants to upload
+    ***name: The name of the note
+    ***subject: The subject the note is about
+    ***course: The specific course the note is for
+    ***term: The term the note was taken for
+    ***Insturctor: The instructor the note was taken for
+    ***owner: The owner of the note
+    ***public: Whether or note other users can see the note (true means they can)
+ **RETURNS:
+    ***Status: The status of the request.
+    ***Returns only on Success:
+        ****noteID: The Firestore ID of the new note
+        ****field: the fields the user put in:
+            *****file: The file the user wants to upload
+            *****name: The name of the note
+            *****subject: The subject the note is about
+            *****course: The specific course the note is for
+            *****term: The term the note was taken for
+            *****Insturctor: The instructor the note was taken for
+            *****owner: The owner of the note
+            *****public: Whether or note other users can see the note (true means they can)
+ ***/
 exports.upload = (req, res) => {
 
 
@@ -45,11 +72,13 @@ exports.upload = (req, res) => {
         for (const name in uploads) {
             const upload = uploads[name]; //Get the object with the file
             const file = upload.file; //Get the file from the object
-            bucket.upload(file, { destination: `notes/${userID}/${upload.name}` }) //Uploads the file to the storage bucket
+            const timestamp = admin.firestore.Timestamp.fromDate(new Date());
+            const filename = timestamp + upload.name;
+            bucket.upload(file, { destination: `notes/${userID}/${filename}` }) //Uploads the file to the storage bucket
                 .then(data => {
                     const newNote = { //Create the note object that will be uploaded to Firestore
                         name: returnval.name,
-                        filename: upload.name,
+                        filename: filename,
                         subject: returnval.subject,
                         course: returnval.course,
                         term: returnval.term,
@@ -57,7 +86,7 @@ exports.upload = (req, res) => {
                         owner: returnval.owner,
                         public: returnval.public,
                         uploader: userID,
-                        timestamp: admin.firestore.Timestamp.fromDate(new Date()),
+                        timestamp: timestamp,
                     };
 
                     db.collection('notes').add(newNote).then(function (uploadDocRef) { //
@@ -65,10 +94,10 @@ exports.upload = (req, res) => {
                         fs.unlinkSync(file); //Unlinks and deletes the file
                         return res.status(200).json({ Status: "Uploaded", noteID: uploadDocRef.id, field: returnval }); //Send the successful response back
                     })
-                        .catch(function (error) {
-                            return res.status(500).json("Error Uploading"); //Problem adding the note to the Firestore
-                        });
-
+                    .catch(function(error){
+                        return res.status(500).json({Status: "Error Uploading"}); //Problem adding the note to the Firestore
+                    });
+                    
                 }).catch(err => {
                     fs.unlinkSync(file); //Unlinks and deletes the file
                     return res.status(500).json(err); //Error uploading to storage
@@ -79,6 +108,19 @@ exports.upload = (req, res) => {
     });
 }
 
+/***
+ *Preview Note
+ **Preview a user's note from Firebase
+ **PARAMS:
+    ***noteid: The Firestore ID of the note the user wants to preview
+    ***Optional Params:
+        ****token: The authentication token of the user. Used if the user is logged in, otherwise is ignored
+ **RETURNS:
+    ***Returns on Success:
+        ****The file stream
+    ***Returns on Failure:
+        ****Status: The status of the request.
+ ***/
 exports.preview = (req, res) => {
     console.log('hi from preview')
     console.log('noteID:', req.query.noteid)
@@ -135,6 +177,28 @@ exports.preview = (req, res) => {
 
 }
 
+/***
+ *User List
+ **Gets the user's list of uploaded notes
+ **PARAMS:
+    ***token: The authentication token of the user
+    ***noteid: The Firestore ID of the note the user wants to edit
+ **RETURNS:
+    ***Status: The status of the request.
+    ***Returns only on Success:
+        ****List of Notes: The user's list of notes:
+            *****uploader: The Firebase ID of the user
+            *****filename: The name of the file in Firebase's Storage
+            *****name: The name of the note
+            *****subject: The subject the note is about
+            *****course: The specific course the note is for
+            *****term: The term the note was taken for
+            *****Insturctor: The instructor the note was taken for
+            *****owner: The owner of the note
+            *****public: Whether or note other users can see the note (true means they can)
+            *****timestamp: The time the note was uploaded
+            *****noteID: The Firestore ID of the new note
+ ***/
 exports.userList = (req, res) => {
     console.log('hi from user list')
     const token = req.query.token; //Get the token from the request
@@ -166,6 +230,26 @@ exports.userList = (req, res) => {
         return res.status(400).json({ Status: "No Token Sent" });
     }
 }
+/***
+ *Edit Note
+ **Edits a note's data in Firebase for a logged in user
+ **PARAMS:
+    ***token: The authentication token of the user
+    ***noteid: The Firestore ID of the note the user wants to edit
+ **JSON BODY:
+    ***file: The file the user wants to upload
+    ***name: The name of the note
+    ***subject: The subject the note is about
+    ***course: The specific course the note is for
+    ***term: The term the note was taken for
+    ***Insturctor: The instructor the note was taken for
+    ***owner: The owner of the note
+    ***public: Whether or note other users can see the note (true means they can)
+ **RETURNS:
+    ***Status: The status of the request.
+    ***Returns only on Success:
+        ****noteID: The Firestore ID of the new note
+ ***/
 exports.editNote = (req, res) => {
     const token = req.query.token; //Get the token from the request
     const noteID = req.query.noteid; //Get the note ID from the request
@@ -214,6 +298,15 @@ exports.editNote = (req, res) => {
     }
 }
 
+/***
+ *Delete Note
+ **Deletes a user's note from Firebase
+ **PARAMS:
+    ***token: The authentication token of the user
+    ***noteid: The Firestore ID of the note the user wants to delete
+ **RETURNS:
+    ***Status: The status of the request.
+ ***/
 exports.deleteNote = (req, res) => {
     const token = req.query.token;
     console.log('hi from delete')
