@@ -10,20 +10,11 @@ import Home from './components/pages/Home';
 import { UserContext } from './UserContext';
 import AuthenticatedRoute from './components/routes/AuthenticatedRoute';
 import RedirectOnceLoggedIn from './components/routes/RedirectOnceLoggedIn';
-<<<<<<< HEAD
 import PersonalSpace from './components/personalSpace/personalSpace';
-import Modal  from './components/Upload form/Modal';
 
-
-
-=======
-import PersonalSpace from './components/pages/personalSpace';
-import Modal from './components/Layout/Modal';
-import Editor from './components/editor/editor';
 import MyEditor from './components/editor/editor';
 import { verifyToken } from './actions/auth';
 // import MyDocument from './components/editor/topdf';
->>>>>>> master
 
 //This is the app
 const App = () => {

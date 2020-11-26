@@ -15,7 +15,5 @@ app.get('/verifyToken', verifyToken);
 app.get('/userList', userList);
 app.put('/editNote', editNote);
 app.delete('/deleteNote', deleteNote);
-app.get('/download', getdownloadURL);
-app.get('/download2', download);
 
 exports.api = functions.https.onRequest(app);

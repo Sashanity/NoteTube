@@ -1,11 +1,6 @@
 import React from 'react';
-<<<<<<< HEAD:src/components/Sidebar/TriggerButton.js
 
 import "../Upload form/modal.css";
-=======
-import './modal.css';
-
->>>>>>> master:src/components/Layout/TriggerButton.js
 import Button from '@material-ui/core/Button';
 import { makeStyles } from '@material-ui/core/styles';
 import CloudUploadIcon from '@material-ui/icons/CloudUpload';
