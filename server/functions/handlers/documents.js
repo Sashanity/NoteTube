@@ -485,3 +485,58 @@ exports.hasFavoritedNote = (req, res) => {
         return res.status(400).json({Status: "Need both the token and the ID of the note"});
     }
 }
+
+/***
+ *Favorites List
+ **Returns a list of notes the user has favorited
+ **PARAMS:
+ ***token: The authentication token of the user
+ **RETURNS:
+ ***Status: The status of the request.
+ ***List: If Status = "Successful", will return whether the list of notes the user has favorited
+ ***/
+exports.favoriteList = (req, res) => { 
+    const favCollection = db.collection("favorites");
+    const noteCollection = db.collection("notes");
+    var retList = [];
+    var idArray = [];
+    if (req.query.token){ //Checks to make sure the note id and token are in the request params.
+        admin.auth().verifyIdToken(req.query.token).then(function(decodedToken) { //Admin decodes the token
+            const userID = decodedToken.uid; //Get the user id
+                favCollection.where("userid", "==", userID).get().then(function(querySnapshot){
+                    if(querySnapshot.empty){
+                        return res.status(200).json({Status: "Successful", List: []});
+                    }
+                    else{ 
+                        querySnapshot.forEach(function(doc){ //Loop through each favorite object and save the note ID
+                            idArray.push(doc.data().noteid);
+                        })
+                        var promises = idArray.map(function(noteID){ return noteCollection.doc(noteID).get() }); //Use this to execute multiple queries
+                        Promise.all(promises).then(function(snapshots){ //Loop through each get query
+                            snapshots.forEach(function(noteDoc){ //Loop through each result
+                                var addDoc = noteDoc.data(); //Get the data
+                                addDoc['noteID'] = noteDoc.id; //Add the note ID to the object
+                                retList.push(addDoc); //Push the object to the returned array
+                            })
+                            return res.status(200).json({Status: "Successful", List: retList});
+                        })
+                        .catch(function(error){ //Error executing the promises
+                            return res.status(500).json({Status: error});
+                        })
+                        
+                    }
+                })
+                .catch(function(error){ //Returns server error if issue looking at the favorites
+                    return res.status(500).json({Status: error});
+                })
+                
+            })
+    
+        .catch(function(error){
+            return res.status(400).json({Status: "Need Valid Token"});
+        })
+    }
+    else{ //Returns user error if either the token or note are not there
+        return res.status(400).json({Status: "Need a Token"});
+    }
+}
