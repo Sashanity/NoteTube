@@ -6,9 +6,10 @@ import Tabs from '@material-ui/core/Tabs';
 import Tab from '@material-ui/core/Tab';
 import FavoriteIcon from '@material-ui/icons/Favorite';
 import PersonPinIcon from '@material-ui/icons/PersonPin';
-
 import Typography from '@material-ui/core/Typography';
 import Box from '@material-ui/core/Box';
+import { shadows } from '@material-ui/system';
+
 import NotesList from '../NotesList/NotesList'
 import './styles.css'
 
@@ -49,9 +50,9 @@ const useStyles = makeStyles((theme) => ({
     root: {
         flexGrow: 1,
         width: '100%',
-        // backgroundColor: theme.palette.background.paper,
+        background: 'transparent',
         // opacity: 1,
-        color: 'white'
+        boxShadow: '3'
     },
     mytheme: {
         backgroundColor: 'white'
@@ -69,8 +70,9 @@ export default function ScrollableTabsButtonForce() {
 
     return (
         <div className={classes.root}>
-            <AppBar position="static" color="default" style={{ background: 'transparent' }}>
-                <Tabs classname={classes.mytheme}
+            <AppBar position="static" color="default" style={{ background: 'transparent', boxShadow: '3' }}>
+                <Tabs
+                    classname={classes.mytheme}
                     value={value}
                     onChange={handleChange}
                     variant="scrollable"

@@ -101,9 +101,9 @@ export default function NotesListItem(props) {
           </CardContent>
 
           <CardActions disableSpacing>
-            <IconButton aria-label='Download'>
+            {/* <IconButton aria-label='Download'>
               <ArrowDownwardOutlinedIcon />
-            </IconButton>
+            </IconButton> */}
 
             <IconButton
               aria-label='OpenInNewTab'

@@ -2,7 +2,7 @@ import React, { useState, useMemo, useEffect } from 'react';
 import { BrowserRouter as Router, Route, Switch } from 'react-router-dom';
 import './App.css';
 import Navbar from './components/Layout/navbar';
-import Footer from './components/Layout/footer';
+
 import Register from './components/auth/Register';
 import Login from './components/auth/Login';
 import Landing from './components/pages/Landing';
@@ -55,7 +55,6 @@ const App = () => {
             {/* <Route exact path='/editor' component={Editor} /> */}
           </Switch>
         </div>
-        <Footer />
       </UserContext.Provider>
     </Router>
   );
