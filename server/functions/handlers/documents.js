@@ -501,3 +501,53 @@ exports.userPublicNotes = (req, res) => {
         return res.status(400).json({Status: "No User ID Sent"});
     }
 }
+
+/***
+ *User Public Notes
+ **Gets a user's list of public notes
+ **PARAMS:
+    ***userid: The ID of the user that we want to get the upload for
+ **RETURNS:
+    ***Status: The status of the request.
+    ***Returns only on Success:
+        ****List: The user's list of notes:
+            *****uploader: The Firebase ID of the user
+            *****filename: The name of the file in Firebase's Storage
+            *****name: The name of the note
+            *****subject: The subject the note is about
+            *****course: The specific course the note is for
+            *****term: The term the note was taken for
+            *****Insturctor: The instructor the note was taken for
+            *****owner: The owner of the note
+            *****public: Whether or note other users can see the note (true means they can)
+            *****timestamp: The time the note was uploaded
+            *****noteID: The Firestore ID of the new note
+ ***/
+exports.userPublicNotes = (req, res) => {
+    const userID = req.query.userid; //Get the token from the request
+    var retList = []; //The array of note data that will be returned
+    if (userID){ //If the user ID exists
+        admin.auth().getUser(userID).then(function(userRecord){ //Make sure the provided user ID belongs to a current user
+            var notesRef = db.collection('notes'); //The collection of note data
+            notesRef.where('uploader', '==', userID).where('public', '==', 'true').get() //Queries the collection based on the user ID and if the note is public
+            .then(function(querySnapshot){
+                querySnapshot.forEach(function(doc) { //Loop through each result
+                    var addDoc = doc.data(); //Get the data
+                    addDoc['noteID'] = doc.id; //Add the note ID to the object
+                    retList.push(addDoc); //Push the object to the returned array
+                });
+                return res.status(200).json({Status: "Successful", List: retList}); //Send the array back
+                })
+                .catch(function(error) { //Error: Server issue with getting the documents
+                    return res.status(500).json({Status: error});
+                })
+        })
+        .catch(function(error){ //Error: The user ID does not belong to a current user
+            return res.status(400).json({Status: "User Does Not Exist"});
+        })
+        
+    }
+    else{ //Error: No userid was sent or the userid was sent incorrectly (wrong query name, etc.)
+        return res.status(400).json({Status: "No User ID Sent"});
+    }
+}
