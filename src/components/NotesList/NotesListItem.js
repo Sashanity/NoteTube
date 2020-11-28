@@ -16,6 +16,9 @@ import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
 import MoreVertIcon from '@material-ui/icons/MoreVert';
 import ArrowDownwardOutlinedIcon from '@material-ui/icons/ArrowDownwardOutlined';
 import OpenInNewIcon from '@material-ui/icons/OpenInNew';
+import Badge from '@material-ui/core/Badge';
+import PublicIcon from '@material-ui/icons/Public';
+
 import Img1 from '../../img/notes.png';
 import Img2 from '../../img/book-img.png';
 import './NotesListItem.css';
@@ -23,6 +26,7 @@ import ListofItems from './listofItems';
 import ClassNotes from './ClassNotes';
 import { notePreview } from '../../actions/documents';
 import { useHistory } from 'react-router-dom';
+
 const useStyles = makeStyles((theme) => ({
   root: {
     maxWidth: 345,
@@ -49,6 +53,7 @@ const useStyles = makeStyles((theme) => ({
 export default function NotesListItem(props) {
   const {
     noteID,
+    public_status,
     Notes_title,
     timestamp,
     courseName,
@@ -65,82 +70,84 @@ export default function NotesListItem(props) {
   const handleExpandClick = () => {
     setExpanded(!expanded);
   };
-  const handlePreview = (noteID) => {
+  const handlePreview = (noteID, public_status) => {
     console.log('HANDLING PREVIEW, NOTEID', noteID);
-    notePreview(history, noteID);
+    notePreview(history, noteID, public_status);
   };
   return (
     <div className='PublicNotes'>
       <div className='NotesListItem'>
-        <Card className={classes.root}>
-          <CardHeader
-            avatar={
-              <Avatar
-                aria-label='notes'
-                className={classes.avatar}
-                src={Img1}
-              ></Avatar>
-            }
-            action={<ClassNotes noteID={noteID} setNotes={setNotes} />}
-            title={Notes_title}
-            subheader={timestamp}
-          />
-          <CardMedia
-            className={classes.media}
-            image={Img2}
-            title={courseName}
-            onClick={(e) => {
-              e.preventDefault();
-              handlePreview(noteID);
-            }}
-          />
-          <CardContent>
-            <Typography variant='body2' color='textSecondary' component='p'>
-              <p>{courseName}</p>
-            </Typography>
-          </CardContent>
+        <Badge color="primary" badgeContent={public_status === 'true' ? <PublicIcon /> : null} >
+          <Card className={classes.root}>
+            <CardHeader
+              avatar={
+                <Avatar
+                  aria-label='notes'
+                  className={classes.avatar}
+                  src={Img1}
+                ></Avatar>
+              }
+              action={<ClassNotes noteID={noteID} public_status={public_status} setNotes={setNotes} />}
+              title={Notes_title}
+              subheader={timestamp}
+            />
+            <CardMedia
+              className={classes.media}
+              image={Img2}
+              title={courseName}
+              onClick={(e) => {
+                e.preventDefault();
+                handlePreview(noteID, public_status);
+              }}
+            />
+            <CardContent>
+              <Typography variant='body2' color='textSecondary' component='p'>
+                <p>{courseName}</p>
+              </Typography>
+            </CardContent>
 
-          <CardActions disableSpacing>
-            {/* <IconButton aria-label='Download'>
+            <CardActions disableSpacing>
+              {/* <IconButton aria-label='Download'>
               <ArrowDownwardOutlinedIcon />
             </IconButton> */}
 
-            <IconButton
-              aria-label='OpenInNewTab'
-              onClick={(e) => {
-                e.preventDefault();
-                handlePreview(noteID);
-              }}
-            >
-              <OpenInNewIcon />
-            </IconButton>
-            <IconButton
-              className={clsx(classes.expand, {
-                [classes.expandOpen]: expanded,
-              })}
-              onClick={handleExpandClick}
-              aria-expanded={expanded}
-              aria-label='show more'
-            >
-              <ExpandMoreIcon />
-            </IconButton>
-          </CardActions>
-          <Collapse in={expanded} timeout='auto' unmountOnExit>
-            <CardContent>
-              <Typography paragraph>
-                <b>Description:</b>
-              </Typography>
-              <Typography paragraph>
-                <p>
-                  {' '}
-                  {instructor} . {semester}
-                </p>
-                <p>{subject}</p>
-              </Typography>
-            </CardContent>
-          </Collapse>
-        </Card>
+              <IconButton
+                aria-label='OpenInNewTab'
+                onClick={(e) => {
+                  e.preventDefault();
+                  handlePreview(noteID);
+                }}
+              >
+                <OpenInNewIcon />
+              </IconButton>
+              <IconButton
+                className={clsx(classes.expand, {
+                  [classes.expandOpen]: expanded,
+                })}
+                onClick={handleExpandClick}
+                aria-expanded={expanded}
+                aria-label='show more'
+              >
+                <ExpandMoreIcon />
+              </IconButton>
+            </CardActions>
+            <Collapse in={expanded} timeout='auto' unmountOnExit>
+              <CardContent>
+                <Typography paragraph>
+                  <b>Description:</b>
+                </Typography>
+                <Typography paragraph>
+                  <p>
+                    {' '}
+                    {instructor} . {semester}
+                  </p>
+                  <p>{subject}</p>
+                </Typography>
+              </CardContent>
+            </Collapse>
+          </Card>
+        </Badge>
       </div>
-    </div>
+    </div >
   );
 }

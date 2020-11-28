@@ -121,22 +121,11 @@ exports.upload = (req, res) => {
 exports.preview = (req, res) => {
     console.log('hi from preview')
     console.log('noteID:', req.query.noteid)
-    let noteRef = db.collection('notes').doc(req.query.noteid); //Get the reference of the note data from Firestore using the note ID from the request
-
-    // db.collection('notes').doc(req.query.noteid)
-    //     .get()
-    //     .then((doc) => {
-    //         if (doc.exists) {
-    //             const noteRef = db.collection('notes').doc(req.query.noteid)
-    //         }
-    //         else { // if doc is not in notes -> check public collection
-    //             const noteRef = db.collection('pubicNotes').doc(req.query.noteid);
-    //         }
-    //     })
-    //     .then((notesRef) => {
-    //         console.log('notereference', noteRef)
-    //     })
-
+    console.log('note public', req.query.public)
+    let public = req.query.public
+    let collection
+    public === 'true' ? collection = 'publicNotes' : collection = 'notes'
+    let noteRef = db.collection(collection).doc(req.query.noteid); //Get the reference of the note data from Firestore using the note ID from the request
 
     var fileDir = ""; //The directory of the file
     var userID = ""; //The ID of the logged in user
@@ -224,7 +213,17 @@ exports.userList = (req, res) => {
                     });
                     console.log('sending list back:', retList)
 
-                    return res.status(200).json({ retList }); //Send the array back
+                    // here check another collection
+                    db.collection('publicNotes').where('uploader', '==', userID).get()
+                        .then((querySnapshot) => {
+                            querySnapshot.forEach(doc => { //Loop through each result
+                                var addDoc = doc.data(); //Get the data
+                                addDoc['noteID'] = doc.id; //Add the note ID to the object
+                                retList.push(addDoc); //Push the object to the returned array
+                            })
+                            return res.status(200).json({ retList }); //Send the array back
+                        });
+
                 })
                 .catch(function (error) { //Error: Server isse with getting the documents
                     return res.status(500).json({ Status: error });
@@ -319,7 +318,11 @@ exports.deleteNote = (req, res) => {
     console.log('hi from delete')
     console.log('noteID: ', req.query.noteid)
     console.log('token:', req.query.token)
-    const noteRef = db.collection('notes').doc(req.query.noteid); //Get the reference of the note data from Firestore using the note ID from the request
+    console.log('public', req.query.public_status)
+    let collection = ''
+    req.query.public_status === 'true' ? collection = 'publicNotes' : collection = 'notes'
+    console.log('deleting from ', collection)
+    const noteRef = db.collection(collection).doc(req.query.noteid); //Get the reference of the note data from Firestore using the note ID from the request
     var userID = ""; //The ID of the logged in user
     if (req.query.token) {
         admin.auth().verifyIdToken(req.query.token).then(function (decodedToken) { //Authenticate the token
@@ -329,10 +332,12 @@ exports.deleteNote = (req, res) => {
         })
         noteRef.get().then(function (doc) { //Get the note data from Firestore
             if (doc.exists) { //If the note data was found (I.E. the note ID was correct)
+                console.log('doc found')
                 noteData = doc.data(); //Put the data in a variable
                 if (noteData.uploader === userID) { //Verifies that the user is allowed to delete the note
                     bucket.file(`notes/${noteData.uploader}/${noteData.filename}`).delete().then(function () {
                         noteRef.delete().then(function () {
+                            console.log('DELETED')
                             return res.status(200).json({ Status: "Delete Successful" });
                         }).catch(function (error) { return res.status(500).json({ Status: error }); });
                     }).catch(function (error) { return res.status(500).json({ Status: error }) });
