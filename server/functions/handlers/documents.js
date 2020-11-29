@@ -325,8 +325,18 @@ exports.userList = (req, res) => {
  ****noteID: The Firestore ID of the new note
  ***/
 exports.editNote = (req, res) => {
-  const token = req.query.token; //Get the token from the request
-  const noteID = req.query.noteid; //Get the note ID from the request
+    const token = req.query.token; //Get the token from the request
+    const noteID = req.query.noteid; //Get the note ID from the request
+    const public = req.query.public;
+    let collection;
+    public.toLowerCase() === 'true'
+        ? (collection = 'publicNotes')
+        : (collection = 'notes');
+    const newPublic = req.body.public;
+    let newCollection;
+    newPublic.toLowerCase() === 'true'
+        ? (newCollection = 'publicNotes')
+        : (newCollection = 'notes');
 
   if (token && noteID) {
     //Make sure we got both the note ID and the token
@@ -336,7 +346,7 @@ exports.editNote = (req, res) => {
       .then(function (decodedToken) {
         //Verify the token is valid
         var userID = decodedToken.uid; //Get the user ID
-        db.collection('notes')
+        db.collection(collection)
           .doc(noteID)
           .get()
           .then(function (doc) {
@@ -345,6 +355,7 @@ exports.editNote = (req, res) => {
               //If the note exists
               if (doc.data().uploader === userID) {
                 //Make sure the user editing the note is the same user who uploaded it
+                
                 const newNote = {
                   //Create a new note to replace the old note
                   name: req.body.name,
@@ -358,22 +369,52 @@ exports.editNote = (req, res) => {
                   uploader: doc.data().uploader,
                   timestamp: doc.data().timestamp,
                 };
-
-                db.collection('notes')
-                  .doc(noteID)
-                  .update(newNote)
-                  .then(function (updatedDoc) {
-                    //Update the document
-                    return res
-                      .status(200)
-                      .json({ Status: 'Successful', noteID: noteID });
-                  })
-                  .catch(function (error) {
-                    //Error: Issue updating the document
-                    return res
-                      .status(500)
-                      .json({ Status: 'Error Updating Doc' });
-                  });
+                if (collection === newCollection){
+                    db.collection(collection)
+                    .doc(noteID)
+                    .update(newNote)
+                    .then(function (updatedDoc) {
+                        //Update the document
+                        return res
+                        .status(200)
+                        .json({ Status: 'Successful', noteID: noteID });
+                    })
+                    .catch(function (error) {
+                        //Error: Issue updating the document
+                        return res
+                        .status(500)
+                        .json({ Status: 'Error Updating Doc' });
+                    });
+                }
+                else{
+                    db.collection(newCollection)
+                    .doc(noteID)
+                    .create(newNote)
+                    .then(function (updatedDoc) {
+                        //Update the document
+                        db.collection(collection)
+                        .doc(noteID)
+                        .delete()
+                        .then(function(){
+                            return res
+                            .status(200)
+                            .json({ Status: 'Successful', noteID: noteID });
+                        })
+                        .catch(function(error){
+                            return res
+                            .status(500)
+                            .json({ Status: 'Error Changing Public' });
+                        })
+                        
+                    })
+                    .catch(function (error) {
+                        //Error: Issue updating the document
+                        return res
+                        .status(500)
+                        .json({ Status: 'Error Updating Doc', error: error });
+                    });
+                }
+                
               } else {
                 //Error: User is not the original owner
                 return res.status(400).json({ Status: 'Not Authorized' });
