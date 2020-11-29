@@ -48,7 +48,7 @@ exports.upload = (req, res) => {
     .verifyIdToken(idToken)
     .then(function (decodedToken) {
       userID = decodedToken.uid; //Gets the user ID that will be used to place the file in that user's folder
-      console.log('userID1:', userID)
+      console.log('userID1:', userID);
       // db.collection('users').where('userId', '==', userID).get()
       //     .then((doc) => {
       //         if (doc.exists) {
@@ -56,17 +56,17 @@ exports.upload = (req, res) => {
       //             returnval['owner'] = doc.getString('username')
       //             console.log('returnval[owner]=', returnval['owner'])
 
-      //         } 
+      //         }
       //     })
-      let snapshot = db.collection('users').where('userId', '==', userID).get()
+      let snapshot = db.collection('users').where('userId', '==', userID).get();
       // this passes means the snapshot found
       if (snapshot.empty) {
         console.log('No matching documents.');
         return;
       }
       // never goes here ?
-      snapshot.forEach(doc => {
-        console.log('**************')
+      snapshot.forEach((doc) => {
+        console.log('**************');
         // console.log(doc.id, '=>', doc.data());
       });
 
@@ -79,7 +79,7 @@ exports.upload = (req, res) => {
   //This reads the text fields from the form
   busboy.on('field', function (fieldname, val) {
     returnval[fieldname] = val; //Saves the fields as an object to upload to db.
-    console.log('returnval[fieldname]=', returnval[fieldname])
+    console.log('returnval[fieldname]=', returnval[fieldname]);
   });
 
   //This reads the file fields from the form
@@ -96,8 +96,8 @@ exports.upload = (req, res) => {
       const timestamp = admin.firestore.Timestamp.fromDate(new Date());
       const filename = timestamp + upload.name;
       let collection = 'notes';
-      console.log('========================>', returnval.public);
-      returnval.public.toLowerCase() === 'true'
+      console.log('========================>', returnval.publicFile);
+      returnval.publicFile.toLowerCase() === 'true'
         ? (collection = 'publicNotes')
         : (collection = 'notes');
       bucket
@@ -112,7 +112,7 @@ exports.upload = (req, res) => {
             term: returnval.term,
             instructor: returnval.instructor,
             owner: returnval.owner,
-            public: returnval.public,
+            public: returnval.publicFile,
             uploader: userID,
             timestamp: timestamp,
           };
