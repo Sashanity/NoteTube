@@ -77,7 +77,12 @@ export default function NotesListItem(props) {
   return (
     <div className='PublicNotes'>
       <div className='NotesListItem'>
-        <Badge color="primary" badgeContent={public_status === 'true' ? <PublicIcon /> : null} >
+        <Badge
+          color='primary'
+          badgeContent={
+            public_status.toLowerCase() === 'true' ? <PublicIcon /> : null
+          }
+        >
           <Card className={classes.root}>
             <CardHeader
               avatar={
@@ -87,7 +92,13 @@ export default function NotesListItem(props) {
                   src={Img1}
                 ></Avatar>
               }
-              action={<ClassNotes noteID={noteID} public_status={public_status} setNotes={setNotes} />}
+              action={
+                <ClassNotes
+                  noteID={noteID}
+                  public_status={public_status}
+                  setNotes={setNotes}
+                />
+              }
               title={Notes_title}
               subheader={timestamp}
             />
@@ -148,6 +159,6 @@ export default function NotesListItem(props) {
           </Card>
         </Badge>
       </div>
-    </div >
+    </div>
   );
 }

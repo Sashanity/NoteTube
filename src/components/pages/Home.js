@@ -56,13 +56,14 @@ const Home = () => {
   const classes = useStyles();
   const Hit = ({ hit }) => (
     <NotesListItem
-      key={hit.noteID} // unique key for each element
-      noteID={hit.noteID}
+      key={hit.objectID} // unique key for each element
+      noteID={hit.objectID}
       Notes_title={hit.name}
       courseName={hit.course}
       semester={hit.term}
       // timestamp={item.timestamp} //  figure outhow to convert to Date
       instructor={hit.instructor}
+      public_status={hit.public}
       subject={hit.subject}
     ></NotesListItem>
   );

@@ -138,7 +138,9 @@ exports.preview = (req, res) => {
   console.log('note public', req.query.public);
   let public = req.query.public;
   let collection;
-  public === 'true' ? (collection = 'publicNotes') : (collection = 'notes');
+  public.toLowerCase() === 'true'
+    ? (collection = 'publicNotes')
+    : (collection = 'notes');
   let noteRef = db.collection(collection).doc(req.query.noteid); //Get the reference of the note data from Firestore using the note ID from the request
 
   var fileDir = ''; //The directory of the file

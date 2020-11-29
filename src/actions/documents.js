@@ -61,8 +61,8 @@ export const getUserNotes = async () => {
 };
 
 export const deleteNoteDB = async (noteid, public_status) => {
-  console.log('IN DELETE ACTION')
-  console.log('NOTEID', noteid)
+  console.log('IN DELETE ACTION');
+  console.log('NOTEID', noteid);
   let token = localStorage.getItem('token');
   try {
     const res = await axios.delete('/deleteNote', {
@@ -77,10 +77,12 @@ export const deleteNoteDB = async (noteid, public_status) => {
 export const notePreview = async (history, noteid, public_status) => {
   console.log('IN NOTE PREVIEW ACTION');
   console.log('NOTEID', noteid);
-  let url = 'http://localhost:5000/notetube-f3f9c/us-central1/api/preview?noteid=' + noteid +
-    '&public=' + public_status +
+  let url =
+    'http://localhost:5000/notetube-f3f9c/us-central1/api/preview?noteid=' +
+    noteid +
+    '&public=' +
+    public_status +
     '&token=' +
-    localStorage.getItem('token')
+    localStorage.getItem('token');
   window.open(url, '_blank');
-
 };
