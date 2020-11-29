@@ -19,13 +19,12 @@ const { response } = require('express');
  ***course: The specific course the note is for
  ***term: The term the note was taken for
  ***Insturctor: The instructor the note was taken for
- ***owner: The owner of the note
  ***public: Whether or note other users can see the note (true means they can)
  **RETURNS:
  ***Status: The status of the request.
  ***Returns only on Success:
  ****noteID: The Firestore ID of the new note
- ****field: the fields the user put in:
+ ****field: the uploaded form:
  *****file: The file the user wants to upload
  *****name: The name of the note
  *****subject: The subject the note is about
@@ -34,6 +33,8 @@ const { response } = require('express');
  *****Insturctor: The instructor the note was taken for
  *****owner: The owner of the note
  *****public: Whether or note other users can see the note (true means they can)
+ *****timestamp: The timestamp of the upload
+ *****uploader: The user ID of the uploader
  ***/
 exports.upload = (req, res) => {
   const busboy = new Busboy({ headers: req.headers }); //Busboy is used to parse the form-data
@@ -49,26 +50,6 @@ exports.upload = (req, res) => {
     .then(function (decodedToken) {
       userID = decodedToken.uid; //Gets the user ID that will be used to place the file in that user's folder
       console.log('userID1:', userID)
-      // db.collection('users').where('userId', '==', userID).get()
-      //     .then((doc) => {
-      //         if (doc.exists) {
-      //             console.log('found username')
-      //             returnval['owner'] = doc.getString('username')
-      //             console.log('returnval[owner]=', returnval['owner'])
-
-      //         } 
-      //     })
-      let snapshot = db.collection('users').where('userId', '==', userID).get()
-      // this passes means the snapshot found
-      if (snapshot.empty) {
-        console.log('No matching documents.');
-        return;
-      }
-      // never goes here ?
-      snapshot.forEach(doc => {
-        console.log('**************')
-        // console.log(doc.id, '=>', doc.data());
-      });
 
       busboy.end(req.rawBody); //Calls the busboy functions below
     })
@@ -103,36 +84,53 @@ exports.upload = (req, res) => {
       bucket
         .upload(file, { destination: `notes/${userID}/${filename}` }) //Uploads the file to the storage bucket
         .then((data) => {
-          const newNote = {
-            //Create the note object that will be uploaded to Firestore
-            name: returnval.name,
-            filename: filename,
-            subject: returnval.subject,
-            course: returnval.course,
-            term: returnval.term,
-            instructor: returnval.instructor,
-            owner: returnval.owner,
-            public: returnval.public,
-            uploader: userID,
-            timestamp: timestamp,
-          };
+        db.collection('users') //Get the username from Firestore
+            .where('userId', '==', userID)
+            .get()
+            .then(function(snapshot){ 
+                let owner = "";
+                if (snapshot.empty){ //If the user does not exist
+                    return res.status(400).json({Status: "User does not exist"});
+                }
+                snapshot.forEach(function(doc){ //Save the username to a variable
+                    owner = doc.data().username;
+                });
+                
+                
+                const newNote = {
+                    //Create the note object that will be uploaded to Firestore
+                    name: returnval.name,
+                    filename: filename,
+                    subject: returnval.subject,
+                    course: returnval.course,
+                    term: returnval.term,
+                    instructor: returnval.instructor,
+                    owner: owner,
+                    public: returnval.public,
+                    uploader: userID,
+                    timestamp: timestamp,
+                };
+                db.collection(collection)
+                .add(newNote)
+                .then(function (uploadDocRef) {
+                    //
 
-          db.collection(collection)
-            .add(newNote)
-            .then(function (uploadDocRef) {
-              //
-
-              fs.unlinkSync(file); //Unlinks and deletes the file
-              return res.status(200).json({
-                Status: 'Uploaded ',
-                collection: collection,
-                noteID: uploadDocRef.id,
-                field: returnval,
-              }); //Send the successful response back
+                    fs.unlinkSync(file); //Unlinks and deletes the file
+                    return res.status(200).json({
+                    Status: 'Uploaded ',
+                    collection: collection,
+                    noteID: uploadDocRef.id,
+                    field: uploadDocRef.data(),
+                    }); //Send the successful response back
+                })
+                .catch(function (error) {
+                    return res.status(500).json({ Status: 'Error Uploading' }); //Problem adding the note to the Firestore
+                });
             })
-            .catch(function (error) {
-              return res.status(500).json({ Status: 'Error Uploading' }); //Problem adding the note to the Firestore
-            });
+            .catch(function(error){
+                return res.status(500).json({Status: "Error getting username"});
+            })
+         
         })
         .catch((err) => {
           fs.unlinkSync(file); //Unlinks and deletes the file
