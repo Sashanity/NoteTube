@@ -72,6 +72,7 @@ export default function NotesListItem(props) {
   };
   const handlePreview = (noteID, public_status) => {
     console.log('HANDLING PREVIEW, NOTEID', noteID);
+    console.log('HANDLING PREVIEW, NOTEID', public_status);
     notePreview(history, noteID, public_status);
   };
   return (
@@ -126,7 +127,7 @@ export default function NotesListItem(props) {
                 aria-label='OpenInNewTab'
                 onClick={(e) => {
                   e.preventDefault();
-                  handlePreview(noteID);
+                  handlePreview(noteID, public_status);
                 }}
               >
                 <OpenInNewIcon />
