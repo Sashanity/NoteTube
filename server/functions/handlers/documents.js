@@ -461,16 +461,22 @@ exports.deleteNote = (req, res) => {
  **PARAMS:
  ***token: The authentication token of the user
  ***noteid: The ID  of the note the user wants to favorite
+ ***public: If the note is public or not
  **RETURNS:
  ***Status: The status of the request. Will be an error if the note was not favorited correctly, either due to server error or due to user error
  ***/
 exports.favoriteNote = (req, res) => { 
     const favCollection = db.collection("favorites");
+    const public = req.query.public;
+    let collection;
+    public.toLowerCase() === 'true'
+    ? (collection = 'publicNotes')
+    : (collection = 'notes');
     if (req.query.token && req.query.noteid){ //Checks to make sure the note id and token are in the request params.
         admin.auth().verifyIdToken(req.query.token).then(function(decodedToken) { //Admin decodes the token
             const userID = decodedToken.uid; //Get the user id
             const noteID = req.query.noteid;
-            db.collection('notes').doc(noteID).get().then(function(doc){
+            db.collection(collection).doc(noteID).get().then(function(doc){
                 if (doc.exists){ //If the note id is real
                     favCollection.where("noteid", "==", noteID).where("userid", "==", userID).get().then(function(querySnapshot){
                         if(querySnapshot.empty){
@@ -520,16 +526,22 @@ exports.favoriteNote = (req, res) => {
  **PARAMS:
  ***token: The authentication token of the user
  ***noteid: The ID  of the note the user wants to favorite
+ ***public: If the note is public or not
  **RETURNS:
  ***Status: The status of the request. Will be an error if the note was not favorited correctly, either due to server error or due to user error
  ***/
 exports.unfavoriteNote = (req, res) => { 
     const favCollection = db.collection("favorites");
+    const public = req.query.public;
+    let collection;
+    public.toLowerCase() === 'true'
+      ? (collection = 'publicNotes')
+      : (collection = 'notes');
     if (req.query.token && req.query.noteid){ //Checks to make sure the note id and token are in the request params.
         admin.auth().verifyIdToken(req.query.token).then(function(decodedToken) { //Admin decodes the token
             const userID = decodedToken.uid; //Get the user id
             const noteID = req.query.noteid; //Get the note id
-            db.collection('notes').doc(noteID).get().then(function(doc){
+            db.collection(collection).doc(noteID).get().then(function(doc){
                 if (doc.exists){ //If the note id is real
                     favCollection.where("noteid", "==", noteID).where("userid", "==", userID).get().then(function(querySnapshot){
                         querySnapshot.forEach(function(doc){
@@ -567,17 +579,23 @@ exports.unfavoriteNote = (req, res) => {
  **PARAMS:
  ***token: The authentication token of the user
  ***noteid: The ID  of the note the user wants to favorite
+ ***public: If the note is public or not
  **RETURNS:
  ***Status: The status of the request. Will be an error if the note was not favorited correctly, either due to server error or due to user error
  ***Favorited: If Status = "Successful", will return whether the user has favorited the note or not
  ***/
 exports.hasFavoritedNote = (req, res) => { 
     const favCollection = db.collection("favorites");
+    const public = req.query.public;
+    let collection;
+    public.toLowerCase() === 'true'
+      ? (collection = 'publicNotes')
+      : (collection = 'notes');
     if (req.query.token && req.query.noteid){ //Checks to make sure the note id and token are in the request params.
         admin.auth().verifyIdToken(req.query.token).then(function(decodedToken) { //Admin decodes the token
             const userID = decodedToken.uid; //Get the user id
             const noteID = req.query.noteid;
-            db.collection('notes').doc(noteID).get().then(function(doc){
+            db.collection(collection).doc(noteID).get().then(function(doc){
                 if (doc.exists){ //If the note id is real
                     favCollection.where("noteid", "==", noteID).where("userid", "==", userID).get().then(function(querySnapshot){
                         if(querySnapshot.empty){
@@ -623,6 +641,7 @@ exports.hasFavoritedNote = (req, res) => {
 exports.favoriteList = (req, res) => { 
     const favCollection = db.collection("favorites");
     const noteCollection = db.collection("notes");
+    const publicCollection = db.collection("publicNotes");
     var retList = [];
     var idArray = [];
     if (req.query.token){ //Checks to make sure the note id and token are in the request params.
@@ -637,6 +656,7 @@ exports.favoriteList = (req, res) => {
                             idArray.push(doc.data().noteid);
                         })
                         var promises = idArray.map(function(noteID){ return noteCollection.doc(noteID).get() }); //Use this to execute multiple queries
+                        
                         Promise.all(promises).then(function(snapshots){ //Loop through each get query
                             snapshots.forEach(function(noteDoc){ //Loop through each result
                                 var addDoc = noteDoc.data(); //Get the data
