@@ -29,7 +29,9 @@ import { useHistory } from 'react-router-dom';
 
 const useStyles = makeStyles((theme) => ({
   root: {
-    maxWidth: 345,
+    // maxWidth: 345,
+    width: 170,
+    height: 300
   },
   media: {
     height: 0,
