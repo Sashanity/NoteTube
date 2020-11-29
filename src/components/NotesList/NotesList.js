@@ -15,6 +15,7 @@ const NotesList = () => {
           <NotesListItem
             key={item.noteID} // unique key for each element
             noteID={item.noteID}
+            public_status={item.public}
             Notes_title={item.name}
             courseName={item.course}
             semester={item.term}
@@ -40,10 +41,10 @@ const NotesList = () => {
         {notes && notes.length ? (
           notes
         ) : (
-          <p>
-            You do not have any notes yet <MoodIcon></MoodIcon>
-          </p>
-        )}
+            <p>
+              You do not have any notes yet <MoodIcon></MoodIcon>
+            </p>
+          )}
       </div>
     </div>
   );

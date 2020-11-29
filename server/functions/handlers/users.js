@@ -110,23 +110,23 @@ exports.signup = (req, res) => {
  ***/
 exports.verifyToken = (req, res) => {
 	const token = req.query.token; //Get the token of the user from the URL
-	if (token){ //Check to make sure the token was passed through
-		admin.auth().verifyIdToken(token, true).then(function(decodedToken){//Decodes the token to make sure it is still valid
-			return res.status(200).json({Status: "Successful", Token: token}); //Sends a 200 response to make sure the 
+	if (token) { //Check to make sure the token was passed through
+		admin.auth().verifyIdToken(token, true).then(function (decodedToken) {//Decodes the token to make sure it is still valid
+			return res.status(200).json({ Status: "Successful", Token: token }); //Sends a 200 response to make sure the 
 		})
-		.catch(function(error){
-			if (error.code == 'auth/id-token-revoked'){ //If the token had to be revoked, send error
-				return res.status(400).json({Status: "Revoked", Error: error});
-			}
-			else if (error.code == 'auth/id-token-expired'){
-				return res.status(400).json({Status: "Expired", Error: error})
-			}
-			else{
-				return res.status(400).json({Status: "Invalid", Error: error});
-			}
-		});
+			.catch(function (error) {
+				if (error.code == 'auth/id-token-revoked') { //If the token had to be revoked, send error
+					return res.status(400).json({ Status: "Revoked", Error: error });
+				}
+				else if (error.code == 'auth/id-token-expired') {
+					return res.status(400).json({ Status: "Expired", Error: error })
+				}
+				else {
+					return res.status(400).json({ Status: "Invalid", Error: error });
+				}
+			});
 	}
-	else{
-		return res.status(400).json({Status: "Need a Token in the parameters"});
+	else {
+		return res.status(400).json({ Status: "Need a Token in the parameters" });
 	}
 };

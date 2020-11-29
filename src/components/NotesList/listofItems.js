@@ -24,7 +24,7 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 export default function SelectedListItem(props) {
-  const { noteID, setNotes } = props;
+  const { noteID, setNotes, public_status } = props;
   console.log('noteID list of items:', noteID);
 
   const classes = useStyles();
@@ -46,9 +46,9 @@ export default function SelectedListItem(props) {
     setOpen(false);
   };
 
-  const handleDeleteDB = async (noteID, setNotes) => {
+  const handleDeleteDB = async (noteID, setNotes, public_status) => {
     console.log('handling delete, passing noteId:', noteID);
-    await deleteNoteDB(noteID);
+    await deleteNoteDB(noteID, public_status);
     setNotes();
     handleClose();
   };
@@ -69,7 +69,7 @@ export default function SelectedListItem(props) {
         <ListItem
           onClick={deleteNote}
           button
-          // selected={selectedIndex === 1}
+        // selected={selectedIndex === 1}
         >
           {/* Dialogbox */}
           <Dialog
@@ -93,7 +93,7 @@ export default function SelectedListItem(props) {
               <Button
                 onClick={(e) => {
                   e.preventDefault();
-                  handleDeleteDB(noteID, setNotes);
+                  handleDeleteDB(noteID, setNotes, public_status);
                 }}
                 color='primary'
                 autoFocus
