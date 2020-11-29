@@ -100,14 +100,12 @@ exports.upload = (req, res) => {
               //
 
               fs.unlinkSync(file); //Unlinks and deletes the file
-              return res
-                .status(200)
-                .json({
-                  Status: 'Uploaded ',
-                  collection: collection,
-                  noteID: uploadDocRef.id,
-                  field: returnval,
-                }); //Send the successful response back
+              return res.status(200).json({
+                Status: 'Uploaded ',
+                collection: collection,
+                noteID: uploadDocRef.id,
+                field: returnval,
+              }); //Send the successful response back
             })
             .catch(function (error) {
               return res.status(500).json({ Status: 'Error Uploading' }); //Problem adding the note to the Firestore
@@ -393,7 +391,7 @@ exports.deleteNote = (req, res) => {
   console.log('token:', req.query.token);
   console.log('public', req.query.public_status);
   let collection = '';
-  req.query.public_status === 'true'
+  req.query.public_status.toLowerCase() === 'true'
     ? (collection = 'publicNotes')
     : (collection = 'notes');
   console.log('deleting from ', collection);

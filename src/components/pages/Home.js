@@ -54,19 +54,18 @@ const Home = () => {
   });
   const [submit, setSubmit] = useState(false);
   const classes = useStyles();
-  const Hits = ({ hits }) =>
-    hits.map((hit) => (
-      <NotesListItem
-        key={hit.noteID} // unique key for each element
-        noteID={hit.noteID}
-        Notes_title={hit.name}
-        courseName={hit.course}
-        semester={hit.term}
-        // timestamp={item.timestamp} //  figure outhow to convert to Date
-        instructor={hit.instructor}
-        subject={hit.subject}
-      ></NotesListItem>
-    ));
+  const Hit = ({ hit }) => (
+    <NotesListItem
+      key={hit.noteID} // unique key for each element
+      noteID={hit.noteID}
+      Notes_title={hit.name}
+      courseName={hit.course}
+      semester={hit.term}
+      // timestamp={item.timestamp} //  figure outhow to convert to Date
+      instructor={hit.instructor}
+      subject={hit.subject}
+    ></NotesListItem>
+  );
   const RefinementList = ({ items, currentRefinement, refine }) => (
     <div>
       <div>Current refinement: {currentRefinement.join(', ')}</div>
@@ -171,14 +170,14 @@ const Home = () => {
                 <></>
               )}
             </Grid>
-            <Grid item xs={5}>
+            <Grid item xs={8}>
               {submit ? (
                 <motion.div
                   initial={{ opacity: 0 }}
                   animate={{ opacity: 1 }}
                   transition={{ delay: 0.5, duration: 1.0 }}
                 >
-                  <CustomHits />
+                  <Hits hitComponent={Hit} />
                 </motion.div>
               ) : (
                 <></>
