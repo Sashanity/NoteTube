@@ -6,7 +6,7 @@ import './NotesListItem.css';
 import MoreVertIcon from '@material-ui/icons/MoreVert';
 
 function ClassNotes(props) {
-  const { noteID, setNotes } = props;
+  const { noteID, setNotes, public_status } = props;
   const [edit, detele] = useState(false);
 
   const editNotes = () => (edit ? detele(false) : detele(true));
@@ -24,6 +24,7 @@ function ClassNotes(props) {
         <div style={{ position: 'absolute', zIndex: 10 }}>
           <SelectedListItem
             noteID={noteID}
+            public_status={public_status}
             setNotes={setNotes}
           ></SelectedListItem>
         </div>
