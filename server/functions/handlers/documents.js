@@ -48,6 +48,28 @@ exports.upload = (req, res) => {
     .verifyIdToken(idToken)
     .then(function (decodedToken) {
       userID = decodedToken.uid; //Gets the user ID that will be used to place the file in that user's folder
+      console.log('userID1:', userID)
+      // db.collection('users').where('userId', '==', userID).get()
+      //     .then((doc) => {
+      //         if (doc.exists) {
+      //             console.log('found username')
+      //             returnval['owner'] = doc.getString('username')
+      //             console.log('returnval[owner]=', returnval['owner'])
+
+      //         } 
+      //     })
+      let snapshot = db.collection('users').where('userId', '==', userID).get()
+      // this passes means the snapshot found
+      if (snapshot.empty) {
+        console.log('No matching documents.');
+        return;
+      }
+      // never goes here ?
+      snapshot.forEach(doc => {
+        console.log('**************')
+        // console.log(doc.id, '=>', doc.data());
+      });
+
       busboy.end(req.rawBody); //Calls the busboy functions below
     })
     .catch(function (error) {
@@ -57,6 +79,7 @@ exports.upload = (req, res) => {
   //This reads the text fields from the form
   busboy.on('field', function (fieldname, val) {
     returnval[fieldname] = val; //Saves the fields as an object to upload to db.
+    console.log('returnval[fieldname]=', returnval[fieldname])
   });
 
   //This reads the file fields from the form

@@ -23,9 +23,14 @@ export const upload = (
     subject,
     files,
   };
-
+  console.log('IN UPLOAD ACTION data:', data)
+  let token = localStorage.getItem('token');
   try {
-    axios.post('/post/upload', data);
+    // axios.post('/upload', data);
+    axios.post('/upload', {
+      data,
+      headers: { 'Content-Type': 'multipart/form-data' }, params: { token }
+    })
   } catch (err) {
     console.log(err);
   }
