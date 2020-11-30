@@ -99,7 +99,7 @@ exports.upload = (req, res) => {
               snapshot.forEach(function (doc) { //Save the username to a variable
                 owner = doc.data().username;
               });
-
+              
               const newNote = {
                 //Create the note object that will be uploaded to Firestore
                 name: returnval.name,
@@ -116,23 +116,22 @@ exports.upload = (req, res) => {
               db.collection(collection)
                 .add(newNote)
                 .then(function (uploadDocRef) {
-                  //
-
-
+                  
                   fs.unlinkSync(file); //Unlinks and deletes the file
+                  
                   return res.status(200).json({
                     Status: 'Uploaded ',
                     collection: collection,
                     noteID: uploadDocRef.id,
-                    field: uploadDocRef.data(),
+                    field: returnval
                   }); //Send the successful response back
                 })
                 .catch(function (error) {
-                  return res.status(500).json({ Status: 'Error Uploading' }); //Problem adding the note to the Firestore
+                  return res.status(500).json({ Status: 'Error Uploading', error: error }); //Problem adding the note to the Firestore
                 });
             })
             .catch(function (error) {
-              return res.status(500).json({ Status: "Error getting username" });
+              return res.status(500).json({ Status: "Error getting username", error: error });
             })
 
         })
