@@ -56,6 +56,8 @@ const PersonalSpace = () => {
           >
             <CloudUploadIcon />
           </Button>
+          {/* <br />
+          <br /> */}
           <Button
             aria-label='Edit'
             color='primary'
@@ -63,7 +65,7 @@ const PersonalSpace = () => {
             variant='contained'
             onClick={(e) => {
               e.preventDefault();
-              history.push('/editor');
+              window.open("/editor", "_blank")
             }}
           >
             <AddIcon />
