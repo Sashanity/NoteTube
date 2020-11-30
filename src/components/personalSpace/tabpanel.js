@@ -86,11 +86,11 @@ export default function ScrollableTabsButtonForce() {
                 </Tabs>
             </AppBar>
             <TabPanel value={value} index={0}>
-                <NotesList></NotesList>
+                <NotesList notelistName={'userNotes'}></NotesList>
             </TabPanel>
             <TabPanel value={value} index={1}>
-                Your Favorites
-      </TabPanel>
+                <NotesList notelistName={'userFavorites'}></NotesList>
+            </TabPanel>
         </div>
     );
 }
