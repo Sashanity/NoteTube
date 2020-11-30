@@ -37,39 +37,29 @@ const { response } = require('express');
  *****uploader: The user ID of the uploader
  ***/
 exports.upload = (req, res) => {
-  console.log('REQ.HEADERS:', req.headers)
+  //console.log('REQ.HEADERS:', req.headers)
   const busboy = new Busboy({ headers: req.headers }); //Busboy is used to parse the form-data
-  console.log('BODY', req.body);
-  console.log('FILE', req.file);
+  //console.log('BODY', req.body);
+  //console.log('FILE', req.file);
   const uploads = {}; //Where the form-data is stored
-  const idToken = req.query.token; //The token of the user
+  //const idToken = req.query.token; //The token of the user
   var userID = ''; //The user ID that will be received from the user
   var returnval = {}; //Returns the user's form-data after the upload is complete
-
+  console.log(req.rawBody);
+busboy.end(req.rawBody); //Calls the busboy functions below
   //Checks the token to make sure the user is logged in
-  admin
-    .auth()
-    .verifyIdToken(idToken)
-    .then(function (decodedToken) {
-      userID = decodedToken.uid; //Gets the user ID that will be used to place the file in that user's folder
-
-      console.log('userID1:', userID)
-
-
-      busboy.end(req.rawBody); //Calls the busboy functions below
-    })
-    .catch(function (error) {
-      return res.status(400).json(error); //Didn't Log in correctly
-    });
+  
 
   //This reads the text fields from the form
   busboy.on('field', function (fieldname, val) {
+    console.log(fieldname);
     returnval[fieldname] = val; //Saves the fields as an object to upload to db.
     console.log('returnval[fieldname]=', returnval[fieldname]);
   });
 
   //This reads the file fields from the form
   busboy.on('file', (fieldname, file, filename, encoding, mimetype) => {
+    console.log("here");
     const filepath = path.join(os.tmpdir(), filename); //Gets the temporary directory that the file will go in
     uploads[fieldname] = { file: filepath, name: filename }; //Add the file to the uploads array
     file.pipe(fs.createWriteStream(filepath)); //Takes the file, reads it, then writes it to the temporary dircetory
@@ -86,6 +76,17 @@ exports.upload = (req, res) => {
       returnval.public.toLowerCase() === 'true'
         ? (collection = 'publicNotes')
         : (collection = 'notes');
+        admin
+    .auth()
+    .verifyIdToken(returnval.token)
+    .then(function (decodedToken) {
+      userID = decodedToken.uid; //Gets the user ID that will be used to place the file in that user's folder
+
+      console.log('userID1:', userID)
+
+
+      
+    
       bucket
         .upload(file, { destination: `notes/${userID}/${filename}` }) //Uploads the file to the storage bucket
         .then((data) => {
@@ -127,7 +128,7 @@ exports.upload = (req, res) => {
                     Status: 'Uploaded ',
                     collection: collection,
                     noteID: uploadDocRef.id,
-                    field: uploadDocRef.data(),
+                    field: returnval,
                   }); //Send the successful response back
                 })
                 .catch(function (error) {
@@ -143,6 +144,10 @@ exports.upload = (req, res) => {
           fs.unlinkSync(file); //Unlinks and deletes the file
           return res.status(500).json(err); //Error uploading to storage
         });
+      })
+      .catch(function (error) {
+        return res.status(400).json(error); //Didn't Log in correctly
+      });
     }
   });
 };

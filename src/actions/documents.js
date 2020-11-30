@@ -1,50 +1,52 @@
 import axios from 'axios';
-const config = {
+/*const config = {
   headers: {
     'Content-Type': 'application/json',
   },
-};
+};*/
 
-// export const upload = async (
-//   checked,
-//   name,
-//   course,
-//   instructor,
-//   term,
-//   subject,
-//   fileState
-// ) => {
-//   let formData = new FormData();
-//   let publicFile;
-//   if (checked) {
-//     publicFile = 'true';
-//   } else {
-//     publicFile = 'false';
-//   }
-//   formData.append('publicFile', publicFile);
-//   formData.append('name', name);
-//   formData.append('course', course);
-//   formData.append('instructor', instructor);
-//   formData.append('term', term);
-//   formData.append('subject', subject);
-//   formData.append('file', fileState);
+ export const upload = async (
+   checked,
+   name,
+   course,
+   instructor,
+   term,
+   subject,
+   fileState
+ ) => {
+   let formData = new FormData();
+   let publicFile;
+   if (checked) {
+     publicFile = 'true';
+   } else {
+     publicFile = 'false';
+   }
+   
+   formData.append('token', localStorage.getItem('token'));
+   formData.append('publicFile', publicFile);
+   formData.append('name', name);
+   formData.append('course', course);
+   formData.append('instructor', instructor);
+   formData.append('term', term);
+   formData.append('subject', subject);
+   formData.append('file', fileState);
+   
+   
+    console.log(formData);
+   let token = localStorage.getItem('token');
+   const formConfig = { headers: {'content-type': 'multipart/form-data'}}
+   try {
+      //axios.post('/upload', formData, formConfig);
+     await axios.post('/upload', formData);
+     
+   } catch (err) {
+     console.log(err);
+   }
+ };
 
-//   let token = localStorage.getItem('token');
-//   try {
-//     // axios.post('/upload', data);
-//     await axios.post('/upload', {
-//       data: formData,
-//       headers: { 'Content-Type': 'multipart/form-data' },
-//       params: { token },
-//     });
-//   } catch (err) {
-//     console.log(err);
-//   }
-// };
 
 
-
-export const upload = async (checked, name, course, instructor, term, subject, fileState) => {
+/*export const upload = async (checked, name, course, instructor, term, subject, fileState) => {
   console.log('IN UPLOAD FUNCITON')
   let token = localStorage.getItem('token')
   let publicFile;
@@ -79,7 +81,7 @@ export const upload = async (checked, name, course, instructor, term, subject, f
   } catch (err) {
     console.log(err)
   }
-}
+}*/
 
 
 export const search = async (history, searchInput) => {
@@ -90,8 +92,11 @@ export const search = async (history, searchInput) => {
         params: {
           searchInput: searchInput,
         },
+      
+      headers: {
+        'Content-Type': 'application/json',
       },
-      config
+    },
     );
     history.push('/searchOverview', res.data);
   } catch (err) {
