@@ -7,10 +7,19 @@ import Paper from '@material-ui/core/Paper';
 import Button from '@material-ui/core/Button';
 import Grid from '@material-ui/core/Grid';
 import { downloadPDF } from "./createPDF.js"
+import { makeStyles } from '@material-ui/core/styles';
 
+const useStyles = makeStyles((theme) => ({
+
+    button: {
+        padding: 8,
+        width: 100,
+    },
+}));
 
 const MyEditor = () => {
     let editor = null
+    const classes = useStyles();
     const onSave = async () => {
         // https://editorjs.io/saving-data
         try {
@@ -35,23 +44,23 @@ const MyEditor = () => {
                     <Grid item xs={2} >
                         <Button
                             variant="contained"
-                            style={{ width: '130px' }}
+                            className={classes.button}
                             color={"primary"}
-                            startIcon={<AddIcon />}
                             onClick={openEditor}>
-                            {"New Note"}
+                            <AddIcon />
                         </Button>
                         <br />
                         <br />
                         <Button
                             variant="contained"
-                            style={{ width: '130px' }}
+                            style={{ width: '100px', padding: '8px' }}
                             color={"primary"}
-                            startIcon={<CloudDownloadIcon />}
+                            // startIcon={}
                             onClick={onSave}
                         >
-                            {"Download"}
+                            <CloudDownloadIcon />
                         </Button>
+
                     </Grid>
                     <Grid item xs={5}>
                         <Paper elevation={20} style={{ width: '794px', 'padding-top': '20px' }}>
