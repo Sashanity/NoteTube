@@ -79,62 +79,62 @@ exports.upload = (req, res) => {
       const timestamp = admin.firestore.Timestamp.fromDate(new Date());
       const filename = timestamp + upload.name;
       let collection = 'notes';
-      console.log('========================>', returnval.publicFile);
-      returnval.publicFile.toLowerCase() === 'true'
+      console.log('========================>', returnval.public);
+      returnval.public.toLowerCase() === 'true'
         ? (collection = 'publicNotes')
         : (collection = 'notes');
       bucket
         .upload(file, { destination: `notes/${userID}/${filename}` }) //Uploads the file to the storage bucket
         .then((data) => {
+          console.log('adding to files')
 
-        db.collection('users') //Get the username from Firestore
+          db.collection('users') //Get the username from Firestore
             .where('userId', '==', userID)
             .get()
-            .then(function(snapshot){ 
-                let owner = "";
-                if (snapshot.empty){ //If the user does not exist
-                    return res.status(400).json({Status: "User does not exist"});
-                }
-                snapshot.forEach(function(doc){ //Save the username to a variable
-                    owner = doc.data().username;
-                });
-                
-                
-                const newNote = {
-                    //Create the note object that will be uploaded to Firestore
-                    name: returnval.name,
-                    filename: filename,
-                    subject: returnval.subject,
-                    course: returnval.course,
-                    term: returnval.term,
-                    instructor: returnval.instructor,
-                    owner: owner,
-                    public: returnval.public,
-                    uploader: userID,
-                    timestamp: timestamp,
-                };
-                db.collection(collection)
+            .then(function (snapshot) {
+              let owner = "";
+              if (snapshot.empty) { //If the user does not exist
+                return res.status(400).json({ Status: "User does not exist" });
+              }
+              snapshot.forEach(function (doc) { //Save the username to a variable
+                owner = doc.data().username;
+              });
+
+              const newNote = {
+                //Create the note object that will be uploaded to Firestore
+                name: returnval.name,
+                filename: filename,
+                subject: returnval.subject,
+                course: returnval.course,
+                term: returnval.term,
+                instructor: returnval.instructor,
+                owner: owner,
+                public: returnval.public,
+                uploader: userID,
+                timestamp: timestamp,
+              };
+              db.collection(collection)
                 .add(newNote)
                 .then(function (uploadDocRef) {
-                    //
+                  //
 
 
-                    fs.unlinkSync(file); //Unlinks and deletes the file
-                    return res.status(200).json({
+                  fs.unlinkSync(file); //Unlinks and deletes the file
+                  return res.status(200).json({
                     Status: 'Uploaded ',
                     collection: collection,
                     noteID: uploadDocRef.id,
                     field: uploadDocRef.data(),
-                    }); //Send the successful response back
+                  }); //Send the successful response back
                 })
                 .catch(function (error) {
-                    return res.status(500).json({ Status: 'Error Uploading' }); //Problem adding the note to the Firestore
+                  return res.status(500).json({ Status: 'Error Uploading' }); //Problem adding the note to the Firestore
                 });
             })
-            .catch(function(error){
-                return res.status(500).json({Status: "Error getting username"});
+            .catch(function (error) {
+              return res.status(500).json({ Status: "Error getting username" });
             })
-         
+
         })
         .catch((err) => {
           fs.unlinkSync(file); //Unlinks and deletes the file
@@ -329,18 +329,18 @@ exports.userList = (req, res) => {
  ****noteID: The Firestore ID of the new note
  ***/
 exports.editNote = (req, res) => {
-    const token = req.query.token; //Get the token from the request
-    const noteID = req.query.noteid; //Get the note ID from the request
-    const public = req.query.public;
-    let collection;
-    public.toLowerCase() === 'true'
-        ? (collection = 'publicNotes')
-        : (collection = 'notes');
-    const newPublic = req.body.public;
-    let newCollection;
-    newPublic.toLowerCase() === 'true'
-        ? (newCollection = 'publicNotes')
-        : (newCollection = 'notes');
+  const token = req.query.token; //Get the token from the request
+  const noteID = req.query.noteid; //Get the note ID from the request
+  const public = req.query.public;
+  let collection;
+  public.toLowerCase() === 'true'
+    ? (collection = 'publicNotes')
+    : (collection = 'notes');
+  const newPublic = req.body.public;
+  let newCollection;
+  newPublic.toLowerCase() === 'true'
+    ? (newCollection = 'publicNotes')
+    : (newCollection = 'notes');
 
   if (token && noteID) {
     //Make sure we got both the note ID and the token
@@ -359,7 +359,7 @@ exports.editNote = (req, res) => {
               //If the note exists
               if (doc.data().uploader === userID) {
                 //Make sure the user editing the note is the same user who uploaded it
-                
+
                 const newNote = {
                   //Create a new note to replace the old note
                   name: req.body.name,
@@ -373,52 +373,52 @@ exports.editNote = (req, res) => {
                   uploader: doc.data().uploader,
                   timestamp: doc.data().timestamp,
                 };
-                if (collection === newCollection){
-                    db.collection(collection)
+                if (collection === newCollection) {
+                  db.collection(collection)
                     .doc(noteID)
                     .update(newNote)
                     .then(function (updatedDoc) {
-                        //Update the document
-                        return res
+                      //Update the document
+                      return res
                         .status(200)
                         .json({ Status: 'Successful', noteID: noteID });
                     })
                     .catch(function (error) {
-                        //Error: Issue updating the document
-                        return res
+                      //Error: Issue updating the document
+                      return res
                         .status(500)
                         .json({ Status: 'Error Updating Doc' });
                     });
                 }
-                else{
-                    db.collection(newCollection)
+                else {
+                  db.collection(newCollection)
                     .doc(noteID)
                     .create(newNote)
                     .then(function (updatedDoc) {
-                        //Update the document
-                        db.collection(collection)
+                      //Update the document
+                      db.collection(collection)
                         .doc(noteID)
                         .delete()
-                        .then(function(){
-                            return res
+                        .then(function () {
+                          return res
                             .status(200)
                             .json({ Status: 'Successful', noteID: noteID });
                         })
-                        .catch(function(error){
-                            return res
+                        .catch(function (error) {
+                          return res
                             .status(500)
                             .json({ Status: 'Error Changing Public' });
                         })
-                        
+
                     })
                     .catch(function (error) {
-                        //Error: Issue updating the document
-                        return res
+                      //Error: Issue updating the document
+                      return res
                         .status(500)
                         .json({ Status: 'Error Updating Doc', error: error });
                     });
                 }
-                
+
               } else {
                 //Error: User is not the original owner
                 return res.status(400).json({ Status: 'Not Authorized' });
