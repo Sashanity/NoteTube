@@ -10,7 +10,7 @@ import Home from './components/pages/Home';
 import { UserContext } from './UserContext';
 import AuthenticatedRoute from './components/routes/AuthenticatedRoute';
 import RedirectOnceLoggedIn from './components/routes/RedirectOnceLoggedIn';
-import PersonalSpace from './components/personalSpace/personalSpace';
+import PersonalSpace from './components/pages/personalSpace';
 
 import MyEditor from './components/editor/editor';
 import { verifyToken } from './actions/auth';

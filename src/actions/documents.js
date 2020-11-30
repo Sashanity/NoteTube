@@ -5,27 +5,38 @@ const config = {
   },
 };
 
-export const upload = (
-  checkedA,
+export const upload = async (
+  checked,
   name,
   course,
   instructor,
   term,
   subject,
-  files
+  fileState
 ) => {
-  let data = {
-    checkedA,
-    name,
-    course,
-    instructor,
-    term,
-    subject,
-    files,
-  };
+  let formData = new FormData();
+  let publicFile;
+  if (checked) {
+    publicFile = 'true';
+  } else {
+    publicFile = 'false';
+  }
+  formData.append('publicFile', publicFile);
+  formData.append('name', name);
+  formData.append('course', course);
+  formData.append('instructor', instructor);
+  formData.append('term', term);
+  formData.append('subject', subject);
+  formData.append('file', fileState);
 
+  let token = localStorage.getItem('token');
   try {
-    axios.post('/post/upload', data);
+    // axios.post('/upload', data);
+    await axios.post('/upload', {
+      data: formData,
+      headers: { 'Content-Type': 'multipart/form-data' },
+      params: { token },
+    });
   } catch (err) {
     console.log(err);
   }
