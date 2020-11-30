@@ -5,42 +5,82 @@ const config = {
   },
 };
 
-export const upload = async (
-  checked,
-  name,
-  course,
-  instructor,
-  term,
-  subject,
-  fileState
-) => {
-  let formData = new FormData();
+// export const upload = async (
+//   checked,
+//   name,
+//   course,
+//   instructor,
+//   term,
+//   subject,
+//   fileState
+// ) => {
+//   let formData = new FormData();
+//   let publicFile;
+//   if (checked) {
+//     publicFile = 'true';
+//   } else {
+//     publicFile = 'false';
+//   }
+//   formData.append('publicFile', publicFile);
+//   formData.append('name', name);
+//   formData.append('course', course);
+//   formData.append('instructor', instructor);
+//   formData.append('term', term);
+//   formData.append('subject', subject);
+//   formData.append('file', fileState);
+
+//   let token = localStorage.getItem('token');
+//   try {
+//     // axios.post('/upload', data);
+//     await axios.post('/upload', {
+//       data: formData,
+//       headers: { 'Content-Type': 'multipart/form-data' },
+//       params: { token },
+//     });
+//   } catch (err) {
+//     console.log(err);
+//   }
+// };
+
+
+
+export const upload = async (checked, name, course, instructor, term, subject, fileState) => {
+  console.log('IN UPLOAD FUNCITON')
+  let token = localStorage.getItem('token')
   let publicFile;
   if (checked) {
     publicFile = 'true';
   } else {
     publicFile = 'false';
   }
-  formData.append('publicFile', publicFile);
-  formData.append('name', name);
-  formData.append('course', course);
-  formData.append('instructor', instructor);
-  formData.append('term', term);
-  formData.append('subject', subject);
-  formData.append('file', fileState);
-
-  let token = localStorage.getItem('token');
   try {
-    // axios.post('/upload', data);
-    await axios.post('/upload', {
-      data: formData,
-      headers: { 'Content-Type': 'multipart/form-data' },
-      params: { token },
-    });
+    axios.post('/upload', {
+      headers: {
+        'Connection': 'keep-alive',
+        'Content-Type': 'multipart/form-data'
+        // 'Content-Type': 'application/json;charset=UTF-8',
+      },
+      formData: {
+        file: {
+          value: fileState,
+          // options: {
+          //   knownLength: headers['content-length']
+          // }
+        },
+        course: { value: course },
+        instructor: { value: instructor },
+        term: { value: term },
+        subject: { value: subject },
+        name: { value: name },
+        publicFile: { value: publicFile }
+      }
+    })
+
   } catch (err) {
-    console.log(err);
+    console.log(err)
   }
-};
+}
+
 
 export const search = async (history, searchInput) => {
   try {

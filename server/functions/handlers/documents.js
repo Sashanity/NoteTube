@@ -37,7 +37,10 @@ const { response } = require('express');
  *****uploader: The user ID of the uploader
  ***/
 exports.upload = (req, res) => {
+  console.log('REQ.HEADERS:', req.headers)
   const busboy = new Busboy({ headers: req.headers }); //Busboy is used to parse the form-data
+  console.log('BODY', req.body);
+  console.log('FILE', req.file);
   const uploads = {}; //Where the form-data is stored
   const idToken = req.query.token; //The token of the user
   var userID = ''; //The user ID that will be received from the user
