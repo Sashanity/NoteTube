@@ -9,7 +9,7 @@ const {
   editNote,
   deleteNote,
   favoriteNote,
-  unFavoriteNote,
+  unfavoriteNote,
   hasFavoritedNote,
   favoriteList,
 } = require('./handlers/documents');
