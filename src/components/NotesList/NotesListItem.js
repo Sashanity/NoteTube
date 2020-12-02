@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import { makeStyles } from '@material-ui/core/styles';
 import clsx from 'clsx';
 import Card from '@material-ui/core/Card';
@@ -18,7 +18,8 @@ import ArrowDownwardOutlinedIcon from '@material-ui/icons/ArrowDownwardOutlined'
 import OpenInNewIcon from '@material-ui/icons/OpenInNew';
 import Badge from '@material-ui/core/Badge';
 import PublicIcon from '@material-ui/icons/Public';
-
+import FavoriteBorderIcon from '@material-ui/icons/FavoriteBorder';
+import FavoriteIcon from '@material-ui/icons/Favorite';
 import Img1 from '../../img/notes.png';
 import Img2 from '../../img/book-img.png';
 import './NotesListItem.css';
@@ -26,7 +27,11 @@ import ListofItems from './listofItems';
 import ClassNotes from './ClassNotes';
 import { notePreview } from '../../actions/documents';
 import { useHistory } from 'react-router-dom';
-
+import {
+  addFavorite,
+  removeFavorite,
+  checkFavorite,
+} from '../../actions/favorites';
 const useStyles = makeStyles((theme) => ({
   root: {
     // maxWidth: 345,
@@ -69,6 +74,7 @@ export default function NotesListItem(props) {
   const classes = useStyles();
   const [expanded, setExpanded] = React.useState(false);
   const history = useHistory();
+  const [favorite, setFavorite] = useState(false);
   const handleExpandClick = () => {
     setExpanded(!expanded);
   };
@@ -77,6 +83,26 @@ export default function NotesListItem(props) {
     console.log('HANDLING PREVIEW, NOTEID', public_status);
     notePreview(history, noteID, public_status);
   };
+
+  const handleFavorite = async () => {
+    let token = localStorage.getItem('token');
+    let noteid = noteID;
+    if (!favorite) {
+      await addFavorite(noteid, token, public_status);
+    } else {
+      await removeFavorite(noteid, token, public_status);
+    }
+    setFavorite(!favorite);
+  };
+  useEffect(() => {
+    let token = localStorage.getItem('token');
+    let noteid = noteID;
+    checkFavorite(noteid, token, public_status).then((res) => {
+      if (res.data.Favorited === true) {
+        setFavorite(true);
+      }
+    });
+  }, []);
   return (
     <div className='PublicNotes'>
       <div className='NotesListItem'>
@@ -133,6 +159,16 @@ export default function NotesListItem(props) {
                 }}
               >
                 <OpenInNewIcon />
+              </IconButton>
+              <IconButton
+                aria-label='OpenInNewTab'
+                color={'primary'}
+                onClick={(e) => {
+                  e.preventDefault();
+                  handleFavorite();
+                }}
+              >
+                {favorite ? <FavoriteIcon /> : <FavoriteBorderIcon />}
               </IconButton>
               <IconButton
                 className={clsx(classes.expand, {
