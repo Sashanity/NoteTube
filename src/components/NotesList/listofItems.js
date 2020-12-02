@@ -14,7 +14,7 @@ import DialogContent from '@material-ui/core/DialogContent';
 import DialogContentText from '@material-ui/core/DialogContentText';
 import DialogTitle from '@material-ui/core/DialogTitle';
 import { deleteNoteDB } from '../../actions/documents';
-
+import { UploadPopup } from '../popups/UploadPopup';
 const useStyles = makeStyles((theme) => ({
   root: {
     width: '100%',
@@ -69,7 +69,7 @@ export default function SelectedListItem(props) {
         <ListItem
           onClick={deleteNote}
           button
-        // selected={selectedIndex === 1}
+          // selected={selectedIndex === 1}
         >
           {/* Dialogbox */}
           <Dialog
@@ -83,7 +83,7 @@ export default function SelectedListItem(props) {
             </DialogTitle>
             <DialogContent>
               <DialogContentText id='alert-dialog-description'>
-                Do you want to Delete ClassNotes?
+                Do you want to Delete Class Notes?
               </DialogContentText>
             </DialogContent>
             <DialogActions>
@@ -94,6 +94,7 @@ export default function SelectedListItem(props) {
                 onClick={(e) => {
                   e.preventDefault();
                   handleDeleteDB(noteID, setNotes, public_status);
+                  handleClose();
                 }}
                 color='primary'
                 autoFocus
