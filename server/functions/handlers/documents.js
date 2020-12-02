@@ -486,7 +486,11 @@ exports.deleteNote = (req, res) => {
                 console.log('deleting from storage')
                 noteRef.delete() // delete from notes/publicNotes
                   .then(function () {
+                    // this never been printed
                     console.log('Deleted', noteID)
+
+                    // never executes this 
+
                     //========================================================================
                     // db.collection('favorites').where('noteid', '==', noteID).get()
                     //   .then(function (qS) {
