@@ -3,12 +3,29 @@ import './NotesListItem.css';
 import NotesListItem from './NotesListItem';
 import { getUserNotes } from '../../actions/documents';
 import MoodIcon from '@material-ui/icons/Mood';
+import { getFavorites } from '../../actions/favorites';
 
-const NotesList = () => {
+export default function NotesList(props) {
+
+  let val
+  const { notelistName } = props
   const [notes, setNotes] = useState();
   const returningNotes = async () => {
     try {
-      let notes = await getUserNotes();
+      notelistName === 'userNotes' ? console.log('CALL USERNOTES') : console.log('CALL FAVORITES')
+      let notes
+
+      if (notelistName === 'userNotes') {
+
+        notes = await getUserNotes()
+        val = 'notes'
+
+      }
+      else if (notelistName === 'userFavorites') {
+        notes = await getFavorites();
+        val = 'favorites'
+      }
+      console.log('NOTES LIST NAME=', notelistName)
       console.log('RECEIVED LIST OF NOTES:', notes);
       setNotes(
         notes.map((item) => (
@@ -42,11 +59,12 @@ const NotesList = () => {
           notes
         ) : (
             <p>
-              You do not have any notes yet <MoodIcon></MoodIcon>
+
+              You do not have any  {notelistName === 'userNotes' ? 'notes' : 'favorites'} yet <MoodIcon></MoodIcon>
             </p>
           )}
       </div>
-    </div>
+    </div >
   );
 };
-export default NotesList;
+// export default NotesList;

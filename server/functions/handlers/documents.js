@@ -484,19 +484,34 @@ exports.deleteNote = (req, res) => {
           //If the note data was found (I.E. the note ID was correct)
           console.log('doc found');
           noteData = doc.data(); //Put the data in a variable
-          if (noteData.uploader === userID) {
-            //Verifies that the user is allowed to delete the note
+          if (noteData.uploader === userID) {//Verifies that the user is allowed to delete the note
+            //delete file from storage
             bucket
               .file(`notes/${noteData.uploader}/${noteData.filename}`)
               .delete()
               .then(function () {
-                noteRef
-                  .delete()
+                // delete from notes/publicNotes
+                noteRef.delete()
                   .then(function () {
-                    console.log('DELETED');
-                    return res
-                      .status(200)
-                      .json({ Status: 'Delete Successful' });
+                    console.log('DELETED')
+                    // // check if notes was in favorites
+                    // db.collection('favorites').where('noteid', '==', noteID).get()
+                    //   .then(qS => {
+                    //     console.log('checking favorites')
+                    //     if (qS.empty) {
+                    //       console.log('not is not anybodies favorite')
+                    //       return res.status(200).json({ Status: 'Delete Successful' });
+                    //     }
+                    //     else {
+                    //       console.log('deleting from favorites')
+                    //       qS.forEach(doc => {
+                    //         doc.ref.delete()
+                    //         return res.status(200).json({ Status: 'Delete Successful' });
+                    //       })
+                    //     }
+                    //   })
+
+                    return res.status(200).json({ Status: 'Delete Successful' });
                   })
                   .catch(function (error) {
                     return res.status(500).json({ Status: error });
@@ -519,3 +534,349 @@ exports.deleteNote = (req, res) => {
     return res.status(400).json({ Error: 'No Token was Sent' });
   }
 };
+
+
+/***
+ *Favorite Note
+ **Saves the users favorites to Firestore
+ **PARAMS:
+ ***token: The authentication token of the user
+ ***noteid: The ID  of the note the user wants to favorite
+ ***public: If the note is public or not
+ **RETURNS:
+ ***Status: The status of the request. Will be an error if the note was not favorited correctly, either due to server error or due to user error
+ ***/
+exports.favoriteNote = (req, res) => {
+  const favCollection = db.collection("favorites");
+  const public = req.query.public;
+  let collection;
+  public.toLowerCase() === 'true'
+    ? (collection = 'publicNotes')
+    : (collection = 'notes');
+  if (req.query.token && req.query.noteid) { //Checks to make sure the note id and token are in the request params.
+    admin.auth().verifyIdToken(req.query.token).then(function (decodedToken) { //Admin decodes the token
+      const userID = decodedToken.uid; //Get the user id
+      const noteID = req.query.noteid;
+      db.collection(collection).doc(noteID).get().then(function (doc) {
+        if (doc.exists) { //If the note id is real
+          favCollection.where("noteid", "==", noteID).where("userid", "==", userID).get().then(function (querySnapshot) {
+            if (querySnapshot.empty) {
+              const newFav = { //Create a new favorite object to add to Firestore with the user id, note id, and current datetime
+                userid: userID,
+                noteid: noteID,
+                timestamp: admin.firestore.Timestamp.fromDate(new Date()),
+                public: public
+              }
+              favCollection.add(newFav).then(function (favRef) { //Adds the favorite to firestore and returns a successful response
+                return res.status(200).json({ Status: "Successful" });
+              })
+                .catch(function (error) { //Returns server error if fails during favorite upload
+                  return res.status(500).json({ Status: error });
+                });
+            }
+            else { //Returns user error if the user already favorited the note
+              return res.status(400).json({ Status: "User already favoirted the note" })
+            }
+          })
+            .catch(function (error) { //Returns server error if issue looking at the favorites
+              return res.status(500).json({ Status: error2 });
+            });
+
+        }
+        else { //Returns user error if the note doesn't exist
+          return res.status(400).json({ Status: "Note not found" });
+        }
+      })
+
+        .catch(function (error) { //Returns server error if fails during retrival of note
+          return res.status(500).json({ Status: error });
+        })
+
+    })
+      .catch(function (error) { //Returns user error if fails during verification
+        return res.status(400).json({ Status: error });
+      });
+  }
+  else { //Returns user error if either the token or note are not there
+    return res.status(400).json({ Status: "Need both the token and the ID of the note" });
+  }
+}
+
+/***
+ *Unfavorite Note
+ **Remvoes the specified note from the users favorites in Firestore
+ **PARAMS:
+ ***token: The authentication token of the user
+ ***noteid: The ID  of the note the user wants to favorite
+ ***public: If the note is public or not
+ **RETURNS:
+ ***Status: The status of the request. Will be an error if the note was not favorited correctly, either due to server error or due to user error
+ ***/
+exports.unfavoriteNote = (req, res) => {
+  const favCollection = db.collection("favorites");
+  const public = req.query.public;
+  let collection;
+  public.toLowerCase() === 'true'
+    ? (collection = 'publicNotes')
+    : (collection = 'notes');
+  if (req.query.token && req.query.noteid) { //Checks to make sure the note id and token are in the request params.
+    admin.auth().verifyIdToken(req.query.token).then(function (decodedToken) { //Admin decodes the token
+      const userID = decodedToken.uid; //Get the user id
+      const noteID = req.query.noteid; //Get the note id
+      db.collection(collection).doc(noteID).get().then(function (doc) {
+        if (doc.exists) { //If the note id is real
+          favCollection.where("noteid", "==", noteID).where("userid", "==", userID).get().then(function (querySnapshot) {
+            querySnapshot.forEach(function (doc) {
+              doc.ref.delete();
+            })
+            return res.status(200).json({ Status: "Successful" });
+          })
+            .catch(function (error) { //Returns server error if issue looking at the favorites
+              return res.status(500).json({ Status: error });
+            });
+
+        }
+        else { //Returns user error if the note doesn't exist
+          return res.status(400).json({ Status: "Note not found" });
+        }
+      })
+
+        .catch(function (error) { //Returns server error if fails during retrival of note
+          return res.status(500).json({ Status: error });
+        })
+
+    })
+      .catch(function (error) { //Returns user error if fails during verification
+        return res.status(400).json({ Status: error });
+      });
+  }
+  else { //Returns user error if either the token or note are not there
+    return res.status(400).json({ Status: "Need both the token and the ID of the note" });
+  }
+}
+
+/***
+ *Has Favorited Note
+ **Checks to see if the note if a part of the users favorites in Firestore
+ **PARAMS:
+ ***token: The authentication token of the user
+ ***noteid: The ID  of the note the user wants to favorite
+ ***public: If the note is public or not
+ **RETURNS:
+ ***Status: The status of the request. Will be an error if the note was not favorited correctly, either due to server error or due to user error
+ ***Favorited: If Status = "Successful", will return whether the user has favorited the note or not
+ ***/
+exports.hasFavoritedNote = (req, res) => {
+  const favCollection = db.collection("favorites");
+  const public = req.query.public;
+  let collection;
+  public.toLowerCase() === 'true'
+    ? (collection = 'publicNotes')
+    : (collection = 'notes');
+  if (req.query.token && req.query.noteid) { //Checks to make sure the note id and token are in the request params.
+    admin.auth().verifyIdToken(req.query.token).then(function (decodedToken) { //Admin decodes the token
+      const userID = decodedToken.uid; //Get the user id
+      const noteID = req.query.noteid;
+      db.collection(collection).doc(noteID).get().then(function (doc) {
+        if (doc.exists) { //If the note id is real
+          favCollection.where("noteid", "==", noteID).where("userid", "==", userID).get().then(function (querySnapshot) {
+            if (querySnapshot.empty) {
+              return res.status(200).json({ Status: "Successful", Favorited: false });
+            }
+            else { //Returns user error if the user already favorited the note
+              return res.status(200).json({ Status: "Successful", Favorited: true });
+            }
+          })
+            .catch(function (error) { //Returns server error if issue looking at the favorites
+              return res.status(500).json({ Status: error });
+            });
+
+        }
+        else { //Returns user error if the note doesn't exist
+          return res.status(400).json({ Status: "Note not found" });
+        }
+      })
+
+        .catch(function (error) { //Returns server error if fails during retrival of note
+          return res.status(500).json({ Status: "error" });
+        })
+
+    })
+      .catch(function (error) { //Returns user error if fails during verification
+        return res.status(400).json({ Status: error });
+      });
+  }
+  else { //Returns user error if either the token or note are not there
+    return res.status(400).json({ Status: "Need both the token and the ID of the note" });
+  }
+}
+
+/***
+ *Favorites List
+ **Returns a list of notes the user has favorited
+ **PARAMS:
+ ***token: The authentication token of the user
+ **RETURNS:
+ ***Status: The status of the request.
+ ***List: If Status = "Successful", will return whether the list of notes the user has favorited
+ ***/
+
+exports.favoriteList = (req, res) => {
+  console.log('hi from favoriteList')
+  const favCollection = db.collection("favorites");
+  const noteCollection = db.collection("notes");
+  const publicCollection = db.collection("publicNotes");
+  let testCollection
+  console.log('res.query.public_status', req.query.public_status)
+  req.query.public_status === 'true' ? testCollection = publicCollection : testCollection = noteCollection
+  var retList = [];
+  var idArray = [];
+  if (req.query.token) { //Checks to make sure the note id and token are in the request params.
+    admin.auth().verifyIdToken(req.query.token).then(function (decodedToken) { //Admin decodes the token
+      const userID = decodedToken.uid; //Get the user id
+      console.log('userID:', userID)
+
+      favCollection.where("userid", "==", userID).where('public', '==', req.query.public_status).get().then(function (querySnapshot) {
+        if (querySnapshot.empty) {
+          console.log('snapshot is empty')
+          return res.status(200).json({ Status: "Successful", List: [] });
+        }
+        else {
+          console.log('snapshot is NOT empty')
+          querySnapshot.forEach(function (doc) { //Loop through each favorite object and save the note ID
+            idArray.push(doc.data().noteid);
+          })
+          console.log('idArray', idArray)
+
+          var promises = idArray.map(function (noteID) {
+            return testCollection.doc(noteID).get()
+          }); //Use this to execute multiple queries
+
+
+          Promise.all(promises).then(function (snapshots) { //Loop through each get query
+            snapshots.forEach(function (noteDoc) { //Loop through each result
+              var addDoc = noteDoc.data(); //Get the data
+              // typeof addDoc === 'undefined' ? console.log('need to look in public notes') : ''
+
+              addDoc['noteID'] = noteDoc.id; //Add the note ID to the object
+              retList.push(addDoc); //Push the object to the returned array              
+            })
+            console.log('sending favorits list2:', retList)
+            return res.status(200).json({ Status: "Successful", List: retList });
+          })
+            .catch(function (error) { //Error executing the promises
+              return res.status(500).json({ Status: error });
+            })
+
+        }
+      })
+        .catch(function (error) { //Returns server error if issue looking at the favorites
+          return res.status(500).json({ Status: error });
+        })
+
+    })
+
+      .catch(function (error) {
+        return res.status(400).json({ Status: "Need Valid Token" });
+      })
+  }
+  else { //Returns user error if either the token or note are not there
+    return res.status(400).json({ Status: "Need a Token" });
+  }
+
+}
+
+
+// exports.favoriteList = (req, res) => {
+//   console.log('hi from favoriteList')
+//   const favCollection = db.collection("favorites");
+//   const noteCollection = db.collection("notes");
+//   const publicCollection = db.collection("publicNotes");
+//   var retList = [];
+//   var idArray = [];
+//   if (req.query.token) { //Checks to make sure the note id and token are in the request params.
+//     admin.auth().verifyIdToken(req.query.token)
+//       .then(function (decodedToken) { //Admin decodes the token
+//         const userID = decodedToken.uid; //Get the user id
+//         console.log('userID:', userID)
+
+
+//         // get snapshot for a user
+//         favCollection.where("userid", "==", userID).get()
+//           .then(function (querySnapshot) {
+//             if (querySnapshot.empty) {
+//               console.log('snapshot is empty')
+//               return res.status(200).json({ Status: "Successful", List: [] });
+//             }
+//             else {
+//               const returnPub = async () => {
+//                 let retPub = await getListOfFavorites(userID, 'true', publicCollection)
+//                 console.log(retPub)
+//               }
+//               // console.log('snapshot is not empty')
+//               // getListOfFavorites(userID, public, publicCollection)
+//               //   .then((retList) => {
+//               //     console.log('returning', retList)
+//               //     return res.status(200).json({ Status: "Successful", List: retList });
+//               //   })
+//             }
+//           })
+//           .catch(function (error) { //Returns server error if issue looking at the favorites
+//             return res.status(500).json({ Status: error });
+//           })
+
+//       })
+
+//       .catch(function (error) {
+//         return res.status(400).json({ Status: "Need Valid Token" });
+//       })
+//   }
+//   else { //Returns user error if either the token or note are not there
+//     return res.status(400).json({ Status: "Need a Token" });
+//   }
+
+// }
+
+// const getListOfFavorites = async (userID, public, collection) => {
+//   console.log('helper is called')
+//   const favCollection = db.collection("favorites");
+//   favCollection.where("userid", "==", userID).where('public', '==', public).get()
+//     .then(function (querySnapshot) {
+//       if (querySnapshot.empty) {
+//         console.log('snapshot is empty')
+//         return res.status(200).json({ Status: "Successful", List: [] });
+//       }
+//       else {
+//         console.log('snapshot is NOT empty')
+//         querySnapshot.forEach(function (doc) { //Loop through each favorite object and save the note ID
+//           idArray.push(doc.data().noteid);
+//         })
+//         console.log('idArray', idArray)
+//         let promises = idArray.map(function (noteID) {
+//           console.log('getting public promises')
+//           return collection.doc(noteID).get()
+//         });
+//         Promise.all(promises).then(function (snapshots) { //Loop through each get query
+//           snapshots.forEach(function (noteDoc) { //Loop through each result
+//             // console.log('noteDoc', noteDoc)
+//             console.log('GETTING DATA')
+//             var addDoc = noteDoc.data(); //Get the data
+//             console.log('addDoc', addDoc)
+//             console.log('idArray', idArray)
+//             typeof addDoc === 'undefined' ? console.log('need to look in public notes') : ''
+
+//             addDoc['noteID'] = noteDoc.id; //Add the note ID to the object
+//             retList.push(addDoc); //Push the object to the returned array              
+//           })
+//           console.log('sending favorits list2:', retList)
+//           //return res.status(200).json({ Status: "Successful", List: retList });
+//           return retList
+//         })
+//           .catch(function (error) { //Error executing the promises
+//             // return res.status(500).json({ Status: error });
+//             return []
+//           })
+//       }
+//     })
+
+// }

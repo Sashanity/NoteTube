@@ -8,6 +8,10 @@ const {
   userList,
   editNote,
   deleteNote,
+  favoriteNote,
+  unfavoriteNote,
+  hasFavoritedNote,
+  favoriteList,
 } = require('./handlers/documents');
 
 const cors = require('cors');
@@ -21,5 +25,9 @@ app.get('/verifyToken', verifyToken);
 app.get('/userList', userList);
 app.put('/editNote', editNote);
 app.delete('/deleteNote', deleteNote);
+app.post('/favoriteNote', favoriteNote);
+app.delete('/unfavoriteNote', unfavoriteNote);
+app.get('/hasFavoritedNote', hasFavoritedNote);
+app.get('/favoriteList', favoriteList);
 
 exports.api = functions.https.onRequest(app);
