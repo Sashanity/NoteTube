@@ -118,18 +118,22 @@ exports.upload = (req, res) => {
                 .then(function (uploadDocRef) {
                   //
 
-
-                  fs.unlinkSync(file); //Unlinks and deletes the file
+                  db.collection(collection).doc(uploadDocRef.id).get().then(function(doc){
+                    fs.unlinkSync(file); //Unlinks and deletes the file
                   return res.status(200).json({
                     Status: 'Uploaded ',
                     collection: collection,
                     noteID: uploadDocRef.id,
-                    field: returnval,
+                    doc: doc.data(),
                   }); //Send the successful response back
+                }).catch(function (error) {
+                  return res.status(500).json({ Status: 'Error Receiving' }); //Problem adding the note to the Firestore
                 })
-                .catch(function (error) {
+                
+                }).catch(function (error) {
                   return res.status(500).json({ Status: 'Error Uploading' }); //Problem adding the note to the Firestore
                 });
+                  
             })
             .catch(function (error) {
               return res.status(500).json({ Status: "Error getting username" });
