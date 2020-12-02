@@ -65,6 +65,7 @@ export const getUserNotes = async () => {
   console.log(token);
   try {
     let res = await axios.get('/userList', { params: { token } });
+    console.log(res.data.retList);
     return res.data.retList;
   } catch (err) {
     console.log('Error: ', err);
@@ -79,7 +80,7 @@ export const deleteNoteDB = async (noteid, public_status) => {
     const res = await axios.delete('/deleteNote', {
       params: { noteid, token, public_status },
     });
-    console.log('DELETE STATUS:', res.status)
+    console.log('DELETE STATUS:', res.status);
     return res.status;
   } catch (err) {
     console.log(err);

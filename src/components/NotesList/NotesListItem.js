@@ -68,7 +68,7 @@ export default function NotesListItem(props) {
     instructor,
     subject,
     setNotes,
-    uploader
+    uploader,
   } = props;
   console.log('noteID:', noteID);
 
@@ -106,22 +106,21 @@ export default function NotesListItem(props) {
   }, []);
 
   function showMenu(props) {
-    const { uploader, noteID, public_status, setNotes } = props
-    console.log('UPLOADER=', localStorage.getItem('user_id'))
-    console.log('uploader=', uploader)
+    console.log('UPLOADER=', localStorage.getItem('user_id'));
+    console.log('uploader=', uploader);
     if (uploader === localStorage.getItem('user_id')) {
-      console.log('DROPPIN, RETURN CLASSNOTES ONJ')
-      return <ClassNotes
-        noteID={noteID}
-        public_status={public_status}
-        setNotes={setNotes}
-      />
+      console.log('DROPPIN, RETURN CLASSNOTES ONJ');
+      return (
+        <ClassNotes
+          noteID={noteID}
+          public_status={public_status}
+          setNotes={setNotes}
+        />
+      );
+    } else {
+      console.log('userid not equal');
+      return '';
     }
-    else {
-      console.log('userid not equal')
-      return ''
-    }
-
   }
 
   return (
