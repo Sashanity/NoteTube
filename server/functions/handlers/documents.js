@@ -124,7 +124,7 @@ exports.upload = (req, res) => {
                     Status: 'Uploaded ',
                     collection: collection,
                     noteID: uploadDocRef.id,
-                    field: uploadDocRef.data(),
+                    field: returnval,
                   }); //Send the successful response back
                 })
                 .catch(function (error) {
