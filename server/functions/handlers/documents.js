@@ -278,12 +278,10 @@ exports.userList = (req, res) => {
               addDoc['noteID'] = doc.id; //Add the note ID to the object
               retList.push(addDoc); //Push the object to the returned array
             });
-            console.log('sending list back:', retList);
+            // console.log('sending list back:', retList);
 
             // here check another collection
-            db.collection('publicNotes')
-              .where('uploader', '==', userID)
-              .get()
+            db.collection('publicNotes').where('uploader', '==', userID).get()
               .then((querySnapshot) => {
                 querySnapshot.forEach((doc) => {
                   //Loop through each result
@@ -462,13 +460,11 @@ exports.deleteNote = (req, res) => {
   req.query.public_status.toLowerCase() === 'true'
     ? (collection = 'publicNotes')
     : (collection = 'notes');
-  console.log('deleting from ', collection);
+  // console.log('deleting from ', collection);
   const noteRef = db.collection(collection).doc(req.query.noteid); //Get the reference of the note data from Firestore using the note ID from the request
   var userID = ''; //The ID of the logged in user
   if (req.query.token) {
-    admin
-      .auth()
-      .verifyIdToken(req.query.token)
+    admin.auth().verifyIdToken(req.query.token)
       .then(function (decodedToken) {
         //Authenticate the token
         userID = decodedToken.uid; //Get the uid
@@ -476,8 +472,7 @@ exports.deleteNote = (req, res) => {
       .catch(function (error) {
         return res.status(400).json({ Status: 'Verification Error' }); //Didn't Log in correctly
       });
-    noteRef
-      .get()
+    noteRef.get()
       .then(function (doc) {
         //Get the note data from Firestore
         if (doc.exists) {
@@ -486,31 +481,28 @@ exports.deleteNote = (req, res) => {
           noteData = doc.data(); //Put the data in a variable
           if (noteData.uploader === userID) {//Verifies that the user is allowed to delete the note
             //delete file from storage
-            bucket
-              .file(`notes/${noteData.uploader}/${noteData.filename}`)
-              .delete()
+            bucket.file(`notes/${noteData.uploader}/${noteData.filename}`).delete()
               .then(function () {
-                // delete from notes/publicNotes
-                noteRef.delete()
+                console.log('deleting from storage')
+                noteRef.delete() // delete from notes/publicNotes
                   .then(function () {
-                    console.log('DELETED')
-                    // // check if notes was in favorites
+                    console.log('Deleted', noteID)
+                    //========================================================================
                     // db.collection('favorites').where('noteid', '==', noteID).get()
-                    //   .then(qS => {
-                    //     console.log('checking favorites')
+                    //   .then(function (qS) {
                     //     if (qS.empty) {
-                    //       console.log('not is not anybodies favorite')
+                    //       console.log('notes was not in favorites')
                     //       return res.status(200).json({ Status: 'Delete Successful' });
                     //     }
                     //     else {
-                    //       console.log('deleting from favorites')
+                    //       console.log('need to check favorites')
                     //       qS.forEach(doc => {
                     //         doc.ref.delete()
-                    //         return res.status(200).json({ Status: 'Delete Successful' });
                     //       })
+                    //       return res.status(200).json({ Status: 'Delete Successful' });
                     //     }
                     //   })
-
+                    //========================================================================
                     return res.status(200).json({ Status: 'Delete Successful' });
                   })
                   .catch(function (error) {
