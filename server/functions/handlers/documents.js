@@ -449,87 +449,147 @@ exports.editNote = (req, res) => {
  ***noteid: The Firestore ID of the note the user wants to delete
  **RETURNS:
  ***Status: The status of the request.
- ***/
+//  ***/
+
+
 exports.deleteNote = (req, res) => {
-  const token = req.query.token;
-  console.log('hi from delete');
-  console.log('noteID: ', req.query.noteid);
-  console.log('token:', req.query.token);
-  console.log('public', req.query.public_status);
+  console.log('hi from delete')
   let collection = '';
-  req.query.public_status.toLowerCase() === 'true'
-    ? (collection = 'publicNotes')
-    : (collection = 'notes');
-  // console.log('deleting from ', collection);
+  req.query.public_status.toLowerCase() === 'true' ? (collection = 'publicNotes') : (collection = 'notes');
   const noteRef = db.collection(collection).doc(req.query.noteid); //Get the reference of the note data from Firestore using the note ID from the request
-  var userID = ''; //The ID of the logged in user
+  var userID = ""; //The ID of the logged in user
   if (req.query.token) {
-    admin.auth().verifyIdToken(req.query.token)
-      .then(function (decodedToken) {
-        //Authenticate the token
-        userID = decodedToken.uid; //Get the uid
-      })
-      .catch(function (error) {
-        return res.status(400).json({ Status: 'Verification Error' }); //Didn't Log in correctly
-      });
+    admin.auth().verifyIdToken(req.query.token).then(function (decodedToken) { //Authenticate the token
+      userID = decodedToken.uid; //Get the uid
+    }).catch(function (error) {
+      return res.status(400).json({ Status: "Verification Error" }); //Didn't Log in correctly
+    })
     noteRef.get()
-      .then(function (doc) {
-        //Get the note data from Firestore
-        if (doc.exists) {
-          //If the note data was found (I.E. the note ID was correct)
-          console.log('doc found');
+      .then(function (doc) { //Get the note data from Firestore
+        if (doc.exists) { //If the note data was found (I.E. the note ID was correct)
           noteData = doc.data(); //Put the data in a variable
-          if (noteData.uploader === userID) {//Verifies that the user is allowed to delete the note
-            //delete file from storage
+          if (noteData.uploader === userID) { //Verifies that the user is allowed to delete the note
             bucket.file(`notes/${noteData.uploader}/${noteData.filename}`).delete()
               .then(function () {
-                console.log('deleting from storage')
-                noteRef.delete() // delete from notes/publicNotes
+                console.log('deleted from storage')
+                noteRef.delete()
                   .then(function () {
-                    // this never been printed
-                    console.log('Deleted', noteID)
+                    console.log('deleted from collection')
+                    db.collection('favorites').where('noteid', '==', noteID).get()
+                      .then((qS) => {
+                        console.log('checking favorites')
+                        if (qS.empty) {
+                          console.log('not is not anybodies favorite')
+                          return res.status(200).json({ Status: 'Delete Successful' });
+                        }
+                        else {
+                          console.log('deleting from favorites')
+                          qS.forEach(doc => {
+                            doc.ref.delete()
+                            return res.status(200).json({ Status: 'Delete Successful' });
+                          })
+                        }
+                        return res.status(200).json({ Status: "Delete Successful" });
+                      }).catch(function (error) { return res.status(500).json({ Status: error }) });
 
-                    // never executes this 
-
-                    //========================================================================
-                    // db.collection('favorites').where('noteid', '==', noteID).get()
-                    //   .then(function (qS) {
-                    //     if (qS.empty) {
-                    //       console.log('notes was not in favorites')
-                    //       return res.status(200).json({ Status: 'Delete Successful' });
-                    //     }
-                    //     else {
-                    //       console.log('need to check favorites')
-                    //       qS.forEach(doc => {
-                    //         doc.ref.delete()
-                    //       })
-                    //       return res.status(200).json({ Status: 'Delete Successful' });
-                    //     }
-                    //   })
-                    //========================================================================
-                    return res.status(200).json({ Status: 'Delete Successful' });
-                  })
-                  .catch(function (error) {
-                    return res.status(500).json({ Status: error });
-                  });
-              })
-              .catch(function (error) {
-                return res.status(500).json({ Status: error });
-              });
-          } else {
-            return res.status(404).json({ Status: 'Not Authorized' });
+                  }).catch(function (error) { return res.status(500).json({ Status: error }); });
+              }).catch(function (error) { return res.status(500).json({ Status: error }) });
           }
-        } else {
-          return res.status(404).json({ Status: 'Not Found' });
+          else {
+            return res.status(404).json({ Status: "Not Authorized" });
+          }
         }
-      })
-      .catch(function (error) {
-        return res.status(500).json({ Error: error });
-      });
-  } else {
-    return res.status(400).json({ Error: 'No Token was Sent' });
+        else {
+          return res.status(404).json({ Status: "Not Found" });
+        }
+      }).catch(function (error) { return res.status(500).json({ Error: error }) });
   }
-};
+  else {
+    return res.status(400).json({ Error: "No Token was Sent" });
+  }
+
+}
+// exports.deleteNote = (req, res) => {
+//   const token = req.query.token;
+//   console.log('hi from delete');
+//   console.log('noteID: ', req.query.noteid);
+//   console.log('token:', req.query.token);
+//   console.log('public', req.query.public_status);
+//   let collection = '';
+//   req.query.public_status.toLowerCase() === 'true'
+//     ? (collection = 'publicNotes')
+//     : (collection = 'notes');
+//   // console.log('deleting from ', collection);
+//   const noteRef = db.collection(collection).doc(req.query.noteid); //Get the reference of the note data from Firestore using the note ID from the request
+//   var userID = ''; //The ID of the logged in user
+//   if (req.query.token) {
+//     admin.auth().verifyIdToken(req.query.token)
+//       .then(function (decodedToken) {
+//         //Authenticate the token
+//         userID = decodedToken.uid; //Get the uid
+//       })
+//       .catch(function (error) {
+//         return res.status(400).json({ Status: 'Verification Error' }); //Didn't Log in correctly
+//       });
+//     noteRef.get()
+//       .then(function (doc) {
+//         //Get the note data from Firestore
+//         if (doc.exists) {
+//           //If the note data was found (I.E. the note ID was correct)
+//           console.log('doc found');
+//           noteData = doc.data(); //Put the data in a variable
+//           if (noteData.uploader === userID) {//Verifies that the user is allowed to delete the note
+//             //delete file from storage
+//             bucket.file(`notes/${noteData.uploader}/${noteData.filename}`).delete()
+//               .then(function () {
+//                 console.log('deleting from storage')
+//                 noteRef.delete() // delete from notes/publicNotes
+//                   .then(function () {
+//                     // this never been printed
+//                     console.log('Deleted', noteID)
+
+//                     // never executes this 
+
+//                     //========================================================================
+//                     db.collection('favorites').where('noteid', '==', noteID).get()
+//                       .then(function (qS) {
+//                         if (qS.empty) {
+//                           console.log('notes was not in favorites')
+//                           return res.status(200).json({ Status: 'Delete Successful' });
+//                         }
+//                         else {
+//                           console.log('need to check favorites')
+//                           qS.forEach(doc => {
+//                             doc.ref.delete()
+//                           })
+//                           return res.status(200).json({ Status: 'Delete Successful' });
+//                         }
+//                       })
+//                     //========================================================================
+
+//                     return res.status(200).json({ Status: 'Delete Successful' });
+//                   })
+//                   .catch(function (error) {
+//                     return res.status(500).json({ Status: error });
+//                   });
+//               })
+//               .catch(function (error) {
+//                 return res.status(500).json({ Status: error });
+//               });
+//           } else {
+//             return res.status(404).json({ Status: 'Not Authorized' });
+//           }
+//         } else {
+//           return res.status(404).json({ Status: 'Not Found' });
+//         }
+//       })
+//       .catch(function (error) {
+//         return res.status(500).json({ Error: error });
+//       });
+//   } else {
+//     return res.status(400).json({ Error: 'No Token was Sent' });
+//   }
+// };
 
 
 /***
@@ -543,6 +603,7 @@ exports.deleteNote = (req, res) => {
  ***Status: The status of the request. Will be an error if the note was not favorited correctly, either due to server error or due to user error
  ***/
 exports.favoriteNote = (req, res) => {
+  console.log('hi from favorite')
   const favCollection = db.collection("favorites");
   const public = req.query.public;
   let collection;
