@@ -45,9 +45,9 @@ export const login = async (emailUsername, password, history, setUser) => {
   });
   try {
     const res = await axios.post('/login', body, config);
-    const tokenVerification = await verifyToken(res.data.token, res.data.user_id);
+    const tokenVerification = await verifyToken(res.data.token);
     if (tokenVerification === 'Successful') {
-      await setAuthHeader(res.data.token);
+      await setAuthHeader(res.data.token, res.data.user_id);
       return false;
     }
   } catch (err) {

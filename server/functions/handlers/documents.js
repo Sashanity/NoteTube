@@ -277,7 +277,7 @@ exports.userList = (req, res) => {
               addDoc['noteID'] = doc.id; //Add the note ID to the object
               retList.push(addDoc); //Push the object to the returned array
             });
-            // console.log('sending list back:', retList);
+            console.log('sending list back:', retList);
 
             // here check another collection
             db.collection('publicNotes')
