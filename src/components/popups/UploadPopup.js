@@ -91,7 +91,7 @@ const UploadPopup = (props) => {
   const { getRootProps, getInputProps } = useDropzone({ onDrop });
   const onChange = (e) =>
     setState({ ...state, [e.target.name]: e.target.value });
-
+  const onChange2 = (e) => setState({ ...state, ['checked']: !checked });
   const onSubmit = async (e) => {
     e.preventDefault();
     console.log(state);
@@ -169,7 +169,7 @@ const UploadPopup = (props) => {
             control={
               <Checkbox
                 checked={checked}
-                onChange={(e) => onChange(e)}
+                onChange={(e) => onChange2(e)}
                 name='checked'
                 color='primary'
               />
