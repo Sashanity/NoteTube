@@ -277,7 +277,7 @@ exports.userList = (req, res) => {
               addDoc['noteID'] = doc.id; //Add the note ID to the object
               retList.push(addDoc); //Push the object to the returned array
             });
-            console.log('sending list back:', retList);
+            // console.log('sending list back:', retList);
 
             // here check another collection
             db.collection('publicNotes')
@@ -447,18 +447,14 @@ exports.editNote = (req, res) => {
  ***noteid: The Firestore ID of the note the user wants to delete
  **RETURNS:
  ***Status: The status of the request.
- ***/
+//  ***/
+
 exports.deleteNote = (req, res) => {
-  const token = req.query.token;
   console.log('hi from delete');
-  console.log('noteID: ', req.query.noteid);
-  console.log('token:', req.query.token);
-  console.log('public', req.query.public_status);
   let collection = '';
   req.query.public_status.toLowerCase() === 'true'
     ? (collection = 'publicNotes')
     : (collection = 'notes');
-  console.log('deleting from ', collection);
   const noteRef = db.collection(collection).doc(req.query.noteid); //Get the reference of the note data from Firestore using the note ID from the request
   var userID = ''; //The ID of the logged in user
   if (req.query.token) {
@@ -478,40 +474,47 @@ exports.deleteNote = (req, res) => {
         //Get the note data from Firestore
         if (doc.exists) {
           //If the note data was found (I.E. the note ID was correct)
-          console.log('doc found');
           noteData = doc.data(); //Put the data in a variable
           if (noteData.uploader === userID) {
             //Verifies that the user is allowed to delete the note
-            //delete file from storage
+
             bucket
               .file(`notes/${noteData.uploader}/${noteData.filename}`)
               .delete()
               .then(function () {
-                // delete from notes/publicNotes
+
+                console.log('deleted from storage');
                 noteRef
                   .delete()
                   .then(function () {
-                    console.log('DELETED');
-                    // // check if notes was in favorites
-                    // db.collection('favorites').where('noteid', '==', noteID).get()
-                    //   .then(qS => {
-                    //     console.log('checking favorites')
-                    //     if (qS.empty) {
-                    //       console.log('not is not anybodies favorite')
-                    //       return res.status(200).json({ Status: 'Delete Successful' });
-                    //     }
-                    //     else {
-                    //       console.log('deleting from favorites')
-                    //       qS.forEach(doc => {
-                    //         doc.ref.delete()
-                    //         return res.status(200).json({ Status: 'Delete Successful' });
-                    //       })
-                    //     }
-                    //   })
+                    console.log('deleted from collection');
+                    db.collection('favorites')
+                      .where('noteid', '==', req.query.noteid)
+                      .get()
+                      .then((qS) => {
+                        console.log('checking favorites');
+                        if (qS.empty) {
+                          console.log('not is not anybodies favorite');
+                          return res
+                            .status(200)
+                            .json({ Status: 'Delete Successful' });
+                        } else {
+                          console.log('deleting from favorites');
+                          qS.forEach((doc) => {
+                            doc.ref.delete();
+                            return res
+                              .status(200)
+                              .json({ Status: 'Delete Successful' });
+                          });
+                        }
+                        return res
+                          .status(200)
+                          .json({ Status: 'Delete Successful' });
+                      })
+                      .catch(function (error) {
+                        return res.status(500).json({ Status: error });
+                      });
 
-                    return res
-                      .status(200)
-                      .json({ Status: 'Delete Successful' });
                   })
                   .catch(function (error) {
                     return res.status(500).json({ Status: error });
@@ -535,6 +538,7 @@ exports.deleteNote = (req, res) => {
   }
 };
 
+
 /***
  *Favorite Note
  **Saves the users favorites to Firestore
@@ -546,12 +550,15 @@ exports.deleteNote = (req, res) => {
  ***Status: The status of the request. Will be an error if the note was not favorited correctly, either due to server error or due to user error
  ***/
 exports.favoriteNote = (req, res) => {
+
   const favCollection = db.collection('favorites');
   const public = req.body.public;
+
   let collection;
   public.toLowerCase() === 'true'
     ? (collection = 'publicNotes')
     : (collection = 'notes');
+
   if (req.body.token && req.body.noteid) {
     //Checks to make sure the note id and token are in the request params.
     admin
@@ -561,6 +568,7 @@ exports.favoriteNote = (req, res) => {
         //Admin decodes the token
         const userID = decodedToken.uid; //Get the user id
         const noteID = req.body.noteid;
+
         db.collection(collection)
           .doc(noteID)
           .get()
@@ -801,6 +809,7 @@ exports.favoriteList = (req, res) => {
         const userID = decodedToken.uid; //Get the user id
         console.log('userID:', userID);
 
+
         favCollection
           .where('userid', '==', userID)
           .where('public', '==', req.query.public_status)
@@ -858,95 +867,4 @@ exports.favoriteList = (req, res) => {
   }
 };
 
-// exports.favoriteList = (req, res) => {
-//   console.log('hi from favoriteList')
-//   const favCollection = db.collection("favorites");
-//   const noteCollection = db.collection("notes");
-//   const publicCollection = db.collection("publicNotes");
-//   var retList = [];
-//   var idArray = [];
-//   if (req.query.token) { //Checks to make sure the note id and token are in the request params.
-//     admin.auth().verifyIdToken(req.query.token)
-//       .then(function (decodedToken) { //Admin decodes the token
-//         const userID = decodedToken.uid; //Get the user id
-//         console.log('userID:', userID)
 
-//         // get snapshot for a user
-//         favCollection.where("userid", "==", userID).get()
-//           .then(function (querySnapshot) {
-//             if (querySnapshot.empty) {
-//               console.log('snapshot is empty')
-//               return res.status(200).json({ Status: "Successful", List: [] });
-//             }
-//             else {
-//               const returnPub = async () => {
-//                 let retPub = await getListOfFavorites(userID, 'true', publicCollection)
-//                 console.log(retPub)
-//               }
-//               // console.log('snapshot is not empty')
-//               // getListOfFavorites(userID, public, publicCollection)
-//               //   .then((retList) => {
-//               //     console.log('returning', retList)
-//               //     return res.status(200).json({ Status: "Successful", List: retList });
-//               //   })
-//             }
-//           })
-//           .catch(function (error) { //Returns server error if issue looking at the favorites
-//             return res.status(500).json({ Status: error });
-//           })
-
-//       })
-
-//       .catch(function (error) {
-//         return res.status(400).json({ Status: "Need Valid Token" });
-//       })
-//   }
-//   else { //Returns user error if either the token or note are not there
-//     return res.status(400).json({ Status: "Need a Token" });
-//   }
-
-// }
-
-// const getListOfFavorites = async (userID, public, collection) => {
-//   console.log('helper is called')
-//   const favCollection = db.collection("favorites");
-//   favCollection.where("userid", "==", userID).where('public', '==', public).get()
-//     .then(function (querySnapshot) {
-//       if (querySnapshot.empty) {
-//         console.log('snapshot is empty')
-//         return res.status(200).json({ Status: "Successful", List: [] });
-//       }
-//       else {
-//         console.log('snapshot is NOT empty')
-//         querySnapshot.forEach(function (doc) { //Loop through each favorite object and save the note ID
-//           idArray.push(doc.data().noteid);
-//         })
-//         console.log('idArray', idArray)
-//         let promises = idArray.map(function (noteID) {
-//           console.log('getting public promises')
-//           return collection.doc(noteID).get()
-//         });
-//         Promise.all(promises).then(function (snapshots) { //Loop through each get query
-//           snapshots.forEach(function (noteDoc) { //Loop through each result
-//             // console.log('noteDoc', noteDoc)
-//             console.log('GETTING DATA')
-//             var addDoc = noteDoc.data(); //Get the data
-//             console.log('addDoc', addDoc)
-//             console.log('idArray', idArray)
-//             typeof addDoc === 'undefined' ? console.log('need to look in public notes') : ''
-
-//             addDoc['noteID'] = noteDoc.id; //Add the note ID to the object
-//             retList.push(addDoc); //Push the object to the returned array
-//           })
-//           console.log('sending favorits list2:', retList)
-//           //return res.status(200).json({ Status: "Successful", List: retList });
-//           return retList
-//         })
-//           .catch(function (error) { //Error executing the promises
-//             // return res.status(500).json({ Status: error });
-//             return []
-//           })
-//       }
-//     })
-
-// }
