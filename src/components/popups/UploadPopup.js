@@ -39,8 +39,9 @@ const UploadPopup = (props) => {
     instructor: '',
     term: '',
     subject: '',
+    file: null,
   });
-  const { checked, name, course, instructor, term, subject } = state;
+  const { checked, name, course, instructor, term, subject, file } = state;
 
   const { title, description, open, handleClose } = props;
   const classes = useStyles();
@@ -70,21 +71,12 @@ const UploadPopup = (props) => {
 
   const handleFileChange = (files) => {
     setFileState([...fileState, files]);
-    //console.log(files)
+    console.log(files)
   };
   const onDrop = (acceptedFiles) => {
     acceptedFiles.forEach((file) => {
-      const reader = new FileReader();
-
-      reader.onabort = () => console.log('file reading was aborted');
-      reader.onerror = () => console.log('file reading has failed');
-      reader.onload = () => {
-        // Do whatever you want with the file contents
-        const binaryStr = reader.result;
-        console.log(binaryStr);
-        handleFileChange(binaryStr);
-      };
-      reader.readAsArrayBuffer(file);
+     //console.log(file);
+     setState({ ...state, file: file });
     });
   };
 
@@ -95,7 +87,7 @@ const UploadPopup = (props) => {
   const onSubmit = async (e) => {
     e.preventDefault();
     console.log(state);
-    await upload(checked, name, course, instructor, term, subject, fileState);
+    await upload(checked, name, course, instructor, term, subject, file);
     handleClose();
   };
   return (

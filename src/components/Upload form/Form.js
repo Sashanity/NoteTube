@@ -55,6 +55,7 @@ export const Form = () => {
     instructor: '',
     term: '',
     subject: '',
+    file: [],
   });
 
   const [fileState, setFileState] = React.useState([]);
@@ -80,7 +81,7 @@ export const Form = () => {
         console.log(binaryStr);
         handleFileChange(binaryStr);
       };
-      reader.readAsArrayBuffer(file);
+      reader.readAsDataURL(file);
     });
   };
 

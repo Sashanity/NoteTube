@@ -1,4 +1,7 @@
 import axios from 'axios';
+const fs = require('fs');
+const os = require('os');
+const path = require('path');
 /*const config = {
   headers: {
     'Content-Type': 'application/json',
@@ -12,7 +15,7 @@ import axios from 'axios';
    instructor,
    term,
    subject,
-   fileState
+   file
  ) => {
    let formData = new FormData();
    let publicFile;
@@ -21,15 +24,15 @@ import axios from 'axios';
    } else {
      publicFile = 'false';
    }
-   
-   formData.append('token', localStorage.getItem('token'));
-   formData.append('publicFile', publicFile);
+   //var fileBlob = new Blob([fileState], {type: 'application/pdf'});
+   //formData.append('token', localStorage.getItem('token'));
+   formData.append('public', publicFile);
    formData.append('name', name);
    formData.append('course', course);
    formData.append('instructor', instructor);
    formData.append('term', term);
    formData.append('subject', subject);
-   formData.append('file', fileState);
+   formData.append('file', file);
    
    
     console.log(formData);
@@ -37,7 +40,7 @@ import axios from 'axios';
    const formConfig = { headers: {'content-type': 'multipart/form-data'}}
    try {
       //axios.post('/upload', formData, formConfig);
-     await axios.post('/upload', formData);
+     await axios.post(`/upload?token=${token}`, formData);
      
    } catch (err) {
      console.log(err);
