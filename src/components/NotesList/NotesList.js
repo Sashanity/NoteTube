@@ -40,6 +40,7 @@ export default function NotesList(props) {
             instructor={item.instructor}
             subject={item.subject}
             setNotes={returningNotes}
+            uploader={item.uploader}
           ></NotesListItem>
         ))
       );

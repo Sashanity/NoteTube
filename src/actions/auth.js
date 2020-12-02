@@ -27,7 +27,7 @@ export const register = async (
   try {
     const res = await axios.post('/signup', body, config);
 
-    setAuthHeader(res.data.token);
+    setAuthHeader(res.data.token, res.data.user_id);
     setUser(res.data.token);
     history.push('/Home');
   } catch (err) {
@@ -47,7 +47,7 @@ export const login = async (emailUsername, password, history, setUser) => {
     const res = await axios.post('/login', body, config);
     const tokenVerification = await verifyToken(res.data.token);
     if (tokenVerification === 'Successful') {
-      await setAuthHeader(res.data.token);
+      await setAuthHeader(res.data.token, res.data.user_id);
       return false;
     }
   } catch (err) {
@@ -75,8 +75,9 @@ export const verifyToken = async (token) => {
   }
 };
 
-const setAuthHeader = (token) => {
+const setAuthHeader = (token, user_id) => {
   const Token = `${token}`;
   localStorage.setItem('token', Token);
+  localStorage.setItem('user_id', user_id);
   axios.defaults.headers.common['Authorization'] = Token;
 };

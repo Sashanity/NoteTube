@@ -24,6 +24,7 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 const PersonalSpace = () => {
+  console.log('USERID AUTH:', localStorage.getItem('user_id'))
   const history = useHistory();
   const classes = useStyles();
 

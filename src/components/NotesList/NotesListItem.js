@@ -68,6 +68,7 @@ export default function NotesListItem(props) {
     instructor,
     subject,
     setNotes,
+    uploader,
   } = props;
   console.log('noteID:', noteID);
 
@@ -103,6 +104,25 @@ export default function NotesListItem(props) {
       }
     });
   }, []);
+
+  function showMenu(props) {
+    console.log('UPLOADER=', localStorage.getItem('user_id'));
+    console.log('uploader=', uploader);
+    if (uploader === localStorage.getItem('user_id')) {
+      console.log('DROPPIN, RETURN CLASSNOTES ONJ');
+      return (
+        <ClassNotes
+          noteID={noteID}
+          public_status={public_status}
+          setNotes={setNotes}
+        />
+      );
+    } else {
+      console.log('userid not equal');
+      return '';
+    }
+  }
+
   return (
     <div className='PublicNotes'>
       <div className='NotesListItem'>
@@ -121,13 +141,7 @@ export default function NotesListItem(props) {
                   src={Img1}
                 ></Avatar>
               }
-              action={
-                <ClassNotes
-                  noteID={noteID}
-                  public_status={public_status}
-                  setNotes={setNotes}
-                />
-              }
+              action={showMenu(uploader, noteID, public_status, setNotes)}
               title={Notes_title}
               subheader={timestamp}
             />
