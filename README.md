@@ -1,3 +1,15 @@
+<h1 align="center">NoteTube</h1>
+<h3 align="center">
+  San Jose State University - Senior Project - Fall 2020
+</h3>
+<div align="center">
+A web app that allows sjsu students to create, search, and use notes for classes </br></br>
+
+![NoteTube gif demo](docs/demo.gif)
+</div>
+
+
+
 ### External Requirements
 - Node.js
 - Firebase, firetools (?)
