@@ -20,6 +20,7 @@ exports.login = (req, res) => {
 		.then((doc) => {
 			if (doc.exists) {
 				user.email = doc.data().email;
+				user.userId = doc.data().userId
 			}
 		})
 		.then(() => {
@@ -30,7 +31,8 @@ exports.login = (req, res) => {
 					return data.user.getIdToken();
 				})
 				.then((token) => {
-					return res.json({ token });
+					user_id = user.userId
+					return res.json({ token, user_id });
 				})
 				.catch((err) => {
 					return res
@@ -84,7 +86,8 @@ exports.signup = (req, res) => {
 			db.doc(`/users/${newUser.username}`).set(userCredentials);
 		})
 		.then(() => {
-			return res.json({ token });
+			user_id = userId
+			return res.json({ token, user_id });
 		})
 		.catch((err) => {
 			console.error(err);
