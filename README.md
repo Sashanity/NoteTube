@@ -48,7 +48,12 @@ $ npm install -g firebase-tools
 Setup with environmental variable is safer because project would just fish out private key out of your environment.  
 It is safer and also would work better in collaboration settings since hardcoded absolute path to the `ServiceAccountKey.json` would not work for each team member.
 
-5. **Start your local server**
+5. **Login to the firebase with provided credentials**
+```sh
+# this wil create a popup offereng you to log in 
+$ firebase login
+```
+6. **Start your local server**
 ```sh
 # Start client 
 $ cd NoteTube/src
