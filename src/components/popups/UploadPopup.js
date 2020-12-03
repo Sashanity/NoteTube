@@ -15,6 +15,7 @@ import Button from '@material-ui/core/Button';
 import { upload } from '../../actions/documents';
 import Checkbox from '@material-ui/core/Checkbox';
 import FormControlLabel from '@material-ui/core/FormControlLabel';
+import { wait } from '@testing-library/react';
 
 const useStyles = makeStyles((theme) => ({
   button: {
@@ -40,8 +41,9 @@ const UploadPopup = (props) => {
     term: '',
     subject: '',
     file: null,
+    status: '',
   });
-  const { checked, name, course, instructor, term, subject, file } = state;
+  const { checked, name, course, instructor, term, subject, file, status } = state;
 
   const { title, description, open, handleClose } = props;
   const classes = useStyles();
@@ -87,8 +89,17 @@ const UploadPopup = (props) => {
   const onSubmit = async (e) => {
     e.preventDefault();
     console.log(state);
-    await upload(checked, name, course, instructor, term, subject, file);
-    handleClose();
+    if (file != null){
+      setState({ ...state, status: "Uploading Note..."});
+      await upload(checked, name, course, instructor, term, subject, file);
+      
+      handleClose();
+    }
+    else{
+      setState({ ...state, status: "Please select a File to Upload!"});
+    }
+    
+    
   };
   return (
     <Dialog
@@ -100,6 +111,7 @@ const UploadPopup = (props) => {
       <form className={classes.form} onSubmit={(e) => onSubmit(e)}>
         <DialogContent>
           <DialogContentText>{description}</DialogContentText>
+          <DialogContentText>{status}</DialogContentText>
           <TextField
             autoFocus
             margin='dense'
