@@ -29,7 +29,7 @@
 		"@testing-library/user-event": "^7.1.2",
 		"algoliasearch": "^4.8.2",
 		"algoliasearch-helper": "^3.3.2",
-		"axios": "^0.19.2",
+		"axios": "^0.21.1",
 		"dotenv": "^8.2.0",
 		"editorjs-react": "^0.1.9",
 		"firebase": "^7.17.2",
